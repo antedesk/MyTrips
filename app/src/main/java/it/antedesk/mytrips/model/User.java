@@ -1,5 +1,6 @@
 package it.antedesk.mytrips.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -14,21 +15,25 @@ public class User implements Parcelable {
     private String name;
     private String surname;
     private String bio;
+    @ColumnInfo(name = "picture_url")
+    public String pictureUrl;
     private CheckIn home;
 
     @Ignore
-    public User(String name, String surname, String bio, CheckIn home) {
+    public User(String name, String surname, String bio, String pictureUrl, CheckIn home) {
         this.name = name;
         this.surname = surname;
         this.bio = bio;
+        this.pictureUrl = pictureUrl;
         this.home = home;
     }
 
-    public User(int id, String name, String surname, String bio, CheckIn home) {
+    public User(int id, String name, String surname, String bio, String pictureUrl, CheckIn home) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.bio = bio;
+        this.pictureUrl = pictureUrl;
         this.home = home;
     }
 
@@ -38,6 +43,7 @@ public class User implements Parcelable {
         name = in.readString();
         surname = in.readString();
         bio = in.readString();
+        pictureUrl = in.readString();
         home = in.readParcelable(CheckIn.class.getClassLoader());
     }
 
@@ -96,6 +102,7 @@ public class User implements Parcelable {
         dest.writeString(name);
         dest.writeString(surname);
         dest.writeString(bio);
+        dest.writeString(pictureUrl);
         dest.writeParcelable(home, flags);
     }
 }

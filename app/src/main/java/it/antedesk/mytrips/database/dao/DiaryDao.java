@@ -1,4 +1,4 @@
-package it.antedesk.mytrips.database;
+package it.antedesk.mytrips.database.dao;
 
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -8,19 +8,19 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import it.antedesk.mytrips.model.CheckIn;
+import it.antedesk.mytrips.model.Diary;
 
-public interface CheckInDao {
+public interface DiaryDao {
 
-    @Query("SELECT * FROM check_ins")
-    List<CheckIn> loadAllCheckIns();
+    @Query("SELECT * FROM diaries ORDER BY start_date DESC")
+    List<Diary> loadAllDiary();
 
     @Insert
-    void insertNote(CheckIn checkIn);
+    void insertDiary(Diary diary);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateNote(CheckIn checkIn);
+    void updateDiary(Diary diary);
 
     @Delete
-    void deleteNote(CheckIn checkIn);
+    void deleteDiary(Diary diary);
 }

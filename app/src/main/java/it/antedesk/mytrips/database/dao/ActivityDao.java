@@ -1,4 +1,4 @@
-package it.antedesk.mytrips.database;
+package it.antedesk.mytrips.database.dao;
 
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;

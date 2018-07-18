@@ -1,4 +1,4 @@
-package it.antedesk.mytrips.database;
+package it.antedesk.mytrips.database.dao;
 
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -8,19 +8,19 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import it.antedesk.mytrips.model.Diary;
+import it.antedesk.mytrips.model.Note;
 
-public interface DiaryDao {
+public interface NoteDao {
 
-    @Query("SELECT * FROM diaries ORDER BY start_date DESC")
-    List<Diary> loadAllDiary();
+    @Query("SELECT * FROM notes ORDER BY date_time DESC")
+    List<Note> loadAllNotes();
 
     @Insert
-    void insertDiary(Diary diary);
+    void insertNote(Note note);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateDiary(Diary diary);
+    void updateNote(Note note);
 
     @Delete
-    void deleteDiary(Diary diary);
+    void deleteNote(Note note);
 }
