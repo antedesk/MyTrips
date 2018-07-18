@@ -1,15 +1,23 @@
 package it.antedesk.mytrips.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@Entity(tableName = "check_ins")
 public class CheckIn implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private double latitude;
     private double longitude;
     private String address;
     private String city;
     private String country;
 
+    @Ignore
     public CheckIn(double latitude, double longitude, String address, String city, String country) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -18,7 +26,18 @@ public class CheckIn implements Parcelable {
         this.country = country;
     }
 
+    public CheckIn(int id, double latitude, double longitude, String address, String city, String country) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+    }
+
+    @Ignore
     protected CheckIn(Parcel in) {
+        id = in.readInt();
         latitude = in.readDouble();
         longitude = in.readDouble();
         address = in.readString();
@@ -84,22 +103,12 @@ public class CheckIn implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeDouble(latitude);
-        parcel.writeDouble(longitude);
-        parcel.writeString(address);
-        parcel.writeString(city);
-        parcel.writeString(country);
-    }
-
-    @Override
-    public String toString() {
-        return "CheckIn{" +
-                "latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", country='" + country + '\'' +
-                '}';
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeString(address);
+        dest.writeString(city);
+        dest.writeString(country);
     }
 }

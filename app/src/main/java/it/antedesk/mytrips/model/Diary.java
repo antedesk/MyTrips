@@ -1,28 +1,61 @@
 package it.antedesk.mytrips.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
 import java.util.List;
 
-public class Diary implements Parcelable {
+@Entity(tableName = "diaries")
+public class Diary implements Parcelable{
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String name;
     private String description;
-    private String startDate;
-    private String endDate;
+    @ColumnInfo(name = "start_date")
+    private Date startDate;
+    @ColumnInfo(name = "end_date")
+    private Date endDate;
     private double budget;
     private String currency;
     private String category;
+    @ColumnInfo(name = "is_plan")
     private boolean isPlan;
     private List<Activity> activities;
 
+    //ignore annotation is used to avoid that room use this constructor
+    @Ignore
+    public Diary(String name, String description, Date startDate, Date endDate, double budget, String currency, String category, boolean isPlan) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.budget = budget;
+        this.currency = currency;
+        this.category = category;
+        this.isPlan = isPlan;
+    }
+
+    public Diary(int id, String name, String description, Date startDate, Date endDate, double budget, String currency, String category, boolean isPlan) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.budget = budget;
+        this.currency = currency;
+        this.category = category;
+        this.isPlan = isPlan;
+    }
 
     protected Diary(Parcel in) {
         name = in.readString();
         description = in.readString();
-        startDate = in.readString();
-        endDate = in.readString();
         budget = in.readDouble();
         currency = in.readString();
         category = in.readString();
@@ -47,28 +80,16 @@ public class Diary implements Parcelable {
         return 0;
     }
 
+    //TODO add start/end data
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(description);
-        parcel.writeString(startDate);
-        parcel.writeString(endDate);
-        parcel.writeDouble(budget);
-        parcel.writeString(currency);
-        parcel.writeString(category);
-        parcel.writeByte((byte) (isPlan ? 1 : 0));
-        parcel.writeTypedList(activities);
-    }
-
-    public Diary(String name, String description, String startDate, String endDate, double budget, String currency, String category, boolean isPlan) {
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.budget = budget;
-        this.currency = currency;
-        this.category = category;
-        this.isPlan = isPlan;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeDouble(budget);
+        dest.writeString(currency);
+        dest.writeString(category);
+        dest.writeByte((byte) (isPlan ? 1 : 0));
+        dest.writeTypedList(activities);
     }
 
     public String getName() {
@@ -87,19 +108,19 @@ public class Diary implements Parcelable {
         this.description = description;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
@@ -141,19 +162,5 @@ public class Diary implements Parcelable {
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
-    }
-
-    @Override
-    public String toString() {
-        return "Diary{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", budget=" + budget +
-                ", currency='" + currency + '\'' +
-                ", category='" + category + '\'' +
-                ", isPlan=" + isPlan +
-                '}';
     }
 }

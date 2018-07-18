@@ -1,15 +1,22 @@
 package it.antedesk.mytrips.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@Entity(tableName = "users")
 public class User implements Parcelable {
 
-    public String name;
-    public String surname;
-    public String bio;
-    public CheckIn home;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    private String name;
+    private String surname;
+    private String bio;
+    private CheckIn home;
 
+    @Ignore
     public User(String name, String surname, String bio, CheckIn home) {
         this.name = name;
         this.surname = surname;
@@ -17,8 +24,17 @@ public class User implements Parcelable {
         this.home = home;
     }
 
+    public User(int id, String name, String surname, String bio, CheckIn home) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.bio = bio;
+        this.home = home;
+    }
 
+    @Ignore
     protected User(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         surname = in.readString();
         bio = in.readString();
@@ -70,25 +86,16 @@ public class User implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", bio='" + bio + '\'' +
-                ", home=" + home +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(surname);
-        parcel.writeString(bio);
-        parcel.writeParcelable(home, i);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(surname);
+        dest.writeString(bio);
+        dest.writeParcelable(home, flags);
     }
 }

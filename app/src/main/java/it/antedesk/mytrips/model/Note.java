@@ -1,29 +1,38 @@
 package it.antedesk.mytrips.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Note extends Activity implements Parcelable{
+import java.util.Date;
+
+@Entity(tableName = "notes")
+public class Note extends Activity implements Parcelable {
 
     private String weather;
     private double temperature;
 
-    protected Note(Parcel in) {
-        super(in);
-        weather = in.readString();
-        temperature = in.readDouble();
-    }
-
-    public Note(String title, String description, String dateTime, String category, double budget, String currency, CheckIn checkIn, String weather, double temperature) {
+    @Ignore
+    public Note(String title, String description, Date dateTime, String category,
+                double budget, String currency, CheckIn checkIn, String weather, double temperature) {
         super(title, description, dateTime, category, budget, currency, checkIn);
         this.weather = weather;
         this.temperature = temperature;
     }
 
-    public Note(Parcel in, String weather, double temperature) {
-        super(in);
+    public Note(int id, String title, String description, Date dateTime, String category,
+                double budget, String currency, CheckIn checkIn, String weather, double temperature) {
+        super(id, title, description, dateTime, category, budget, currency, checkIn);
         this.weather = weather;
         this.temperature = temperature;
+    }
+
+    @Ignore
+    protected Note(Parcel in) {
+        super(in);
+        weather = in.readString();
+        temperature = in.readDouble();
     }
 
     @Override
@@ -64,13 +73,5 @@ public class Note extends Activity implements Parcelable{
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
-    }
-
-    @Override
-    public String toString() {
-        return "Note{" +
-                "weather='" + weather + '\'' +
-                ", temperature=" + temperature +
-                '}';
     }
 }

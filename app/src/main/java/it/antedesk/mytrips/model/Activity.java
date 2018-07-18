@@ -1,19 +1,31 @@
 package it.antedesk.mytrips.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Activity implements Parcelable {
+import java.util.Date;
 
+@Entity(tableName = "activities")
+public class Activity implements Parcelable{
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String title;
     private String description;
-    private String dateTime;
+    @ColumnInfo(name = "date_time")
+    private Date dateTime;
     private String category;
     private double budget;
     private String currency;
+    @ColumnInfo(name = "check_in")
     private CheckIn checkIn;
 
-    public Activity(String title, String description, String dateTime, String category, double budget, String currency, CheckIn checkIn) {
+    @Ignore
+    public Activity(String title, String description, Date dateTime, String category, double budget, String currency, CheckIn checkIn) {
         this.title = title;
         this.description = description;
         this.dateTime = dateTime;
@@ -23,10 +35,22 @@ public class Activity implements Parcelable {
         this.checkIn = checkIn;
     }
 
+    public Activity(int id, String title, String description, Date dateTime, String category, double budget, String currency, CheckIn checkIn) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dateTime = dateTime;
+        this.category = category;
+        this.budget = budget;
+        this.currency = currency;
+        this.checkIn = checkIn;
+    }
+
+    @Ignore
     protected Activity(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         description = in.readString();
-        dateTime = in.readString();
         category = in.readString();
         budget = in.readDouble();
         currency = in.readString();
@@ -61,11 +85,11 @@ public class Activity implements Parcelable {
         this.description = description;
     }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -94,31 +118,18 @@ public class Activity implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "Activity{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", dateTime='" + dateTime + '\'' +
-                ", category='" + category + '\'' +
-                ", budget=" + budget +
-                ", currency='" + currency + '\'' +
-                ", checkIn=" + checkIn +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(title);
-        parcel.writeString(description);
-        parcel.writeString(dateTime);
-        parcel.writeString(category);
-        parcel.writeDouble(budget);
-        parcel.writeString(currency);
-        parcel.writeParcelable(checkIn, i);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(category);
+        dest.writeDouble(budget);
+        dest.writeString(currency);
+        dest.writeParcelable(checkIn, flags);
     }
 }
