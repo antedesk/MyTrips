@@ -2,12 +2,19 @@ package it.antedesk.mytrips.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@Entity(tableName = "users")
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "users",
+        foreignKeys = @ForeignKey(entity = CheckIn.class,
+                                parentColumns = "id",
+                                childColumns = "home_check_in",
+                                onDelete = CASCADE))
 public class User implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
@@ -16,25 +23,26 @@ public class User implements Parcelable {
     private String surname;
     private String bio;
     @ColumnInfo(name = "picture_url")
-    public String pictureUrl;
-    private CheckIn home;
+    private String pictureUrl;
+    @ColumnInfo(name = "home_check_in")
+    private int homeCheckIn;
 
-    @Ignore
-    public User(String name, String surname, String bio, String pictureUrl, CheckIn home) {
-        this.name = name;
-        this.surname = surname;
-        this.bio = bio;
-        this.pictureUrl = pictureUrl;
-        this.home = home;
-    }
-
-    public User(int id, String name, String surname, String bio, String pictureUrl, CheckIn home) {
+    public User(int id, String name, String surname, String bio, String pictureUrl, int homeCheckIn) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.bio = bio;
         this.pictureUrl = pictureUrl;
-        this.home = home;
+        this.homeCheckIn = homeCheckIn;
+    }
+
+    @Ignore
+    public User(String name, String surname, String bio, String pictureUrl, int homeCheckIn) {
+        this.name = name;
+        this.surname = surname;
+        this.bio = bio;
+        this.pictureUrl = pictureUrl;
+        this.homeCheckIn = homeCheckIn;
     }
 
     @Ignore
@@ -44,7 +52,7 @@ public class User implements Parcelable {
         surname = in.readString();
         bio = in.readString();
         pictureUrl = in.readString();
-        home = in.readParcelable(CheckIn.class.getClassLoader());
+        homeCheckIn = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -58,6 +66,22 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 
     public String getName() {
         return name;
@@ -83,12 +107,12 @@ public class User implements Parcelable {
         this.bio = bio;
     }
 
-    public CheckIn getHome() {
-        return home;
+    public int getHomeCheckIn() {
+        return homeCheckIn;
     }
 
-    public void setHome(CheckIn home) {
-        this.home = home;
+    public void setHomeCheckIn(int homeCheckIn) {
+        this.homeCheckIn = homeCheckIn;
     }
 
     @Override
@@ -103,6 +127,6 @@ public class User implements Parcelable {
         dest.writeString(surname);
         dest.writeString(bio);
         dest.writeString(pictureUrl);
-        dest.writeParcelable(home, flags);
+        dest.writeInt(homeCheckIn);
     }
 }

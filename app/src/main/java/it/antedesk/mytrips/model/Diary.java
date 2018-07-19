@@ -26,7 +26,6 @@ public class Diary implements Parcelable{
     private String category;
     @ColumnInfo(name = "is_plan")
     private boolean isPlan;
-    private List<Activity> activities;
 
     //ignore annotation is used to avoid that room use this constructor
     @Ignore
@@ -60,7 +59,6 @@ public class Diary implements Parcelable{
         currency = in.readString();
         category = in.readString();
         isPlan = in.readByte() != 0;
-        activities = in.createTypedArrayList(Activity.CREATOR);
     }
 
     public static final Creator<Diary> CREATOR = new Creator<Diary>() {
@@ -89,7 +87,14 @@ public class Diary implements Parcelable{
         dest.writeString(currency);
         dest.writeString(category);
         dest.writeByte((byte) (isPlan ? 1 : 0));
-        dest.writeTypedList(activities);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -154,13 +159,5 @@ public class Diary implements Parcelable{
 
     public void setPlan(boolean plan) {
         isPlan = plan;
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
     }
 }

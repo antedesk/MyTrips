@@ -1,10 +1,14 @@
 package it.antedesk.mytrips.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 @Entity(tableName = "check_ins")
 public class CheckIn implements Parcelable {
@@ -56,6 +60,14 @@ public class CheckIn implements Parcelable {
             return new CheckIn[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public double getLatitude() {
         return latitude;

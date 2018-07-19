@@ -15,6 +15,9 @@ public interface ActivityDao {
     @Query("SELECT * FROM activities ORDER BY date_time DESC")
     List<Activity> loadAllActivities();
 
+    @Query("SELECT * FROM activities WHERE diary_id=:diaryId")
+    List<Activity> retrieveActivitiesByDiaryId(final int diaryId);
+
     @Insert
     void insertActivity(Activity activity);
 

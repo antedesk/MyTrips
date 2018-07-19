@@ -8,12 +8,16 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.Note;
 
 public interface NoteDao {
 
     @Query("SELECT * FROM notes ORDER BY date_time DESC")
     List<Note> loadAllNotes();
+
+    @Query("SELECT * FROM notes WHERE diary_id=:diaryId")
+    List<Activity> retrieveNotesByDiaryId(final int diaryId);
 
     @Insert
     void insertNote(Note note);
