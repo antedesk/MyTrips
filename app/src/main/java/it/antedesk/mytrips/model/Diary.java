@@ -3,6 +3,7 @@ package it.antedesk.mytrips.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,7 +11,8 @@ import android.os.Parcelable;
 import java.util.Date;
 import java.util.List;
 
-@Entity(tableName = "diaries")
+@Entity(tableName = "diaries",
+        indices = { @Index(value = {"id"}, unique = true) })
 public class Diary implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)

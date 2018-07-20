@@ -8,6 +8,11 @@ import android.content.Context;
 import android.util.Log;
 
 import it.antedesk.mytrips.database.converter.DateConverter;
+import it.antedesk.mytrips.database.dao.ActivityDao;
+import it.antedesk.mytrips.database.dao.CheckInDao;
+import it.antedesk.mytrips.database.dao.DiaryDao;
+import it.antedesk.mytrips.database.dao.NoteDao;
+import it.antedesk.mytrips.database.dao.UserDao;
 import it.antedesk.mytrips.model.*;
 
 @Database(entities = {User.class, Diary.class, Activity.class, Note.class, CheckIn.class}, version = 1, exportSchema = false)
@@ -32,4 +37,10 @@ public abstract class AppDatabase extends RoomDatabase{
         Log.d(LOG_TAG, "Getting the db instance");
         return sInstance;
     }
+
+    public abstract UserDao getUserDao();
+    public abstract DiaryDao getDiaryDao();
+    public abstract ActivityDao getActivityDao();
+    public abstract NoteDao getNoteDao();
+    public abstract CheckInDao getCheckInDao();
 }

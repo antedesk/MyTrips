@@ -7,7 +7,8 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
-@Entity(tableName = "notes")
+@Entity(tableName = "notes",
+        inheritSuperIndices = true)
 public class Note extends Activity implements Parcelable {
 
     private String weather;

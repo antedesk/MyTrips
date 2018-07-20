@@ -1,5 +1,6 @@
 package it.antedesk.mytrips.database.dao;
 
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import it.antedesk.mytrips.model.Diary;
 
+@Dao
 public interface DiaryDao {
 
     @Query("SELECT * FROM diaries ORDER BY start_date DESC")
