@@ -15,6 +15,9 @@ import it.antedesk.mytrips.model.CheckIn;
 @Dao
 public interface ActivityDao {
 
+    @Query("SELECT * FROM activities WHERE id=:id")
+    Activity retrieveActivityById(int id);
+
     @Query("SELECT * FROM activities ORDER BY date_time DESC")
     List<Activity> loadAllActivities();
 

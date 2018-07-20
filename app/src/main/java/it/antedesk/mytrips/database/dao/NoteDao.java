@@ -15,6 +15,9 @@ import it.antedesk.mytrips.model.Note;
 @Dao
 public interface NoteDao {
 
+    @Query("SELECT * FROM notes WHERE id=:id")
+    Activity retrieveNoteById(int id);
+
     @Query("SELECT * FROM notes ORDER BY date_time DESC")
     List<Note> loadAllNotes();
 

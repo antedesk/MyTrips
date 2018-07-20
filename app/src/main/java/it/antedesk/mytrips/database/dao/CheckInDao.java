@@ -9,10 +9,14 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.CheckIn;
 
 @Dao
 public interface CheckInDao {
+
+    @Query("SELECT * FROM activities WHERE id=:id")
+    Activity retrieveCheckInById(int id);
 
     @Query("SELECT * FROM check_ins")
     List<CheckIn> loadAllCheckIns();

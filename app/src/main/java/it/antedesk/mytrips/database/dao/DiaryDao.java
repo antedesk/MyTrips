@@ -9,10 +9,14 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.Diary;
 
 @Dao
 public interface DiaryDao {
+
+    @Query("SELECT * FROM activities WHERE id=:id")
+    Activity retrieveDiaryById(int id);
 
     @Query("SELECT * FROM diaries ORDER BY start_date DESC")
     List<Diary> loadAllDiary();
