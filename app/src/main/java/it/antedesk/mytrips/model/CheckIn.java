@@ -3,6 +3,7 @@ package it.antedesk.mytrips.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,7 +11,8 @@ import android.os.Parcelable;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
-@Entity(tableName = "check_ins")
+@Entity(tableName = "check_ins",
+        indices = { @Index(value = {"id"}, unique = true) })
 public class CheckIn implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)

@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,6 +12,7 @@ import android.os.Parcelable;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "users",
+        indices = { @Index(value = {"home_check_in"}, unique = true) },
         foreignKeys = @ForeignKey(entity = CheckIn.class,
                                 parentColumns = "id",
                                 childColumns = "home_check_in",
