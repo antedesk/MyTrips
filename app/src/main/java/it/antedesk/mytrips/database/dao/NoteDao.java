@@ -17,7 +17,7 @@ import it.antedesk.mytrips.model.Note;
 public interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE id=:id")
-    Activity retrieveNoteById(int id);
+    LiveData<Note> retrieveNoteById(int id);
 
     @Query("SELECT * FROM notes ORDER BY date_time DESC")
     LiveData<List<Note>> loadAllNotes();

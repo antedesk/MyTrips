@@ -10,14 +10,13 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.User;
 
 @Dao
 public interface UserDao {
 
     @Query("SELECT * FROM users WHERE id=:id")
-    Activity retrieveUserById(int id);
+    User retrieveUserById(int id);
 
     @Query("SELECT * FROM users")
     LiveData<List<User>> loadAllUsers();

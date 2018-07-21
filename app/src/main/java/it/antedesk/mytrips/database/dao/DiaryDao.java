@@ -17,7 +17,7 @@ import it.antedesk.mytrips.model.Diary;
 public interface DiaryDao {
 
     @Query("SELECT * FROM activities WHERE id=:id")
-    Activity retrieveDiaryById(int id);
+    LiveData<Activity> retrieveDiaryById(int id);
 
     @Query("SELECT * FROM diaries WHERE is_plan = :isPlan ORDER BY start_date DESC")
     LiveData<List<Diary>> loadAllDiaries(boolean isPlan);

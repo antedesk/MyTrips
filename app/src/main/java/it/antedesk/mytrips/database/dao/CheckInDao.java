@@ -16,8 +16,8 @@ import it.antedesk.mytrips.model.CheckIn;
 @Dao
 public interface CheckInDao {
 
-    @Query("SELECT * FROM activities WHERE id=:id")
-    Activity retrieveCheckInById(int id);
+    @Query("SELECT * FROM check_ins WHERE id=:id")
+    LiveData<CheckIn> retrieveCheckInById(int id);
 
     @Query("SELECT * FROM check_ins")
     LiveData<List<CheckIn>> loadAllCheckIns();
