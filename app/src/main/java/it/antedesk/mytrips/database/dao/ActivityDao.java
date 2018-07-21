@@ -1,5 +1,6 @@
 package it.antedesk.mytrips.database.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -13,10 +14,10 @@ import it.antedesk.mytrips.model.Activity;
 public interface ActivityDao {
 
     @Query("SELECT * FROM activities ORDER BY date_time DESC")
-    List<Activity> loadAllActivities();
+    LiveData<List<Activity>> loadAllActivities();
 
     @Query("SELECT * FROM activities WHERE diary_id=:diaryId")
-    List<Activity> retrieveActivitiesByDiaryId(final int diaryId);
+    LiveData<List<Activity>> retrieveActivitiesByDiaryId(final int diaryId);
 
     @Insert
     void insertActivity(Activity activity);

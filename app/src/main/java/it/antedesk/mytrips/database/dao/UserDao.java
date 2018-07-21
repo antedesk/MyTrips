@@ -1,5 +1,6 @@
 package it.antedesk.mytrips.database.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -13,7 +14,7 @@ import it.antedesk.mytrips.model.User;
 public interface UserDao {
 
     @Query("SELECT * FROM users")
-    List<User> loadAllUsers();
+    LiveData<List<User>> loadAllUsers();
 
     @Insert
     void insertUser(User user);
