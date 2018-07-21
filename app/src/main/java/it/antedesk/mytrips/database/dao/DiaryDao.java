@@ -19,8 +19,8 @@ public interface DiaryDao {
     @Query("SELECT * FROM activities WHERE id=:id")
     Activity retrieveDiaryById(int id);
 
-    @Query("SELECT * FROM diaries ORDER BY start_date DESC")
-    LiveData<List<Diary>> loadAllDiary();
+    @Query("SELECT * FROM diaries WHERE is_plan = :isPlan ORDER BY start_date DESC")
+    LiveData<List<Diary>> loadAllDiaries(boolean isPlan);
 
     @Insert
     void insertDiary(Diary diary);
