@@ -10,11 +10,11 @@ import it.antedesk.mytrips.model.CheckIn;
 public interface BaseDao<T> {
 
     @Insert
-    void insertEntity(CheckIn checkIn);
+    void insert(T entity);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateEntity(CheckIn checkIn);
+    void update(T entity);
 
     @Delete
-    void deleteEntity(CheckIn checkIn);
+    void delete(T entity);
 }

@@ -10,10 +10,11 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.model.User;
 
 @Dao
-public interface UserDao {
+public interface UserDao extends BaseDao<User>{
 
     @Query("SELECT * FROM users WHERE id=:id")
     User retrieveUserById(int id);
@@ -21,12 +22,4 @@ public interface UserDao {
     @Query("SELECT * FROM users")
     LiveData<List<User>> loadAllUsers();
 
-    @Insert
-    void insertUser(User user);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateNote(User user);
-
-    @Delete
-    void deleteNote(User user);
 }

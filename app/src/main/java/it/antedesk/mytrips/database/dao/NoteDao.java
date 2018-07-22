@@ -14,7 +14,7 @@ import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.Note;
 
 @Dao
-public interface NoteDao {
+public interface NoteDao extends BaseDao<Note>{
 
     @Query("SELECT * FROM notes WHERE id=:id")
     LiveData<Note> retrieveNoteById(int id);
@@ -25,12 +25,4 @@ public interface NoteDao {
     @Query("SELECT * FROM notes WHERE diary_id=:diaryId")
     LiveData<List<Activity>> retrieveNotesByDiaryId(final int diaryId);
 
-    @Insert
-    void insertNote(Note note);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateNote(Note note);
-
-    @Delete
-    void deleteNote(Note note);
 }

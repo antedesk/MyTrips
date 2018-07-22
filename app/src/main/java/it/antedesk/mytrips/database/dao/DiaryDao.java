@@ -14,7 +14,7 @@ import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.Diary;
 
 @Dao
-public interface DiaryDao {
+public interface DiaryDao extends BaseDao<Diary>{
 
     @Query("SELECT * FROM activities WHERE id=:id")
     LiveData<Activity> retrieveDiaryById(int id);
@@ -22,12 +22,4 @@ public interface DiaryDao {
     @Query("SELECT * FROM diaries WHERE is_plan = :isPlan ORDER BY start_date DESC")
     LiveData<List<Diary>> loadAllDiaries(boolean isPlan);
 
-    @Insert
-    void insertDiary(Diary diary);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateDiary(Diary diary);
-
-    @Delete
-    void deleteDiary(Diary diary);
 }

@@ -12,9 +12,10 @@ import java.util.List;
 
 import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.CheckIn;
+import it.antedesk.mytrips.model.Diary;
 
 @Dao
-public interface CheckInDao {
+public interface CheckInDao  extends BaseDao<CheckIn>{
 
     @Query("SELECT * FROM check_ins WHERE id=:id")
     LiveData<CheckIn> retrieveCheckInById(int id);
@@ -25,12 +26,4 @@ public interface CheckInDao {
     @Query("SELECT COUNT(id) FROM check_ins")
     int getTotalCheckIn();
 
-    @Insert
-    void insertNote(CheckIn checkIn);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateNote(CheckIn checkIn);
-
-    @Delete
-    void deleteNote(CheckIn checkIn);
 }

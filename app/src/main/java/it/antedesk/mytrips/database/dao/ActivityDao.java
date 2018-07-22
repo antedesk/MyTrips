@@ -14,7 +14,7 @@ import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.CheckIn;
 
 @Dao
-public interface ActivityDao {
+public interface ActivityDao extends BaseDao<Activity> {
 
     @Query("SELECT * FROM activities WHERE id=:id")
     LiveData<Activity>retrieveActivityById(int id);
@@ -27,13 +27,4 @@ public interface ActivityDao {
 
     @Query("SELECT * FROM check_ins WHERE id=:checkInId")
     CheckIn retrieveCheckInById(final int checkInId);
-
-    @Insert
-    void insertActivity(Activity activity);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateActivity(Activity activity);
-
-    @Delete
-    void deleteActivity(Activity activity);
 }
