@@ -1,7 +1,11 @@
 package it.antedesk.mytrips.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+
 import it.antedesk.mytrips.database.AppDatabase;
+import it.antedesk.mytrips.database.AppExecutors;
+import it.antedesk.mytrips.model.CheckIn;
 import it.antedesk.mytrips.model.User;
 
 public class UserRepository {
@@ -9,16 +13,18 @@ public class UserRepository {
 
     private static UserRepository sInstance;
     private final AppDatabase mDb;
+    private final AppExecutors appExecutors;
 
-    private UserRepository(final AppDatabase database) {
+    private UserRepository(final AppDatabase database, final AppExecutors appExecutors) {
         mDb = database;
+        this.appExecutors = appExecutors;
     }
 
-    public static UserRepository getInstance(final AppDatabase database) {
+    public static UserRepository getInstance(final AppDatabase database, final AppExecutors appExecutors) {
         if (sInstance == null) {
             synchronized (UserRepository.class) {
                 if (sInstance == null) {
-                    sInstance = new UserRepository(database);
+                    sInstance = new UserRepository(database, appExecutors);
                 }
             }
         }
@@ -26,18 +32,20 @@ public class UserRepository {
     }
 
     public LiveData<User> geteUserById(int userId) {
-        return mDb.getUserDao().retrieveUserById(userId);
+        MutableLiveData<User> user = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> user.postValue(mDb.getUserDao().retrieveUserById(userId)));
+        return user;
     }
 
     public void insertUser (User user) {
-        mDb.getUserDao().insert(user);
+        appExecutors.diskIO().execute(() -> mDb.getUserDao().insert(user));
     }
 
     public void updateUser (User user) {
-        mDb.getUserDao().update(user);
+        appExecutors.diskIO().execute(() -> mDb.getUserDao().update(user));
     }
 
     public void deleteUser (User user) {
-        mDb.getUserDao().delete(user);
+        appExecutors.diskIO().execute(() -> mDb.getUserDao().delete(user));
     }
 }

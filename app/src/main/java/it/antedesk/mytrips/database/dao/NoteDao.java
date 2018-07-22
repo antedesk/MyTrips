@@ -13,16 +13,16 @@ import it.antedesk.mytrips.model.Note;
 public interface NoteDao extends BaseDao<Note>{
 
     @Query("SELECT * FROM notes WHERE id=:id")
-    LiveData<Note> retrieveNoteById(int id);
+    Note retrieveNoteById(int id);
 
     @Query("SELECT * FROM notes WHERE diary_id=:diaryId")
-    LiveData<List<Note>> retrieveNotesByDiaryId(final int diaryId);
+    List<Note> retrieveNotesByDiaryId(final int diaryId);
 
     @Query("SELECT * FROM check_ins WHERE id=:checkInId")
-    LiveData<CheckIn> retrieveCheckInById(final int checkInId);
+    CheckIn retrieveCheckInById(final int checkInId);
 
     @Query("SELECT * FROM notes WHERE diary_id=:id ORDER BY date_time DESC")
-    LiveData<List<Note>> loadNotesByDiaryId(int id);
+    List<Note> loadNotesByDiaryId(int id);
 
     @Query("SELECT COUNT(DISTINCT address) " +
             "FROM notes LEFT JOIN check_ins on notes.check_in_id = check_ins.id " +

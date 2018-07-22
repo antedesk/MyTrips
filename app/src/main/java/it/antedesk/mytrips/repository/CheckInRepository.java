@@ -1,10 +1,12 @@
 package it.antedesk.mytrips.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 
 import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;
+import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.CheckIn;
 
 public class CheckInRepository {
@@ -14,16 +16,18 @@ public class CheckInRepository {
 
     private static CheckInRepository sInstance;
     private final AppDatabase mDb;
+    private final AppExecutors appExecutors;
 
-    private CheckInRepository(final AppDatabase database) {
+    private CheckInRepository(final AppDatabase database, final AppExecutors appExecutors) {
         mDb = database;
+        this.appExecutors = appExecutors;
     }
 
-    public static CheckInRepository getInstance(final AppDatabase database) {
+    public static CheckInRepository getInstance(final AppDatabase database, final AppExecutors appExecutors) {
         if (sInstance == null) {
             synchronized (CheckInRepository.class) {
                 if (sInstance == null) {
-                    sInstance = new CheckInRepository(database);
+                    sInstance = new CheckInRepository(database, appExecutors);
                 }
             }
         }
@@ -31,35 +35,46 @@ public class CheckInRepository {
     }
 
     public LiveData<CheckIn> getCheckInById(int id) {
-        return mDb.getCheckInDao().retrieveCheckInById(id);
+        MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getCheckInDao().retrieveCheckInById(id)));
+        return checkIn;
     }
 
-    public int getTotalCheckIns() {
-        return mDb.getCheckInDao().getTotalCheckIn();
+    public LiveData<Integer> getTotalCheckIns() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getCheckInDao().getTotalCheckIn()));
+        return total;
     }
 
-    public int getTotalCities() {
-        return mDb.getCheckInDao().getTotalCities();
+    public LiveData<Integer> getTotalCities() {
+
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getCheckInDao().getTotalCities()));
+        return total;
     }
 
-    public int getTotalCountries() {
-        return mDb.getCheckInDao().getTotalCountries();
+    public LiveData<Integer> getTotalCountries() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getCheckInDao().getTotalCountries()));
+        return total;
     }
 
     public LiveData<List<String>>  getVisitedCountries() {
-        return mDb.getCheckInDao().getCountries();
+        MutableLiveData<List<String>> countries = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> countries.postValue(mDb.getCheckInDao().getCountries()));
+        return countries;
     }
 
     public void insertCheckIn (CheckIn checkIn) {
-        mDb.getCheckInDao().insert(checkIn);
+        appExecutors.diskIO().execute(() -> mDb.getCheckInDao().insert(checkIn));
     }
 
     public void updateCheckIn (CheckIn checkIn) {
-        mDb.getCheckInDao().update(checkIn);
+        appExecutors.diskIO().execute(() -> mDb.getCheckInDao().update(checkIn));
     }
 
     public void deleteCheckIn (CheckIn checkIn) {
-        mDb.getCheckInDao().delete(checkIn);
+        appExecutors.diskIO().execute(() -> mDb.getCheckInDao().delete(checkIn));
     }
 
 }

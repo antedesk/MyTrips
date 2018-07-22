@@ -12,7 +12,7 @@ import it.antedesk.mytrips.model.CheckIn;
 public interface CheckInDao  extends BaseDao<CheckIn>{
 
     @Query("SELECT * FROM check_ins WHERE id=:id")
-    LiveData<CheckIn> retrieveCheckInById(int id);
+    CheckIn retrieveCheckInById(int id);
 
     @Query("SELECT  COUNT(DISTINCT address) FROM check_ins")
     int getTotalCheckIn();
@@ -24,6 +24,6 @@ public interface CheckInDao  extends BaseDao<CheckIn>{
     int getTotalCountries();
 
     @Query("SELECT DISTINCT country FROM check_ins")
-    LiveData<List<String>> getCountries();
+    List<String> getCountries();
 
 }

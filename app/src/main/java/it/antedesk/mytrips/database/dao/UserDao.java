@@ -12,6 +12,6 @@ import it.antedesk.mytrips.model.User;
 public interface UserDao extends BaseDao<User>{
 
     @Query("SELECT * FROM users WHERE id=:id")
-    LiveData<User> retrieveUserById(int id);
+    User retrieveUserById(int id);
 
 }
