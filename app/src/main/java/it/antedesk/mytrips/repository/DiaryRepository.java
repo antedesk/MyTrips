@@ -31,20 +31,30 @@ public class DiaryRepository {
         return sInstance;
     }
 
-    LiveData<List<Diary>> getPlans() {
+    public LiveData<Diary> getDiaryById(int id) {
+        return mDb.getDiaryDao().retrieveDiaryById(id);
+    }
+
+    public LiveData<List<Diary>> getPlans() {
         diaries = mDb.getDiaryDao().loadAllDiaries(false);
         return diaries;
     }
 
-    LiveData<List<Diary>> getDiaries() {
+    public LiveData<List<Diary>> getDiaries() {
         diaries = mDb.getDiaryDao().loadAllDiaries(true);
         return diaries;
     }
 
-    //HOW TO DO THIS?
-    public void insertDiary (Diary word) {
-        //new insertAsyncTask(mDiaryDao).execute(word);
+    public void insertDiary (Diary diary) {
+        mDb.getDiaryDao().insert(diary);
     }
 
+    public void updateDiary (Diary diary) {
+        mDb.getDiaryDao().update(diary);
+    }
+
+    public void deleteDiary (Diary diary) {
+        mDb.getDiaryDao().delete(diary);
+    }
 
 }

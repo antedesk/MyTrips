@@ -19,14 +19,11 @@ public interface ActivityDao extends BaseDao<Activity> {
     @Query("SELECT * FROM activities WHERE id=:id")
     LiveData<Activity>retrieveActivityById(int id);
 
-    @Query("SELECT * FROM activities ORDER BY date_time DESC")
-    LiveData<List<Activity>> loadAllActivities();
-
     @Query("SELECT * FROM activities WHERE diary_id=:diaryId")
     LiveData<List<Activity>> retrieveActivitiesByDiaryId(final int diaryId);
 
     @Query("SELECT * FROM check_ins WHERE id=:checkInId")
-    CheckIn retrieveCheckInById(final int checkInId);
+    LiveData<CheckIn> retrieveCheckInById(final int checkInId);
 
     @Query("SELECT * FROM activities WHERE diary_id=:id ORDER BY date_time DESC")
     LiveData<List<Activity>> loadActivitiesByDiaryId(int id);
@@ -41,7 +38,7 @@ public interface ActivityDao extends BaseDao<Activity> {
     double getTotalBudgetByDiaryId(int diaryId);
 
     @Query("SELECT SUM(budget) FROM activities")
-    double getTotalBudget4AllActivity();
+    double getTotalBudget4AllActivities();
 
     @Query("SELECT category, SUM(budget) FROM activities GROUP BY category")
     double getTotalBudgetByCategories();
