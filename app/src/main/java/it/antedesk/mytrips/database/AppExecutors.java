@@ -1,4 +1,4 @@
-package it.antedesk.mytrips.repository;
+package it.antedesk.mytrips.database;
 
 import android.os.Handler;
 import android.os.Looper;
