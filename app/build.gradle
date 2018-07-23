@@ -55,6 +55,10 @@ dependencies {
     androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
 
     implementation 'com.jakewharton:butterknife:8.8.1'
+
+    // for circular ImageView
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
