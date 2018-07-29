@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="6dp"
+    card_view:cardPreventCornerOverlap="true"
+    tools:ignore="MissingPrefix"
+    card_view:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/diary_title_tv"
+            style="@style/BaseTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/title_placeholder_txt"/>
+
+        <TextView
+            android:id="@+id/diary_date_tv"
+            style="@style/BaseTextView"
+            android:layout_below="@+id/diary_title_tv"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/date_placeholder"/>
+        <TextView
+            android:id="@+id/diary_category_tv"
+            style="@style/BaseTextView"
+            android:layout_below="@+id/diary_title_tv"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/category_placeholer"/>
+
+        <TextView
+            android:id="@+id/diary_description_tv"
+            style="@style/BaseTextView"
+            android:layout_below="@+id/diary_date_tv"
+            android:layout_margin="10dp"
+            android:text="@string/diary_description_placeholder"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

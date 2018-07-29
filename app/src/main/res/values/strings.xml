@@ -4,12 +4,16 @@
     <string name="facebook_app_id">227250021247101</string>
     <string name="fb_login_protocol_scheme">fb227250021247101</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="tab_diaries">My Diaries</string>
+    <string name="tab_plans">My Plans</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="fake_username">Tonino Jones</string>
     <string name="user_home_location">Rome, Italy</string>
+    <string name="title_placeholder_txt">My Awesome Trip</string>
+    <string name="diary_description_placeholder">This is my first trip in the city of nowhere\.\.\.</string>
+    <string name="category_placeholer">Adventure</string>
+    <string name="date_placeholder">10/12/2017</string>
+    <string name="no_content_placeholder">No content at the moment!\nAre you ready for your next trip?</string>
 
 </resources>

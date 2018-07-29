@@ -162,4 +162,19 @@ public class Diary implements Parcelable{
     public void setPlan(boolean plan) {
         isPlan = plan;
     }
+
+    @Override
+    public String toString() {
+        return "Diary{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", budget=" + budget +
+                ", currency='" + currency + '\'' +
+                ", category='" + category + '\'' +
+                ", isPlan=" + isPlan +
+                '}';
+    }
 }

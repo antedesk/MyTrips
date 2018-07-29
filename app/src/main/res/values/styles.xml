@@ -24,4 +24,12 @@
         <item name="android:layout_margin">@dimen/default_layout_margin_tv</item>
     </style>
 
+    <style name="BaseTextView" parent="@android:style/TextAppearance">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/default_tv_size</item>
+        <item name="android:layout_margin">@dimen/default_layout_margin_tv</item>
+    </style>
+
+    <dimen name="default_tv_size">20sp</dimen>
 </resources>

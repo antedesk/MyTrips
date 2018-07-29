@@ -1,41 +1,48 @@
 package it.antedesk.mytrips;
 
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
+
+import it.antedesk.mytrips.adapter.DiaryViewAdapter;
+import it.antedesk.mytrips.database.AppDatabase;
+import it.antedesk.mytrips.database.AppExecutors;
+import it.antedesk.mytrips.model.Diary;
+import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -44,37 +51,42 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         // trick to make scrollview working with tabbeView
-        NestedScrollView scrollView = (NestedScrollView) findViewById (R.id.nested_scrollview);
+        NestedScrollView scrollView = findViewById (R.id.nested_scrollview);
         scrollView.setFillViewport (true);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
-        //collapsingToolbarLayout.setTitleEnabled(false);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of the sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+/*
+        final Diary d = new Diary("pippo", "my pippo", Calendar.getInstance().getTime(),
+                Calendar.getInstance().getTime(), 200.59, "EUR", "family", true);
+        Log.d(WelcomeActivity.class.getName(), d.getName());
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+       AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void run() {
+                mDb.getDiaryDao().insert(d);
             }
         });
+*/
+        //  mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        //  tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
     }
 
 
@@ -101,38 +113,109 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     /**
+     * Allows to set up the tabs and titles
+     * @param viewPager
+     */
+    private void setupViewPager(ViewPager viewPager) {
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(DiaryFragment.newInstance(false), getString(R.string.tab_diaries));
+        adapter.addFrag(DiaryFragment.newInstance(true), getString(R.string.tab_plans));
+        viewPager.setAdapter(adapter);
+    }
+
+    /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryViewAdapterOnClickHandler {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String IS_A_PLAN = "is_a_plan";
 
-        public PlaceholderFragment() {
+        private DiaryViewAdapter dvApter;
+
+        public DiaryFragment() {
         }
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static DiaryFragment newInstance(boolean isPlane) {
+            DiaryFragment fragment = new DiaryFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putBoolean(IS_A_PLAN, isPlane);
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+//            textView.setText(getString(R.string.section_format));
+            //textView.setText(getString(R.string.section_format, getArguments().getBoolean(IS_A_PLAN)));
+
+            boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+            int portraitColumns = tabletSize ? 2 : 1;
+            int landscapeColumns = tabletSize ? 3 : calculateNoOfColumns(Objects.requireNonNull(getActivity()).getApplicationContext());
+            int numberOfColumns =
+                    getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? portraitColumns : landscapeColumns;
+
+            // creating a GridLayoutManager
+            GridLayoutManager mLayoutManager
+                    = new GridLayoutManager(Objects.requireNonNull(getActivity()).getApplicationContext(), numberOfColumns);
+
+            RecyclerView recyclerView = rootView.findViewById(R.id.diaries_recycler_view);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setHasFixedSize(true);
+
+            dvApter = new DiaryViewAdapter(this);
+            recyclerView.setAdapter(dvApter);
+
+            if (getArguments() != null) {
+                retrieveDiariesOrPlans(getArguments().getBoolean(IS_A_PLAN));
+            }
+
             return rootView;
         }
+
+        @Override
+        public void onClick(Diary selectedDiary) {
+
+        }
+
+        private void retrieveDiariesOrPlans(final boolean isPlane){
+            LoadDiariesViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiariesViewModel.class);
+            if(isPlane) {
+                dataViewModel.getPlans().observe(this, plans -> {
+                    if(plans!=null)
+                        dvApter.setDiarysData(plans);
+                });
+            } else {
+                dataViewModel.getDiaries().observe(this, diaries -> {
+                    if(diaries!=null)
+                        dvApter.setDiarysData(diaries);
+                });
+            }
+        }
+
+        /**
+         * Calculates the number of columns for the gridlayout
+         * @param context
+         * @return
+         */
+        public static int calculateNoOfColumns(Context context) {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+            int scalingFactor = 180;
+            int noOfCol = (int) (dpWidth / scalingFactor);
+            noOfCol = noOfCol >= 3 ? 2 : 1;
+            return noOfCol;
+        }
+
     }
 
     /**
@@ -141,21 +224,32 @@ public class WelcomeActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return mFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return mFragmentList.size();
+        }
+
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
 }
