@@ -6,7 +6,8 @@
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="tab_diaries">My Diaries</string>
     <string name="tab_plans">My Plans</string>
-    <string name="action_settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="stats">Stats</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="fake_username">Tonino Jones</string>
     <string name="user_home_location">Rome, Italy</string>
@@ -15,5 +16,7 @@
     <string name="category_placeholer">Adventure</string>
     <string name="date_placeholder">10/12/2017</string>
     <string name="no_content_placeholder">No content at the moment!\nAre you ready for your next trip?</string>
+    <string name="fab_add_diary_str">Add a new Diary</string>
+    <string name="fab_add_plan_str">Add a new Plan</string>
 
 </resources>

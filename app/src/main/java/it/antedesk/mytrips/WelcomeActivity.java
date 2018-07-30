@@ -10,31 +10,28 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import it.antedesk.mytrips.adapter.DiaryViewAdapter;
-import it.antedesk.mytrips.database.AppDatabase;
-import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
@@ -42,37 +39,49 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class WelcomeActivity extends AppCompatActivity {
 
+    @BindView(R.id.nested_scrollview)
+    NestedScrollView scrollView;
+    @BindView (R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.container)
+    ViewPager mViewPager;
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
+
+    @BindView(R.id.fab_add_diary)
+    FloatingActionButton fabDiary;
+    @BindView(R.id.fab_add_plan)
+    FloatingActionButton fabPlan;
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private int fabState = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        ButterKnife.bind(this);
 
         // trick to make scrollview working with tabbeView
-        NestedScrollView scrollView = findViewById (R.id.nested_scrollview);
         scrollView.setFillViewport (true);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 /*
-        final Diary d = new Diary("pippo", "my pippo", Calendar.getInstance().getTime(),
-                Calendar.getInstance().getTime(), 200.59, "EUR", "family", true);
+        final Diary d = new Diary("pluto"+i, "my pluto_"+i, Calendar.getInstance().getTime(),
+                Calendar.getInstance().getTime(), 200.59, "EUR", "Adventure", false);
         Log.d(WelcomeActivity.class.getName(), d.getName());
 
-       AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
+        AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -81,14 +90,39 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 */
-        //  mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        //  tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    fabDiary.show();
+                    fabPlan.hide();
+                } else {
+                    fabDiary.hide();
+                    fabPlan.show();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        fabDiary.setOnClickListener((View view) -> {
+            Snackbar.make(view, "FAB Diary", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        });
+
+        fabPlan.setOnClickListener((View view) -> {
+            Snackbar.make(view, "FAB Plan", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,11 +139,16 @@ public class WelcomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch(id)
+        {
+            case R.id.action_profile:
+                return true;
+            case R.id.action_stats:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -154,9 +193,6 @@ public class WelcomeActivity extends AppCompatActivity {
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format));
-            //textView.setText(getString(R.string.section_format, getArguments().getBoolean(IS_A_PLAN)));
 
             boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
             int portraitColumns = tabletSize ? 2 : 1;

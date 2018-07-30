@@ -10,4 +10,11 @@
     <dimen name="home_fab_elevation">6dp</dimen>
     <dimen name="no_content_line_spacing">5dp</dimen>
 
+    <dimen name="fab_cardview_horizontal_padding">6dp</dimen>
+    <dimen name="fab_cardview_vertical_padding">2dp</dimen>
+
+    <dimen name="fab_cardCornerRadius">6dp</dimen>
+    <dimen name="fab_cardElevation">6dp</dimen>
+    <dimen name="default_tv_size">20sp</dimen>
+
 </resources>

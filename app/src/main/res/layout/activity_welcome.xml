@@ -77,12 +77,22 @@
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_add_diary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_add"
+        app:srcCompat="@drawable/ic_add_black_24dp"
+        android:elevation="@dimen/home_fab_elevation"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@mipmap/fake_icon"
+        android:visibility="gone"
         android:elevation="@dimen/home_fab_elevation"/>
 
 </android.support.design.widget.CoordinatorLayout>
