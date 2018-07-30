@@ -18,5 +18,29 @@
     <string name="no_content_placeholder">No content at the moment!\nAre you ready for your next trip?</string>
     <string name="fab_add_diary_str">Add a new Diary</string>
     <string name="fab_add_plan_str">Add a new Plan</string>
+    <string name="diary_name_description">diary name</string>
+    <string name="description_icon">description icon</string>
+    <string name="description_placeholder_tv">Description</string>
+    <string name="end_date_icon_description">end date icon</string>
+    <string name="start_date_icon_description">start date icon</string>
+    <string name="start_date_placeholder_et">Start date</string>
+    <string name="end_date_placeholder_edt">End date</string>
+    <string name="money_placeholder_edt">00.00</string>
+    <string name="category_placeholder_edt">category placeholder</string>
+
+    <string-array name="diary_categories_array">
+        <item>Adventure</item>
+        <item>Business</item>
+        <item>Cruise</item>
+        <item>Family Trip</item>
+        <item>Road Trip</item>
+        <item>Student Trip</item>
+        <item>Vacation</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="diary_cotraveler_array">
+        <item>Alone</item>
+        <item>Co-Travelers</item>
+    </string-array>
 
 </resources>

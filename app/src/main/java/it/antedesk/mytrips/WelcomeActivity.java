@@ -2,6 +2,7 @@ package it.antedesk.mytrips;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,16 +28,20 @@ import android.widget.LinearLayout;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.adapter.DiaryViewAdapter;
+import it.antedesk.mytrips.database.AppDatabase;
+import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static it.antedesk.mytrips.utils.SupportVariablesDefinition.IS_PLAN;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -77,8 +83,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(mViewPager);
 /*
-        final Diary d = new Diary("pluto"+i, "my pluto_"+i, Calendar.getInstance().getTime(),
-                Calendar.getInstance().getTime(), 200.59, "EUR", "Adventure", false);
+        final Diary d = new Diary("pippo_0", "my pippo_0", Calendar.getInstance().getTime(),
+                Calendar.getInstance().getTime(), 200.59, "EUR", "family", true);
         Log.d(WelcomeActivity.class.getName(), d.getName());
 
         AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
@@ -113,14 +119,19 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = new Intent(this, AddDiaryActivity.class);
         fabDiary.setOnClickListener((View view) -> {
             Snackbar.make(view, "FAB Diary", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+            intent.putExtra(IS_PLAN, false);
+            startActivity(intent);
         });
 
         fabPlan.setOnClickListener((View view) -> {
             Snackbar.make(view, "FAB Plan", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+            intent.putExtra(IS_PLAN, false);
+            startActivity(intent);
         });
     }
 

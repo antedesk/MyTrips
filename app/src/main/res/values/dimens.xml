@@ -16,5 +16,6 @@
     <dimen name="fab_cardCornerRadius">6dp</dimen>
     <dimen name="fab_cardElevation">6dp</dimen>
     <dimen name="default_tv_size">20sp</dimen>
+    <dimen name="form_tv_size">23sp</dimen>
 
 </resources>
