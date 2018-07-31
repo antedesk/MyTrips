@@ -185,7 +185,6 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/end_date_icon_description"
                 android:src="@mipmap/fake_icon" />
-
             <Spinner
                 android:id="@+id/diary_cotraveler_spinner"
                 style="@style/AddDiarySpinner"/>

@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/add_diary_grid_padding"
-        android:layout_marginStart="@dimen/add_diary_grid_padding">
+        android:layout_marginStart="@dimen/add_diary_grid_padding"
+        android:background="@color/light_gray10"
+        android:elevation="@dimen/button_elevation">
 
         <ImageView
             android:id="@+id/diary_name_icon"

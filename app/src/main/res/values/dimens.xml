@@ -19,5 +19,8 @@
     <dimen name="default_tv_size">20sp</dimen>
     <dimen name="form_tv_size">23sp</dimen>
     <dimen name="add_diary_grid_padding">16dp</dimen>
+    <dimen name="add_diary_margin_top">10dp</dimen>
+    <dimen name="save_button_margin_bottom">5dp</dimen>
+    <dimen name="button_elevation">6dp</dimen>
 
 </resources>
