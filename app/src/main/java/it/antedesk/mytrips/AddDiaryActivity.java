@@ -1,14 +1,16 @@
 package it.antedesk.mytrips;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -17,6 +19,8 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static it.antedesk.mytrips.utils.SupportVariablesDefinition.IS_PLAN;
 
 public class AddDiaryActivity extends AppCompatActivity {
 
@@ -46,6 +50,17 @@ public class AddDiaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_diary);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+        // checking if it is null, if so close the activity
+        if (intent == null) {
+            Snackbar.make(findViewById(R.id.form_scroller), "FAB Plan", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+
+        boolean isPlan = intent.getBooleanExtra(IS_PLAN, false);
+        String pageTitle = isPlan ? getString(R.string.add_plan_str) : getString(R.string.add_diary_str);
+        setTitle(pageTitle);
+
         setupDates();
         setupSpinners();
 
@@ -68,7 +83,6 @@ public class AddDiaryActivity extends AppCompatActivity {
                     diaryNameEditText.setError(null);
             }
         });
-
         diaryDescEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,6 +102,7 @@ public class AddDiaryActivity extends AppCompatActivity {
                     diaryDescEditText.setError(null);
             }
         });
+
     }
 
     /**
@@ -140,5 +155,9 @@ public class AddDiaryActivity extends AppCompatActivity {
                 R.array.current_currencies_array, android.R.layout.simple_spinner_item);
         currenciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currenciesSpinner.setAdapter(currenciesAdapter);
+    }
+
+    public void onSaveClick(View view) {
+        finish();
     }
 }

@@ -16,8 +16,8 @@
     <string name="category_placeholer">Adventure</string>
     <string name="date_placeholder">10/12/2017</string>
     <string name="no_content_placeholder">No content at the moment!\nAre you ready for your next trip?</string>
-    <string name="fab_add_diary_str">Add a new Diary</string>
-    <string name="fab_add_plan_str">Add a new Plan</string>
+    <string name="add_diary_str">Add Diary</string>
+    <string name="add_plan_str">Add Plan</string>
     <string name="diary_name_description">diary name</string>
     <string name="description_icon">description icon</string>
     <string name="description_placeholder_tv">Description</string>

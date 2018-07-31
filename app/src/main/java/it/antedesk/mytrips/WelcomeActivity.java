@@ -130,7 +130,7 @@ public class WelcomeActivity extends AppCompatActivity {
         fabPlan.setOnClickListener((View view) -> {
             Snackbar.make(view, "FAB Plan", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            intent.putExtra(IS_PLAN, false);
+            intent.putExtra(IS_PLAN, true);
             startActivity(intent);
         });
     }
