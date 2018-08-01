@@ -30,8 +30,10 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import it.antedesk.mytrips.adapter.DiaryViewAdapter;
+import it.antedesk.mytrips.ui.adapter.DiaryViewAdapter;
 import it.antedesk.mytrips.model.Diary;
+import it.antedesk.mytrips.ui.fragment.DiaryFragment;
+import it.antedesk.mytrips.ui.fragment.adapter.SectionsPagerAdapter;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
@@ -151,7 +153,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -164,138 +165,5 @@ public class WelcomeActivity extends AppCompatActivity {
         adapter.addFrag(DiaryFragment.newInstance(false), getString(R.string.tab_diaries));
         adapter.addFrag(DiaryFragment.newInstance(true), getString(R.string.tab_plans));
         viewPager.setAdapter(adapter);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryViewAdapterOnClickHandler {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String IS_A_PLAN = "is_a_plan";
-
-        private DiaryViewAdapter dvApter;
-        private boolean isPlan;
-
-        public DiaryFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static DiaryFragment newInstance(boolean isPlane) {
-            DiaryFragment fragment = new DiaryFragment();
-            Bundle args = new Bundle();
-            args.putBoolean(IS_A_PLAN, isPlane);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
-
-            boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
-            int portraitColumns = tabletSize ? 2 : 1;
-            int landscapeColumns = tabletSize ? 3 : calculateNoOfColumns(Objects.requireNonNull(getActivity()).getApplicationContext());
-            int numberOfColumns =
-                    getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? portraitColumns : landscapeColumns;
-
-            // creating a GridLayoutManager
-            GridLayoutManager mLayoutManager
-                    = new GridLayoutManager(Objects.requireNonNull(getActivity()).getApplicationContext(), numberOfColumns);
-
-            RecyclerView recyclerView = rootView.findViewById(R.id.diaries_recycler_view);
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setHasFixedSize(true);
-
-            dvApter = new DiaryViewAdapter(this);
-            recyclerView.setAdapter(dvApter);
-
-            return rootView;
-        }
-
-        @Override
-        public void onClick(Diary selectedDiary) {
-            Snackbar.make(getActivity().findViewById(R.id.diaries_recycler_view),"Selected "+selectedDiary.getName(), Snackbar.LENGTH_LONG).show();
-
-        }
-
-        private void retrieveDiariesOrPlans(final boolean isPlane){
-            LoadDiariesViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiariesViewModel.class);
-            if(isPlane) {
-                dataViewModel.getPlans().observe(this, plans -> {
-                    if(plans!=null)
-                        dvApter.setDiarysData(plans);
-                });
-            } else {
-                dataViewModel.getDiaries().observe(this, diaries -> {
-                    if(diaries!=null)
-                        dvApter.setDiarysData(diaries);
-                });
-            }
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            if (getArguments() != null) {
-                retrieveDiariesOrPlans(getArguments().getBoolean(IS_A_PLAN));
-            }
-        }
-
-        /**
-         * Calculates the number of columns for the gridlayout
-         * @param context
-         * @return
-         */
-        public static int calculateNoOfColumns(Context context) {
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            int scalingFactor = 180;
-            int noOfCol = (int) (dpWidth / scalingFactor);
-            noOfCol = noOfCol >= 3 ? 2 : 1;
-            return noOfCol;
-        }
-
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
     }
 }
