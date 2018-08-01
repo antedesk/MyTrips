@@ -83,7 +83,7 @@ public class ActivityRepository {
         return total;
     }
 
-    public MutableLiveData<CheckIn> retrieveCheckInById(int checkInId) {
+    public LiveData<CheckIn> retrieveCheckInById(int checkInId) {
         MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getActivityDao().retrieveCheckInById(checkInId)));
         return checkIn;

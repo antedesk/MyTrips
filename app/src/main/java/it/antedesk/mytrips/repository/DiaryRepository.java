@@ -1,5 +1,6 @@
 package it.antedesk.mytrips.repository;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -30,18 +31,18 @@ public class DiaryRepository {
         return sInstance;
     }
 
-    public MutableLiveData<Diary> getDiaryById(int id) {
+    public LiveData<Diary> getDiaryById(int id) {
         MutableLiveData<Diary> diary = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> diary.postValue(mDb.getDiaryDao().retrieveDiaryById(id)));
         return diary;
     }
 
-    public MutableLiveData<List<Diary>> getPlans() {
+    public LiveData<List<Diary>> getPlans() {
         MutableLiveData<List<Diary>> diaries = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> diaries.postValue(mDb.getDiaryDao().loadAllDiaries(true)));
         return diaries;
     }
-    public MutableLiveData<List<Diary>> getDiaries() {
+    public LiveData<List<Diary>> getDiaries() {
         MutableLiveData<List<Diary>> diaries = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> diaries.postValue(mDb.getDiaryDao().loadAllDiaries(false)));
         return diaries;
