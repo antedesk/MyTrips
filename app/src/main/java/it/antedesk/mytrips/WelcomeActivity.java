@@ -177,6 +177,7 @@ public class WelcomeActivity extends AppCompatActivity {
         private static final String IS_A_PLAN = "is_a_plan";
 
         private DiaryViewAdapter dvApter;
+        private boolean isPlan;
 
         public DiaryFragment() {
         }
@@ -215,15 +216,12 @@ public class WelcomeActivity extends AppCompatActivity {
             dvApter = new DiaryViewAdapter(this);
             recyclerView.setAdapter(dvApter);
 
-            if (getArguments() != null) {
-                retrieveDiariesOrPlans(getArguments().getBoolean(IS_A_PLAN));
-            }
-
             return rootView;
         }
 
         @Override
         public void onClick(Diary selectedDiary) {
+            Snackbar.make(getActivity().findViewById(R.id.diaries_recycler_view),"Selected "+selectedDiary.getName(), Snackbar.LENGTH_LONG).show();
 
         }
 
@@ -239,6 +237,14 @@ public class WelcomeActivity extends AppCompatActivity {
                     if(diaries!=null)
                         dvApter.setDiarysData(diaries);
                 });
+            }
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            if (getArguments() != null) {
+                retrieveDiariesOrPlans(getArguments().getBoolean(IS_A_PLAN));
             }
         }
 

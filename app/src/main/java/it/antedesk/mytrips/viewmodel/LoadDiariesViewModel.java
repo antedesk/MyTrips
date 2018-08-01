@@ -15,21 +15,19 @@ import it.antedesk.mytrips.repository.DiaryRepository;
 
 public class LoadDiariesViewModel extends AndroidViewModel {
 
-    private LiveData<List<Diary>> diaries;
-    private LiveData<List<Diary>> plans;
+    private AppDatabase database;
+    private AppExecutors appExecutors;
 
     public LoadDiariesViewModel(@NonNull Application application) {
         super(application);
-        AppDatabase database = AppDatabase.getsInstance(this.getApplication());
-        AppExecutors appExecutors = AppExecutors.getInstance();
-        diaries = DiaryRepository.getInstance(database, appExecutors).getDiaries();
-        plans = DiaryRepository.getInstance(database, appExecutors).getPlans();
+        database = AppDatabase.getsInstance(this.getApplication());
+        appExecutors = AppExecutors.getInstance();
     }
 
     public LiveData<List<Diary>> getDiaries() {
-        return diaries;
+        return DiaryRepository.getInstance(database, appExecutors).getDiaries();
     }
     public LiveData<List<Diary>> getPlans() {
-        return plans;
+        return DiaryRepository.getInstance(database, appExecutors).getPlans();
     }
 }
