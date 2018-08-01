@@ -1,6 +1,7 @@
 package it.antedesk.mytrips;
 
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -22,6 +23,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.model.Diary;
+import it.antedesk.mytrips.viewmodel.AddDiaryViewModel;
+import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
 import static it.antedesk.mytrips.utils.SupportVariablesDefinition.IS_PLAN;
 
@@ -176,7 +179,7 @@ public class AddDiaryActivity extends AppCompatActivity {
         currenciesSpinner.setAdapter(currenciesAdapter);
     }
 
-    private Calendar setCalendarInfo(Calendar calendar, int year, int monthOfYear, int dayOfMonth){
+    private Calendar setCalendarInfo(Calendar calendar, int year, int monthOfYear, int dayOfMonth) {
 
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, monthOfYear);
@@ -236,6 +239,9 @@ public class AddDiaryActivity extends AppCompatActivity {
         Diary diary = getFormData();
         if (diary != null) {
             Log.d(AddDiaryActivity.class.getName(), diary.toString());
+            AddDiaryViewModel dataViewModel = ViewModelProviders.of(this).get(AddDiaryViewModel.class);
+            dataViewModel.addDiary(diary);
+
             finish();
         } else {
             errors = false;

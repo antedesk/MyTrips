@@ -1,6 +1,5 @@
 package it.antedesk.mytrips.repository;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -10,10 +9,6 @@ import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Diary;
 
 public class DiaryRepository {
-
-    private static final String LOG_TAG = DiaryRepository.class.getSimpleName();
-
-    private LiveData<List<Diary>> diaries;
 
     private static DiaryRepository sInstance;
     private final AppDatabase mDb;

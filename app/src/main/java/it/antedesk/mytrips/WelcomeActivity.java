@@ -18,25 +18,19 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.adapter.DiaryViewAdapter;
-import it.antedesk.mytrips.database.AppDatabase;
-import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
@@ -60,7 +54,6 @@ public class WelcomeActivity extends AppCompatActivity {
     FloatingActionButton fabPlan;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private int fabState = 0;
 
 
     @Override
