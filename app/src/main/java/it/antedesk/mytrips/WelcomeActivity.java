@@ -55,8 +55,6 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.fab_add_plan)
     FloatingActionButton fabPlan;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,27 +68,13 @@ public class WelcomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
         setupViewPager(mViewPager);
 
         tabLayout.setupWithViewPager(mViewPager);
-/*
-        final Diary d = new Diary("pippo_0", "my pippo_0", Calendar.getInstance().getTime(),
-                Calendar.getInstance().getTime(), 200.59, "EUR", "family", true);
-        Log.d(WelcomeActivity.class.getName(), d.getName());
-
-        AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
-
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.getDiaryDao().insert(d);
-            }
-        });
-*/
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -114,20 +98,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = new Intent(this, AddDiaryActivity.class);
-        fabDiary.setOnClickListener((View view) -> {
-            Snackbar.make(view, "FAB Diary", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            intent.putExtra(IS_PLAN, false);
-            startActivity(intent);
-        });
-
-        fabPlan.setOnClickListener((View view) -> {
-            Snackbar.make(view, "FAB Plan", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            intent.putExtra(IS_PLAN, true);
-            startActivity(intent);
-        });
+        setupFABs();
     }
 
     @Override
@@ -154,6 +125,23 @@ public class WelcomeActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setupFABs(){
+        Intent intent = new Intent(this, AddDiaryActivity.class);
+        fabDiary.setOnClickListener((View view) -> {
+            Snackbar.make(view, "FAB Diary", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            intent.putExtra(IS_PLAN, false);
+            startActivity(intent);
+        });
+
+        fabPlan.setOnClickListener((View view) -> {
+            Snackbar.make(view, "FAB Plan", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            intent.putExtra(IS_PLAN, true);
+            startActivity(intent);
+        });
     }
 
     /**
