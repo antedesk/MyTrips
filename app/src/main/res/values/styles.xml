@@ -51,10 +51,20 @@
     <style name="DatePickerEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">@dimen/add_diary_margin_top</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">false</item>
         <item name="android:inputType">none</item>
+    </style>
+
+    <style name="dividerBase">
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="dividerHorizontal" parent="dividerBase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/view_separator_thickness</item>
+        <item name="android:layout_margin">@dimen/add_diary_margin_top</item>
     </style>
 
 </resources>

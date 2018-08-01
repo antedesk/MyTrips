@@ -30,6 +30,11 @@
     <string name="save_txt_button">Save</string>
     <string name="add_money">add money</string>
     <string name="error_str_len">Max character length is</string>
+    <string name="general_error">Something went wrong with your request.\\\\nPlease, try again.</string>
+    <string name="missing_data">Please, fill all the required fields correctly</string>
+    <string name="error_on_date">The selected end date is after the selected start date. Please, set the dates properly.</string>
+    <string name="missing_date">Missing date</string>
+    <string name="required_field">Required field</string>
 
     <string-array name="diary_categories_array">
         <item>Adventure</item>
