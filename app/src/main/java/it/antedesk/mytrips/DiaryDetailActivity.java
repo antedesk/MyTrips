@@ -1,5 +1,6 @@
 package it.antedesk.mytrips;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
+import it.antedesk.mytrips.model.CheckIn;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.ui.adapter.NoteViewAdapter;
@@ -110,30 +112,53 @@ public class DiaryDetailActivity extends AppCompatActivity {
         fabAddNote.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        //toRemove(diary.getId());
+        toRemove(diary.getId());
 
     }
 
-    private void toRemove(int diaryId) {
+    private void toRemove(long diaryId) {
+        MutableLiveData<Long> id = new MutableLiveData<>();
+
+        CheckIn checkIn = new CheckIn(
+                41.9027835,
+                12.4963655,
+                "vattela a pesta, 45",
+                "Roma",
+                "Italia"
+        );
         Note note = new Note(
-                "test2",
+                "TONNARELLO!",
                 "description",
                 Calendar.getInstance().getTime(),
                 "Dinner",
                 40,
                 "EUR",
-                2,
+                0,
                 "sun",
                 30
         );
+        Note note1 = new Note(
+                "test2",
+                "description long long long long long long long tooooooooo long",
+                Calendar.getInstance().getTime(),
+                "Dinner",
+                40,
+                "EUR",
+                0,
+                "sun",
+                30
+        );
+        note.setDiaryId(diaryId);
+        note1.setDiaryId(diaryId);
         AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
+                long checkinid = mDb.getCheckInDao().insert(checkIn);
+                note.setCheckInId(checkinid);
                 mDb.getNoteDao().insert(note);
             }
         });
-
     }
 
     private void snackBarMessage(int messageId) {
@@ -183,6 +208,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
         public NotesFragment() {
         }
 
+        //TODO pass the diary id to the fragment!
         /**
          * Returns a new instance of this fragment for the given section
          * number.

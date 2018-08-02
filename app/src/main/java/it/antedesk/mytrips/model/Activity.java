@@ -15,8 +15,8 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "activities",
         indices = { @Index(value = {"id"}, unique = true),
-                    @Index(value = {"diary_id"}, unique = true),
-                    @Index(value = {"check_in_id"}, unique = true) },
+                    @Index(value = {"diary_id"}),
+                    @Index(value = {"check_in_id"}) },
         foreignKeys = { @ForeignKey(entity = Diary.class,
                                     parentColumns = "id",
                                     childColumns = "diary_id",
@@ -27,9 +27,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Activity implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     @ColumnInfo(name = "diary_id")
-    private int diaryId;
+    private long diaryId;
     private String title;
     private String description;
     @ColumnInfo(name = "date_time")
@@ -38,10 +38,10 @@ public class Activity implements Parcelable{
     private double budget;
     private String currency;
     @ColumnInfo(name = "check_in_id")
-    private int checkInId;
+    private long checkInId;
 
     @Ignore
-    public Activity(String title, String description, Date dateTime, String category, double budget, String currency, int checkInId) {
+    public Activity(String title, String description, Date dateTime, String category, double budget, String currency, long checkInId) {
         this.title = title;
         this.description = description;
         this.dateTime = dateTime;
@@ -51,7 +51,7 @@ public class Activity implements Parcelable{
         this.checkInId = checkInId;
     }
 
-    public Activity(int id, int diaryId, String title, String description, Date dateTime, String category, double budget, String currency, int checkInId) {
+    public Activity(long id, long diaryId, String title, String description, Date dateTime, String category, double budget, String currency, long checkInId) {
         this.id = id;
         this.diaryId = diaryId;
         this.title = title;
@@ -65,14 +65,14 @@ public class Activity implements Parcelable{
 
     @Ignore
     protected Activity(Parcel in) {
-        id = in.readInt();
-        diaryId = in.readInt();
+        id = in.readLong();
+        diaryId = in.readLong();
         title = in.readString();
         description = in.readString();
         category = in.readString();
         budget = in.readDouble();
         currency = in.readString();
-        checkInId = in.readInt();
+        checkInId = in.readLong();
     }
 
     public static final Creator<Activity> CREATOR = new Creator<Activity>() {
@@ -87,27 +87,27 @@ public class Activity implements Parcelable{
         }
     };
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getDiaryId() {
+    public long getDiaryId() {
         return diaryId;
     }
 
-    public void setDiaryId(int diaryId) {
+    public void setDiaryId(long diaryId) {
         this.diaryId = diaryId;
     }
 
-    public int getCheckInId() {
+    public long getCheckInId() {
         return checkInId;
     }
 
-    public void setCheckInId(int checkInId) {
+    public void setCheckInId(long checkInId) {
         this.checkInId = checkInId;
     }
 
@@ -166,13 +166,13 @@ public class Activity implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(diaryId);
+        dest.writeLong(id);
+        dest.writeLong(diaryId);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(category);
         dest.writeDouble(budget);
         dest.writeString(currency);
-        dest.writeInt(checkInId);
+        dest.writeLong(checkInId);
     }
 }

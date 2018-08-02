@@ -15,7 +15,7 @@ import java.util.Date;
 public class Diary implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private String name;
     private String description;
     @ColumnInfo(name = "start_date")
@@ -41,7 +41,7 @@ public class Diary implements Parcelable{
         this.isPlan = isPlan;
     }
 
-    public Diary(int id, String name, String description, Date startDate, Date endDate, double budget, String currency, String category, boolean isPlan) {
+    public Diary(long id, String name, String description, Date startDate, Date endDate, double budget, String currency, String category, boolean isPlan) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,7 +54,7 @@ public class Diary implements Parcelable{
     }
 
     protected Diary(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         name = in.readString();
         description = in.readString();
         budget = in.readDouble();
@@ -83,7 +83,7 @@ public class Diary implements Parcelable{
     //TODO add start/end data
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeDouble(budget);
@@ -92,11 +92,11 @@ public class Diary implements Parcelable{
         dest.writeByte((byte) (isPlan ? 1 : 0));
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

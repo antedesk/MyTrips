@@ -65,8 +65,10 @@ public class CheckInRepository {
         return countries;
     }
 
-    public void insertCheckIn (CheckIn checkIn) {
-        appExecutors.diskIO().execute(() -> mDb.getCheckInDao().insert(checkIn));
+    public LiveData<Long> insertCheckIn (CheckIn checkIn) {
+        MutableLiveData<Long> id = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> id.postValue(mDb.getCheckInDao().insert(checkIn)));
+        return id;
     }
 
     public void updateCheckIn (CheckIn checkIn) {

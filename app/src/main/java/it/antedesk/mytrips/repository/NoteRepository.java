@@ -34,6 +34,12 @@ public class NoteRepository {
         return sInstance;
     }
 
+    public LiveData<List<Note>> getNotes() {
+        MutableLiveData<List<Note>> notes = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> notes.postValue(mDb.getNoteDao().loadNotes()));
+        return notes;
+    }
+
     public LiveData<List<Note>> getDiaryNotes(int diaryId) {
         MutableLiveData<List<Note>> notes = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> notes.postValue(mDb.getNoteDao().loadNotesByDiaryId(diaryId)));

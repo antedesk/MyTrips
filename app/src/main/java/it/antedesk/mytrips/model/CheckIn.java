@@ -12,7 +12,7 @@ import android.os.Parcelable;
 public class CheckIn implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private double latitude;
     private double longitude;
     private String address;
@@ -28,7 +28,7 @@ public class CheckIn implements Parcelable {
         this.country = country;
     }
 
-    public CheckIn(int id, double latitude, double longitude, String address, String city, String country) {
+    public CheckIn(long id, double latitude, double longitude, String address, String city, String country) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -39,7 +39,7 @@ public class CheckIn implements Parcelable {
 
     @Ignore
     protected CheckIn(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         latitude = in.readDouble();
         longitude = in.readDouble();
         address = in.readString();
@@ -59,11 +59,11 @@ public class CheckIn implements Parcelable {
         }
     };
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -114,7 +114,7 @@ public class CheckIn implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         dest.writeString(address);

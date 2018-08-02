@@ -24,6 +24,7 @@ public class LoadDiaryDataViewModel  extends AndroidViewModel {
     }
 
     public LiveData<List<Note>> getDiaryNotes(int diaryId) {
+        //return NoteRepository.getInstance(database, appExecutors).getNotes();
         return NoteRepository.getInstance(database, appExecutors).getDiaryNotes(diaryId);
     }
 

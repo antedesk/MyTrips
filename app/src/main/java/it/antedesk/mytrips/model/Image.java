@@ -18,15 +18,15 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Image {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     @ColumnInfo(name = "note_id")
-    private int noteId;
+    private long noteId;
     private String name;
     private String path;
     @ColumnInfo(name = "is_cover")
     private boolean isCover;
 
-    public Image(int id, int noteId, String name, String path, boolean isCover) {
+    public Image(long id, long noteId, String name, String path, boolean isCover) {
         this.id = id;
         this.noteId = noteId;
         this.name = name;
@@ -34,19 +34,19 @@ public class Image {
         this.isCover = isCover;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getNoteId() {
+    public long getNoteId() {
         return noteId;
     }
 
-    public void setNoteId(int noteId) {
+    public void setNoteId(long noteId) {
         this.noteId = noteId;
     }
 

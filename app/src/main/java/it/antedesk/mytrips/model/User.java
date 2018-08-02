@@ -20,16 +20,16 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class User implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private String name;
     private String surname;
     private String bio;
     @ColumnInfo(name = "picture_url")
     private String pictureUrl;
     @ColumnInfo(name = "home_check_in")
-    private int homeCheckIn;
+    private long homeCheckIn;
 
-    public User(int id, String name, String surname, String bio, String pictureUrl, int homeCheckIn) {
+    public User(long id, String name, String surname, String bio, String pictureUrl, long homeCheckIn) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -39,7 +39,7 @@ public class User implements Parcelable {
     }
 
     @Ignore
-    public User(String name, String surname, String bio, String pictureUrl, int homeCheckIn) {
+    public User(String name, String surname, String bio, String pictureUrl, long homeCheckIn) {
         this.name = name;
         this.surname = surname;
         this.bio = bio;
@@ -49,12 +49,12 @@ public class User implements Parcelable {
 
     @Ignore
     protected User(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         name = in.readString();
         surname = in.readString();
         bio = in.readString();
         pictureUrl = in.readString();
-        homeCheckIn = in.readInt();
+        homeCheckIn = in.readLong();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -69,11 +69,11 @@ public class User implements Parcelable {
         }
     };
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -109,11 +109,11 @@ public class User implements Parcelable {
         this.bio = bio;
     }
 
-    public int getHomeCheckIn() {
+    public long getHomeCheckIn() {
         return homeCheckIn;
     }
 
-    public void setHomeCheckIn(int homeCheckIn) {
+    public void setHomeCheckIn(long homeCheckIn) {
         this.homeCheckIn = homeCheckIn;
     }
 
@@ -124,11 +124,11 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeString(surname);
         dest.writeString(bio);
         dest.writeString(pictureUrl);
-        dest.writeInt(homeCheckIn);
+        dest.writeLong(homeCheckIn);
     }
 }
