@@ -1,28 +1,24 @@
 package it.antedesk.mytrips;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.util.Calendar;
-import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
-public class HomeActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_profile);
 
         mDb = AppDatabase.getsInstance(getApplicationContext());
 

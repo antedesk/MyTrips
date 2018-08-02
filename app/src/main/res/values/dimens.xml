@@ -23,4 +23,15 @@
     <dimen name="save_button_margin_bottom">5dp</dimen>
     <dimen name="button_elevation">6dp</dimen>
     <dimen name="view_separator_thickness">1dp</dimen>
+    <dimen name="cover_photo_layout_height">200dp</dimen>
+    <dimen name="detail_cardview_text_size">20sp</dimen>
+    <dimen name="cover_photo_container_margin_top_bottom">5dp</dimen>
+    <dimen name="cover_photo_container_margin_start_end">16dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
+    <dimen name="activity_date_container_bottom_start">5dp</dimen>
+    <dimen name="cardview_corner_radius">8dp</dimen>
+    <dimen name="cardview_elevation">6dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
 </resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/diary_details_notes_tab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DiaryDetailActivity$PlaceholderFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/notes_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin" />
+
+    <TextView
+        android:id="@+id/no_info"
+        style="@style/BaseTextView"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/no_content_line_spacing"
+        android:lines="2"
+        android:text="@string/no_content_placeholder"
+        android:visibility="gone" />
+</RelativeLayout>

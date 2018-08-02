@@ -30,11 +30,21 @@
     <string name="save_txt_button">Save</string>
     <string name="add_money">add money</string>
     <string name="error_str_len">Max character length is</string>
-    <string name="general_error">Something went wrong with your request.\\\\nPlease, try again.</string>
+    <string name="general_error">Something went wrong with your request. Please, try again.</string>
     <string name="missing_data">Please, fill all the required fields correctly</string>
     <string name="error_on_date">The selected end date is after the selected start date. Please, set the dates properly.</string>
     <string name="missing_date">Missing date</string>
     <string name="required_field">Required field</string>
+    <string name="note_title_placeholder_txt">My Note Title</string>
+
+    <string name="diary_category_adventure">Adventure</string>
+    <string name="diary_category_Business">Business</string>
+    <string name="diary_category_Cruise">Cruise</string>
+    <string name="diary_category_family_trip">Family Trip</string>
+    <string name="diary_category_road_trip">Road Trip</string>
+    <string name="diary_category_student_trip">Student Trip</string>
+    <string name="diary_category_Vacation">Vacation</string>
+    <string name="diary_category_other">Other</string>
 
     <string-array name="diary_categories_array">
         <item>Adventure</item>
@@ -220,5 +230,34 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
+    <string name="tab_notes">Notes</string>
+    <string name="checkins">Check-ins</string>
+    <string name="cover_photo_description">cover photo</string>
+    <string name="activity_icon_description">activity icon</string>
+    <string name="note_description_placeholder">This is a long1, long2, long3, long4, long5, long6, long7, long8, long, long, long note placeholder</string>
+
+    <string name="note_category_breakfast">Breakfast</string>
+    <string name="note_category_lunch">Lunch</string>
+    <string name="note_category_dinner">Dinner</string>
+    <string name="note_category_transfer">Transfer</string>
+    <string name="note_category_overnight_stay">Overnight stay</string>
+    <string name="note_category_excursion">Excursion</string>
+    <string name="note_category_shopping">Shopping</string>
+    <string name="note_category_cultural_visit">Cultural visit</string>
+    <string name="note_category_other">Other</string>
+
+
+    <string-array name="activity_categories_array">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Transfer</item>
+        <item>Overnight stay</item>
+        <item>Excursion</item>
+        <item>Shopping</item>
+        <item>Cultural visit</item>
+        <item>Other</item>
+    </string-array>
+
 
 </resources>

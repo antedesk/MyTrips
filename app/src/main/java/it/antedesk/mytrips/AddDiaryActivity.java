@@ -180,7 +180,6 @@ public class AddDiaryActivity extends AppCompatActivity {
     }
 
     private Calendar setCalendarInfo(Calendar calendar, int year, int monthOfYear, int dayOfMonth) {
-
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, monthOfYear);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -241,7 +240,6 @@ public class AddDiaryActivity extends AppCompatActivity {
             Log.d(AddDiaryActivity.class.getName(), diary.toString());
             AddDiaryViewModel dataViewModel = ViewModelProviders.of(this).get(AddDiaryViewModel.class);
             dataViewModel.addDiary(diary);
-
             finish();
         } else {
             errors = false;

@@ -2,6 +2,7 @@ package it.antedesk.mytrips.ui.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -15,12 +16,15 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
+import it.antedesk.mytrips.AddDiaryActivity;
+import it.antedesk.mytrips.DiaryDetailActivity;
 import it.antedesk.mytrips.R;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.ui.adapter.DiaryViewAdapter;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,7 +37,6 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
     private static final String IS_A_PLAN = "is_a_plan";
 
     private DiaryViewAdapter dvApter;
-    private boolean isPlan;
 
     public DiaryFragment() {
     }
@@ -78,7 +81,9 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
     @Override
     public void onClick(Diary selectedDiary) {
         Snackbar.make(getActivity().findViewById(R.id.diaries_recycler_view),"Selected "+selectedDiary.getName(), Snackbar.LENGTH_LONG).show();
-
+        Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
+        intent.putExtra(SELECTED_DIARY, selectedDiary);
+        startActivity(intent);
     }
 
     private void retrieveDiariesOrPlans(final boolean isPlane){

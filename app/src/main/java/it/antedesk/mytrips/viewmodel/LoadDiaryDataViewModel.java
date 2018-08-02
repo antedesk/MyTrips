@@ -9,24 +9,22 @@ import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
-import it.antedesk.mytrips.model.Diary;
-import it.antedesk.mytrips.repository.DiaryRepository;
+import it.antedesk.mytrips.model.Note;
+import it.antedesk.mytrips.repository.NoteRepository;
 
-public class LoadDiariesViewModel extends AndroidViewModel {
+public class LoadDiaryDataViewModel  extends AndroidViewModel {
 
     private AppDatabase database;
     private AppExecutors appExecutors;
 
-    public LoadDiariesViewModel(@NonNull Application application) {
+    public LoadDiaryDataViewModel(@NonNull Application application) {
         super(application);
         database = AppDatabase.getsInstance(this.getApplication());
         appExecutors = AppExecutors.getInstance();
     }
 
-    public LiveData<List<Diary>> getDiaries() {
-        return DiaryRepository.getInstance(database, appExecutors).getDiaries();
+    public LiveData<List<Note>> getDiaryNotes(int diaryId) {
+        return NoteRepository.getInstance(database, appExecutors).getDiaryNotes(diaryId);
     }
-    public LiveData<List<Diary>> getPlans() {
-        return DiaryRepository.getInstance(database, appExecutors).getPlans();
-    }
+
 }
