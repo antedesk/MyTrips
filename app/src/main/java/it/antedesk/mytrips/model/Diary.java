@@ -9,7 +9,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity(tableName = "diaries",
         indices = { @Index(value = {"id"}, unique = true) })
@@ -55,6 +54,7 @@ public class Diary implements Parcelable{
     }
 
     protected Diary(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         description = in.readString();
         budget = in.readDouble();
@@ -83,6 +83,7 @@ public class Diary implements Parcelable{
     //TODO add start/end data
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeDouble(budget);
