@@ -260,6 +260,9 @@
         <item>Other</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
+    <string name="note_date_placeholder_et">Set Date</string>
+    <string name="note_time_placeholder_edt">Set Time</string>
+    <string name="add_note_str">Add Note</string>
 
 
 </resources>

@@ -34,4 +34,5 @@
     <dimen name="margin_5dp">5dp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="add_note_margin_top">5dp</dimen>
 </resources>
