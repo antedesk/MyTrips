@@ -31,7 +31,7 @@ public class DiaryRepository {
         return sInstance;
     }
 
-    public LiveData<Diary> getDiaryById(int id) {
+    public LiveData<Diary> getDiaryById(long id) {
         MutableLiveData<Diary> diary = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> diary.postValue(mDb.getDiaryDao().retrieveDiaryById(id)));
         return diary;

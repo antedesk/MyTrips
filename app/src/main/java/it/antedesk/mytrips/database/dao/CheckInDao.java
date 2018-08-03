@@ -11,7 +11,7 @@ import it.antedesk.mytrips.model.CheckIn;
 public interface CheckInDao  extends BaseDao<CheckIn>{
 
     @Query("SELECT * FROM check_ins WHERE id=:id")
-    CheckIn retrieveCheckInById(int id);
+    CheckIn retrieveCheckInById(long id);
 
     @Query("SELECT  COUNT(DISTINCT address) FROM check_ins")
     int getTotalCheckIn();

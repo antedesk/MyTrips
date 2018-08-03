@@ -40,31 +40,31 @@ public class NoteRepository {
         return notes;
     }
 
-    public LiveData<List<Note>> getDiaryNotes(int diaryId) {
+    public LiveData<List<Note>> getDiaryNotes(long diaryId) {
         MutableLiveData<List<Note>> notes = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> notes.postValue(mDb.getNoteDao().loadNotesByDiaryId(diaryId)));
         return notes;
     }
 
-    public LiveData<Note> geteNoteById(int diaryId) {
+    public LiveData<Note> geteNoteById(long diaryId) {
         MutableLiveData<Note> note = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> note.postValue(mDb.getNoteDao().retrieveNoteById(diaryId)));
         return note;
     }
 
-    public LiveData<List<Note>> retrieveNotesByDiaryId(int diaryId) {
+    public LiveData<List<Note>> retrieveNotesByDiaryId(long diaryId) {
         MutableLiveData<List<Note>> notes = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> notes.postValue(mDb.getNoteDao().retrieveNotesByDiaryId(diaryId)));
         return notes;
     }
 
-    public LiveData<Integer> getTotalCheckinsByDiaryId(int diaryId) {
+    public LiveData<Integer> getTotalCheckinsByDiaryId(long diaryId) {
         MutableLiveData<Integer> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalCheckinsByDiaryId(diaryId)));
         return total;
     }
 
-    public LiveData<Double> getTotalBudgetByDiaryId(int diaryId) {
+    public LiveData<Double> getTotalBudgetByDiaryId(long diaryId) {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByDiaryId(diaryId)));
         return total;
@@ -82,13 +82,13 @@ public class NoteRepository {
         return total;
     }
 
-    public LiveData<Double> getTotalBudgetByCategoriesAndDiaryId(int diaryId) {
+    public LiveData<Double> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByCategoriesAndDiaryId(diaryId)));
         return total;
     }
 
-    public LiveData<CheckIn> retrieveCheckInById(int checkInId) {
+    public LiveData<CheckIn> retrieveCheckInById(long checkInId) {
         MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getNoteDao().retrieveCheckInById(checkInId)));
         return checkIn;

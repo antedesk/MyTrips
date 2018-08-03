@@ -15,25 +15,25 @@ public interface NoteDao extends BaseDao<Note>{
     List<Note> loadNotes();
 
     @Query("SELECT * FROM notes WHERE id=:id")
-    Note retrieveNoteById(int id);
+    Note retrieveNoteById(long id);
 
     @Query("SELECT * FROM notes WHERE diary_id=:diaryId")
-    List<Note> retrieveNotesByDiaryId(final int diaryId);
+    List<Note> retrieveNotesByDiaryId(final long diaryId);
 
     @Query("SELECT * FROM check_ins WHERE id=:checkInId")
-    CheckIn retrieveCheckInById(final int checkInId);
+    CheckIn retrieveCheckInById(final long checkInId);
 
     @Query("SELECT * FROM notes WHERE diary_id=:id")
-    List<Note> loadNotesByDiaryId(int id);
+    List<Note> loadNotesByDiaryId(long id);
 
     @Query("SELECT COUNT(DISTINCT address) " +
             "FROM notes LEFT JOIN check_ins on notes.check_in_id = check_ins.id " +
             "WHERE diary_id=:diaryId " +
             "ORDER BY date_time DESC")
-    int getTotalCheckinsByDiaryId(int diaryId);
+    int getTotalCheckinsByDiaryId(long diaryId);
 
     @Query("SELECT SUM(budget) FROM notes WHERE diary_id=:diaryId")
-    double getTotalBudgetByDiaryId(int diaryId);
+    double getTotalBudgetByDiaryId(long diaryId);
 
     @Query("SELECT SUM(budget) FROM notes")
     double getTotalBudget4AllNotes();
@@ -42,5 +42,5 @@ public interface NoteDao extends BaseDao<Note>{
     double getTotalBudgetByCategories();
 
     @Query("SELECT category, SUM(budget) FROM notes WHERE diary_id=:diaryId GROUP BY category")
-    double getTotalBudgetByCategoriesAndDiaryId(int diaryId);
+    double getTotalBudgetByCategoriesAndDiaryId(long diaryId);
 }

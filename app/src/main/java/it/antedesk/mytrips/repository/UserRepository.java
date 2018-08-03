@@ -31,7 +31,7 @@ public class UserRepository {
         return sInstance;
     }
 
-    public LiveData<User> geteUserById(int userId) {
+    public LiveData<User> geteUserById(long userId) {
         MutableLiveData<User> user = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> user.postValue(mDb.getUserDao().retrieveUserById(userId)));
         return user;

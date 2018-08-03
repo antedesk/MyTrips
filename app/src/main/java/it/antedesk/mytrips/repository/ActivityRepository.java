@@ -35,31 +35,31 @@ public class ActivityRepository {
         return sInstance;
     }
 
-    public LiveData<List<Activity>> getDiaryActivities(int diaryId) {
+    public LiveData<List<Activity>> getDiaryActivities(long diaryId) {
         MutableLiveData<List<Activity>> activities = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> activities.postValue(mDb.getActivityDao().loadActivitiesByDiaryId(diaryId)));
         return activities;
     }
 
-    public LiveData<Activity> geteActivityById(int activityId) {
+    public LiveData<Activity> geteActivityById(long activityId) {
         MutableLiveData<Activity> activity = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> activity.postValue(mDb.getActivityDao().retrieveActivityById(activityId)));
         return activity;
     }
 
-    public LiveData<List<Activity>> retrieveActivitiesByDiaryId(int diaryId) {
+    public LiveData<List<Activity>> retrieveActivitiesByDiaryId(long diaryId) {
         MutableLiveData<List<Activity>> activities = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> activities.postValue(mDb.getActivityDao().retrieveActivitiesByDiaryId(diaryId)));
         return activities;
     }
 
-    public LiveData<Integer> getTotalCheckinsByDiaryId(int diaryId) {
-        MutableLiveData<Integer> totalCheckins = new MutableLiveData<>();
+    public LiveData<Long> getTotalCheckinsByDiaryId(long diaryId) {
+        MutableLiveData<Long> totalCheckins = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> totalCheckins.postValue(mDb.getActivityDao().getTotalCheckinsByDiaryId(diaryId)));
         return totalCheckins;
     }
 
-    public LiveData<Double> getTotalBudgetByDiaryId(int diaryId) {
+    public LiveData<Double> getTotalBudgetByDiaryId(long diaryId) {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getActivityDao().getTotalBudgetByDiaryId(diaryId)));
         return total;
@@ -77,13 +77,13 @@ public class ActivityRepository {
         return total;
     }
 
-    public LiveData<Double> getTotalBudgetByCategoriesAndDiaryId(int diaryId) {
+    public LiveData<Double> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getActivityDao().getTotalBudgetByCategoriesAndDiaryId(diaryId)));
         return total;
     }
 
-    public LiveData<CheckIn> retrieveCheckInById(int checkInId) {
+    public LiveData<CheckIn> retrieveCheckInById(long checkInId) {
         MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getActivityDao().retrieveCheckInById(checkInId)));
         return checkIn;

@@ -59,6 +59,8 @@ public class DiaryDetailActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    private long diaryId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,8 @@ public class DiaryDetailActivity extends AppCompatActivity {
             finish();
         }
         toolbar.setTitle(diary.getName());
+        diaryId = diary.getId();
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -112,7 +116,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
         fabAddNote.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        toRemove(diary.getId());
+        //toRemove(diaryId);
 
     }
 
@@ -157,6 +161,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
                 long checkinid = mDb.getCheckInDao().insert(checkIn);
                 note.setCheckInId(checkinid);
                 mDb.getNoteDao().insert(note);
+                mDb.getNoteDao().insert(note1);
             }
         });
     }
@@ -171,7 +176,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
      * @param mViewPager
      */
     private void setupViewPager(ViewPager mViewPager) {
-        mSectionsPagerAdapter.addFrag(NotesFragment.newInstance(0), getString(R.string.tab_notes));
+        mSectionsPagerAdapter.addFrag(NotesFragment.newInstance(diaryId), getString(R.string.tab_notes));
         mSectionsPagerAdapter.addFrag(PlaceholderFragment.newInstance(1), getString(R.string.checkins));
         mSectionsPagerAdapter.addFrag(PlaceholderFragment.newInstance(2), getString(R.string.stats));
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -208,15 +213,14 @@ public class DiaryDetailActivity extends AppCompatActivity {
         public NotesFragment() {
         }
 
-        //TODO pass the diary id to the fragment!
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static NotesFragment newInstance(int sectionNumber) {
+        public static NotesFragment newInstance(long diaryId) {
             NotesFragment fragment = new NotesFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putLong(SELECTED_DIARY_ID, diaryId);
             fragment.setArguments(args);
             return fragment;
         }
@@ -262,7 +266,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
         }
 
 
-        private void retrieveDiaryNotes(final int diaryId) {
+        private void retrieveDiaryNotes(final long diaryId) {
             LoadDiaryDataViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiaryDataViewModel.class);
             dataViewModel.getDiaryNotes(diaryId).observe(this, (List<Note> notes) -> {
                 if (notes != null)
@@ -274,7 +278,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             if (getArguments() != null) {
-                retrieveDiaryNotes(getArguments().getInt(SELECTED_DIARY_ID));
+                retrieveDiaryNotes(getArguments().getLong(SELECTED_DIARY_ID));
             }
         }
 

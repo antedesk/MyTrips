@@ -11,7 +11,7 @@ import it.antedesk.mytrips.model.Diary;
 public interface DiaryDao extends BaseDao<Diary>{
 
     @Query("SELECT * FROM diaries WHERE id=:id")
-    Diary retrieveDiaryById(int id);
+    Diary retrieveDiaryById(long id);
 
     @Query("SELECT * FROM diaries WHERE is_plan = :isPlan ORDER BY start_date DESC")
     List<Diary> loadAllDiaries(boolean isPlan);
