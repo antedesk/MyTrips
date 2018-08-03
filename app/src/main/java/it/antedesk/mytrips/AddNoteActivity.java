@@ -216,14 +216,7 @@ public class AddNoteActivity extends AppCompatActivity {
         if (diaryBudgetEditText.getText() != null && diaryBudgetEditText.length() != 0)
             budget = Double.valueOf(diaryBudgetEditText.getText().toString());
 
-        Diary diary = errors ? null : new Diary(diaryNameEditText.getText().toString(),
-                diaryDescEditText.getText().toString(),
-                currentStartDate,
-                currentEndDate,
-                budget, currenciesSpinner.getSelectedItem().toString().split(" - ")[0],
-                categorySpinner.getSelectedItem().toString(), isPlan);
-
-        return diary;
+        return null;
     }
 
     public void onSaveClick(View view) {
