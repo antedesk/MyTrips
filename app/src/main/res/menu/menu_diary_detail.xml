@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="it.antedesk.mytrips.DiaryDetailActivity">
     <item
-        android:id="@+id/action_modify"
+        android:id="@+id/action_update"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/update_diary"
         android:icon="@mipmap/fake_icon"
         app:showAsAction="ifRoom" />
 </menu>

@@ -257,3 +257,7 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+
+# file to exclude with credential
+app/app/src/main/res/layout/activity_maps.xml

@@ -245,6 +245,7 @@
     <string name="note_category_shopping">Shopping</string>
     <string name="note_category_cultural_visit">Cultural visit</string>
     <string name="note_category_other">Other</string>
+    <string name="update_diary">Update diary</string>
 
 
     <string-array name="activity_categories_array">
@@ -258,6 +259,7 @@
         <item>Cultural visit</item>
         <item>Other</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>
