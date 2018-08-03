@@ -260,4 +260,4 @@ gradle-app.setting
 
 
 # file to exclude with credential
-app/app/src/main/res/layout/activity_maps.xml
+app/src/release/res/values/google_maps_api.xml
