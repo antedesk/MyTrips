@@ -64,6 +64,12 @@ public class NoteRepository {
         return total;
     }
 
+    public LiveData<List<CheckIn>> getCheckinsByDiaryId(long diaryId) {
+        MutableLiveData<List<CheckIn>> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getCheckinsByDiaryId(diaryId)));
+        return total;
+    }
+
     public LiveData<Double> getTotalBudgetByDiaryId(long diaryId) {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByDiaryId(diaryId)));

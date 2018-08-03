@@ -61,6 +61,8 @@ public class Diary implements Parcelable{
         currency = in.readString();
         category = in.readString();
         isPlan = in.readByte() != 0;
+        startDate = (java.util.Date) in.readSerializable();
+        endDate = (java.util.Date) in.readSerializable();
     }
 
     public static final Creator<Diary> CREATOR = new Creator<Diary>() {
@@ -90,6 +92,8 @@ public class Diary implements Parcelable{
         dest.writeString(currency);
         dest.writeString(category);
         dest.writeByte((byte) (isPlan ? 1 : 0));
+        dest.writeLong(startDate.getTime());
+
     }
 
     public long getId() {

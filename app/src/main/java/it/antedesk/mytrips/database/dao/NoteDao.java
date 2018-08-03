@@ -26,6 +26,11 @@ public interface NoteDao extends BaseDao<Note>{
     @Query("SELECT * FROM notes WHERE diary_id=:id")
     List<Note> loadNotesByDiaryId(long id);
 
+    @Query("SELECT * " +
+            "FROM notes LEFT JOIN check_ins on notes.check_in_id = check_ins.id " +
+            "WHERE diary_id=:diaryId")
+    List<CheckIn> getCheckinsByDiaryId(long diaryId);
+
     @Query("SELECT COUNT(DISTINCT address) " +
             "FROM notes LEFT JOIN check_ins on notes.check_in_id = check_ins.id " +
             "WHERE diary_id=:diaryId " +
