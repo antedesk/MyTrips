@@ -130,15 +130,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private void setupFABs(){
         Intent intent = new Intent(this, AddDiaryActivity.class);
         fabDiary.setOnClickListener((View view) -> {
-            Snackbar.make(view, "FAB Diary", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
             intent.putExtra(IS_PLAN, false);
             startActivity(intent);
         });
 
         fabPlan.setOnClickListener((View view) -> {
-            Snackbar.make(view, "FAB Plan", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
             intent.putExtra(IS_PLAN, true);
             startActivity(intent);
         });

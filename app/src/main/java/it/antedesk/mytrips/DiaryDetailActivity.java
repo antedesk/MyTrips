@@ -1,36 +1,25 @@
 package it.antedesk.mytrips;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,9 +28,9 @@ import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.CheckIn;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.model.Note;
+import it.antedesk.mytrips.ui.fragment.CheckInsFragment;
 import it.antedesk.mytrips.ui.fragment.NotesFragment;
 import it.antedesk.mytrips.ui.fragment.adapter.SectionsPagerAdapter;
-import it.antedesk.mytrips.viewmodel.LoadDiaryCheckInsViewModel;
 
 import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY;
 import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY_ID;
@@ -110,56 +99,16 @@ public class DiaryDetailActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
 
         tabLayout.setupWithViewPager(mViewPager);
-        fabAddNote.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        //fabAddNote.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        //        .setAction("Action", null).show());
 
-        toRemove(diaryId);
 
-    }
-
-    private void toRemove(long diaryId) {
-        MutableLiveData<Long> id = new MutableLiveData<>();
-
-        CheckIn checkIn = new CheckIn(
-                41.9027835,
-                12.4963655,
-                "vattela a pesta, 45",
-                "Roma",
-                "Italia"
-        );
-        Note note = new Note(
-                "TONNARELLO!",
-                "description",
-                Calendar.getInstance().getTime(),
-                "Dinner",
-                40,
-                "EUR",
-                0,
-                "sun",
-                30
-        );
-        Note note1 = new Note(
-                "test2",
-                "description long long long long long long long tooooooooo long",
-                Calendar.getInstance().getTime(),
-                "Dinner",
-                40,
-                "EUR",
-                0,
-                "sun",
-                30
-        );
-        note.setDiaryId(diaryId);
-        note1.setDiaryId(diaryId);
-        AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                long checkinid = mDb.getCheckInDao().insert(checkIn);
-                note.setCheckInId(checkinid);
-                mDb.getNoteDao().insert(note);
-                mDb.getNoteDao().insert(note1);
-            }
+        Intent addNoteIntent = new Intent(this, AddNoteActivity.class);
+        fabAddNote.setOnClickListener(view -> {
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+            addNoteIntent.putExtra(SELECTED_DIARY_ID, diaryId);
+            startActivity(addNoteIntent);
         });
     }
 
@@ -189,7 +138,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_update) {
+        if(id == R.id.action_update) {
             return true;
         }
 
@@ -197,65 +146,6 @@ public class DiaryDetailActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class CheckInsFragment extends Fragment implements OnMapReadyCallback {
-
-        private GoogleMap mMap;
-
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        private long diaryId;
-
-        public CheckInsFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static CheckInsFragment newInstance(long diaryId) {
-            CheckInsFragment fragment = new CheckInsFragment();
-            Bundle args = new Bundle();
-            args.putLong(SELECTED_DIARY_ID, diaryId);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_checkins, container, false);
-
-            if (getArguments() != null)
-                diaryId = getArguments().getLong(SELECTED_DIARY_ID);
-
-            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-            mapFragment.getMapAsync(this);
-            getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
-
-            return rootView;
-        }
-
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            mMap = googleMap;
-
-            LoadDiaryCheckInsViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiaryCheckInsViewModel.class);
-            dataViewModel.getCheckinsByDiaryId(diaryId).observe(this, (List<CheckIn> checkIns) -> {
-                if (checkIns != null && checkIns.size() != 0) {
-                    LatLng firstCheckin = new LatLng(checkIns.get(0).getLatitude(), checkIns.get(0).getLongitude());
-                    for (CheckIn checkIn : checkIns) {
-                        LatLng marker = new LatLng(checkIn.getLatitude(), checkIn.getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(marker).title("Marker in Sydney"));
-                    }
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(firstCheckin));
-                }
-            });
-
-        }
-    }
 
     /**
      * A placeholder fragment containing a simple view.

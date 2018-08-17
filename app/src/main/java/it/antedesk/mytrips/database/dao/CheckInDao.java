@@ -8,7 +8,10 @@ import java.util.List;
 import it.antedesk.mytrips.model.CheckIn;
 
 @Dao
-public interface CheckInDao  extends BaseDao<CheckIn>{
+public interface CheckInDao extends BaseDao<CheckIn>{
+
+    @Query("SELECT * FROM check_ins")
+    List<CheckIn> retrieveCheckIns();
 
     @Query("SELECT * FROM check_ins WHERE id=:id")
     CheckIn retrieveCheckInById(long id);

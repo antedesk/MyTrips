@@ -41,7 +41,8 @@ public class Activity implements Parcelable{
     private long checkInId;
 
     @Ignore
-    public Activity(String title, String description, Date dateTime, String category, double budget, String currency, long checkInId) {
+    public Activity(long diaryId, String title, String description, Date dateTime, String category, double budget, String currency, long checkInId) {
+        this.diaryId = diaryId;
         this.title = title;
         this.description = description;
         this.dateTime = dateTime;

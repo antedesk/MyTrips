@@ -34,6 +34,12 @@ public class CheckInRepository {
         return sInstance;
     }
 
+    public LiveData<List<CheckIn>> getCheckIns() {
+        MutableLiveData<List<CheckIn>> checkIns = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> checkIns.postValue(mDb.getCheckInDao().retrieveCheckIns()));
+        return checkIns;
+    }
+
     public LiveData<CheckIn> getCheckInById(long id) {
         MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getCheckInDao().retrieveCheckInById(id)));
