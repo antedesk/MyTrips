@@ -279,7 +279,7 @@ public class AddNoteActivity extends AppCompatActivity {
         if (noteBudgetEditText.getText() != null && noteBudgetEditText.length() != 0)
             budget = Double.valueOf(noteBudgetEditText.getText().toString());
 
-        return new Note(
+        return errors ? null : new Note(
                 diaryId,
                 noteNameEditText.getText().toString(),
                 noteDescEditText.getText().toString(),
