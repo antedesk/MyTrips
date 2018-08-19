@@ -1,6 +1,5 @@
 package it.antedesk.mytrips;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,21 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import it.antedesk.mytrips.database.AppDatabase;
-import it.antedesk.mytrips.database.AppExecutors;
-import it.antedesk.mytrips.model.CheckIn;
 import it.antedesk.mytrips.model.Diary;
-import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.ui.fragment.CheckInsFragment;
 import it.antedesk.mytrips.ui.fragment.NotesFragment;
 import it.antedesk.mytrips.ui.fragment.adapter.SectionsPagerAdapter;
 
-import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY;
-import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY_ID;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
 public class DiaryDetailActivity extends AppCompatActivity {
 

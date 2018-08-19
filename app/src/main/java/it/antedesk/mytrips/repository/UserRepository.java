@@ -5,7 +5,6 @@ import android.arch.lifecycle.MutableLiveData;
 
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
-import it.antedesk.mytrips.model.CheckIn;
 import it.antedesk.mytrips.model.User;
 
 public class UserRepository {

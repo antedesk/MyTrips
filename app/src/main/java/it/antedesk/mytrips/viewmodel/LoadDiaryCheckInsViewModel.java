@@ -9,8 +9,7 @@ import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
-import it.antedesk.mytrips.model.CheckIn;
-import it.antedesk.mytrips.repository.CheckInRepository;
+import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.repository.NoteRepository;
 
 public class LoadDiaryCheckInsViewModel extends AndroidViewModel {
@@ -24,8 +23,7 @@ public class LoadDiaryCheckInsViewModel extends AndroidViewModel {
         appExecutors = AppExecutors.getInstance();
     }
 
-    public LiveData<List<CheckIn>> getCheckinsByDiaryId(long diaryId) {
+    public LiveData<List<CheckinMinimal>> getCheckinsByDiaryId(long diaryId) {
         return NoteRepository.getInstance(database, appExecutors).getCheckinsByDiaryId(diaryId);
-        //return CheckInRepository.getInstance(database, appExecutors).getCheckIns();
     }
 }

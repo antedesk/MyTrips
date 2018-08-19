@@ -20,7 +20,7 @@ import it.antedesk.mytrips.ui.adapter.NoteViewAdapter;
 import it.antedesk.mytrips.viewmodel.LoadDiaryDataViewModel;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY_ID;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
 public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewAdapterOnClickHandler {
 

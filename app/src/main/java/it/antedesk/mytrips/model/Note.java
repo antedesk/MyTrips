@@ -15,19 +15,19 @@ public class Note extends Activity implements Parcelable {
     private double temperature;
 
     @Ignore
-    public Note(long diaryId, String title, String description, Date dateTime, String category,
-                double budget, String currency, long checkIn, String weather, double temperature) {
-        super(diaryId, title, description, dateTime, category, budget, currency, checkIn);
+    public Note(long diaryId, String title, String description, Date dateTime, String category, double budget, String currency, double latitude, double longitude, String address, String city, String country, String countryCode, String weather, double temperature) {
+        super(diaryId, title, description, dateTime, category, budget, currency, latitude, longitude, address, city, country, countryCode);
         this.weather = weather;
         this.temperature = temperature;
     }
 
-    public Note(long id, long diaryId, String title, String description, Date dateTime, String category, double budget, String currency, long checkInId, String weather, double temperature) {
-        super(id, diaryId, title, description, dateTime, category, budget, currency, checkInId);
+    public Note(long id, long diaryId, String title, String description, Date dateTime, String category, double budget, String currency, double latitude, double longitude, String address, String city, String country, String countryCode, String weather, double temperature) {
+        super(id, diaryId, title, description, dateTime, category, budget, currency, latitude, longitude, address, city, country, countryCode);
         this.weather = weather;
         this.temperature = temperature;
     }
 
+    @Ignore
     public Note(Parcel in, String weather, double temperature) {
         super(in);
         this.weather = weather;

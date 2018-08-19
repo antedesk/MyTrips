@@ -9,13 +9,12 @@ import android.util.Log;
 
 import it.antedesk.mytrips.database.converter.DateConverter;
 import it.antedesk.mytrips.database.dao.ActivityDao;
-import it.antedesk.mytrips.database.dao.CheckInDao;
 import it.antedesk.mytrips.database.dao.DiaryDao;
 import it.antedesk.mytrips.database.dao.NoteDao;
 import it.antedesk.mytrips.database.dao.UserDao;
 import it.antedesk.mytrips.model.*;
 
-@Database(entities = {User.class, Diary.class, Activity.class, Note.class, CheckIn.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Diary.class, Activity.class, Note.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase{
 
@@ -42,5 +41,4 @@ public abstract class AppDatabase extends RoomDatabase{
     public abstract DiaryDao getDiaryDao();
     public abstract ActivityDao getActivityDao();
     public abstract NoteDao getNoteDao();
-    public abstract CheckInDao getCheckInDao();
 }

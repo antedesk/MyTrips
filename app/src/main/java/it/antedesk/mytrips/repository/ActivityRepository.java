@@ -8,8 +8,6 @@ import java.util.List;
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Activity;
-import it.antedesk.mytrips.model.CheckIn;
-import it.antedesk.mytrips.model.Diary;
 
 public class ActivityRepository {
 
@@ -53,12 +51,13 @@ public class ActivityRepository {
         return activities;
     }
 
+    /*
     public LiveData<Long> getTotalCheckinsByDiaryId(long diaryId) {
         MutableLiveData<Long> totalCheckins = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> totalCheckins.postValue(mDb.getActivityDao().getTotalCheckinsByDiaryId(diaryId)));
         return totalCheckins;
     }
-
+*/
     public LiveData<Double> getTotalBudgetByDiaryId(long diaryId) {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getActivityDao().getTotalBudgetByDiaryId(diaryId)));
@@ -82,13 +81,6 @@ public class ActivityRepository {
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getActivityDao().getTotalBudgetByCategoriesAndDiaryId(diaryId)));
         return total;
     }
-
-    public LiveData<CheckIn> retrieveCheckInById(long checkInId) {
-        MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
-        appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getActivityDao().retrieveCheckInById(checkInId)));
-        return checkIn;
-    }
-
     public void insertActivity (Activity activity) {
         appExecutors.diskIO().execute(() -> mDb.getActivityDao().insert(activity));
     }

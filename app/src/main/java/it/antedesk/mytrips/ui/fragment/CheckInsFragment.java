@@ -17,10 +17,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import it.antedesk.mytrips.R;
-import it.antedesk.mytrips.model.CheckIn;
+import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.viewmodel.LoadDiaryCheckInsViewModel;
 
-import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY_ID;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
 /**
  * A fragment containing the markers of all the user's check-ins.
@@ -75,10 +75,10 @@ public class CheckInsFragment extends Fragment implements OnMapReadyCallback {
 
     private void loadMarkers(){
         LoadDiaryCheckInsViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiaryCheckInsViewModel.class);
-        dataViewModel.getCheckinsByDiaryId(diaryId).observe(this, (List<CheckIn> checkIns) -> {
+        dataViewModel.getCheckinsByDiaryId(diaryId).observe(this, (List<CheckinMinimal> checkIns) -> {
             if (checkIns != null && checkIns.size() != 0) {
                 LatLng firstCheckin = new LatLng(checkIns.get(0).getLatitude(), checkIns.get(0).getLongitude());
-                for (CheckIn checkIn : checkIns) {
+                for (CheckinMinimal checkIn : checkIns) {
                     LatLng marker = new LatLng(checkIn.getLatitude(), checkIn.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(marker).title("Marker in position " + checkIns.indexOf(checkIn)));
                 }

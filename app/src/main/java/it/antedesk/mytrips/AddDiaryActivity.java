@@ -24,9 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.AddDiaryViewModel;
-import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
-import static it.antedesk.mytrips.utils.SupportVariablesDefinition.IS_PLAN;
+import static it.antedesk.mytrips.utils.Constants.IS_PLAN;
 
 public class AddDiaryActivity extends AppCompatActivity {
 

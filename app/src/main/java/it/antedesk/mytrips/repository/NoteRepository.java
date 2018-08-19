@@ -7,8 +7,8 @@ import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
-import it.antedesk.mytrips.model.CheckIn;
 import it.antedesk.mytrips.model.Note;
+import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 
 public class NoteRepository {
 
@@ -58,14 +58,8 @@ public class NoteRepository {
         return notes;
     }
 
-    public LiveData<Integer> getTotalCheckinsByDiaryId(long diaryId) {
-        MutableLiveData<Integer> total = new MutableLiveData<>();
-        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalCheckinsByDiaryId(diaryId)));
-        return total;
-    }
-
-    public LiveData<List<CheckIn>> getCheckinsByDiaryId(long diaryId) {
-        MutableLiveData<List<CheckIn>> checkIns = new MutableLiveData<>();
+    public LiveData<List<CheckinMinimal>> getCheckinsByDiaryId(long diaryId) {
+        MutableLiveData<List<CheckinMinimal>> checkIns = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> checkIns.postValue(mDb.getNoteDao().getCheckinsByDiaryId(diaryId)));
         return checkIns;
     }
@@ -92,12 +86,6 @@ public class NoteRepository {
         MutableLiveData<Double> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByCategoriesAndDiaryId(diaryId)));
         return total;
-    }
-
-    public LiveData<CheckIn> retrieveCheckInById(long checkInId) {
-        MutableLiveData<CheckIn> checkIn = new MutableLiveData<>();
-        appExecutors.diskIO().execute(() -> checkIn.postValue(mDb.getNoteDao().retrieveCheckInById(checkInId)));
-        return checkIn;
     }
 
     public void insertNote (Note note) {

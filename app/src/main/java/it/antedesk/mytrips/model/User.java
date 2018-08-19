@@ -12,11 +12,7 @@ import android.os.Parcelable;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "users",
-        indices = { @Index(value = {"home_check_in"}, unique = true) },
-        foreignKeys = @ForeignKey(entity = CheckIn.class,
-                                parentColumns = "id",
-                                childColumns = "home_check_in",
-                                onDelete = CASCADE))
+        indices = { @Index(value = {"home_check_in"}, unique = true) })
 public class User implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
-import it.antedesk.mytrips.AddDiaryActivity;
 import it.antedesk.mytrips.DiaryDetailActivity;
 import it.antedesk.mytrips.R;
 import it.antedesk.mytrips.model.Diary;
@@ -24,7 +23,7 @@ import it.antedesk.mytrips.ui.adapter.DiaryViewAdapter;
 import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static it.antedesk.mytrips.utils.SupportVariablesDefinition.SELECTED_DIARY;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY;
 
 /**
  * A placeholder fragment containing a simple view.
