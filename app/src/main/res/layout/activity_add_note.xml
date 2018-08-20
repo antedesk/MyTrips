@@ -187,35 +187,48 @@
             style="@style/dividerHorizontal"
             android:layout_below="@+id/note_budget_container" />
 
-
-        <Button
-            android:id="@+id/fetch_address_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/divider_3"
-            android:text="@string/fetch_address"
-            android:onClick="fetchAddressButtonHandler" />
-
         <ProgressBar
             android:id="@+id/progress_bar_add_loc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-        <TextView
-            android:id="@+id/location_address_view"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/location_address_ll"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fetch_address_button"
-            android:layout_marginTop="@dimen/margin_5dp"
-            android:textSize="@dimen/default_tv_size"
-            tools:text="fdsfd" />
+            android:layout_below="@id/divider_3"
+            android:orientation="horizontal">
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/location_address_inl"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                app:hintEnabled="false">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/location_address_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_5dp"
+                    android:hint="@string/location_hint"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/fetch_address_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="fetchAddressButtonHandler"
+                android:text="@string/fetch_address" />
+        </LinearLayout>
         <Button
             android:id="@+id/save_button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/location_address_view"
+            android:layout_below="@+id/location_address_ll"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/save_button_margin_bottom"
             android:layout_marginTop="@dimen/add_note_margin_top"

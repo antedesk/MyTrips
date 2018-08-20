@@ -267,7 +267,7 @@
 
     <!--Strings for geocoder-->
     <string name="no_geocoder_available">No geocoder available</string>
-    <string name="fetch_address">Fetch address</string>
+    <string name="fetch_address">Find me</string>
     <string name="address_found">Address found</string>
     <string name="no_address_found">Sorry, no address found</string>
     <string name="no_location_data_provided">No location data provided</string>
@@ -277,6 +277,7 @@
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
         functionality.</string>
     <string name="settings">Settings</string>
+    <string name="location_hint">Write the Place or Address</string>
 
 
 </resources>
