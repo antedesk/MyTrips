@@ -4,13 +4,16 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -20,6 +23,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,14 +46,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.model.Note;
+import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.service.FetchAddressIntentService;
 import it.antedesk.mytrips.viewmodel.AddNoteViewModel;
 
 import static it.antedesk.mytrips.utils.Constants.FETCH_ADDRESS_INTENT_SERVICE;
+import static it.antedesk.mytrips.utils.Constants.LOCATION_CALLBACK;
 import static it.antedesk.mytrips.utils.Constants.LOCATION_DATA_EXTRA;
 import static it.antedesk.mytrips.utils.Constants.RECEIVER;
 import static it.antedesk.mytrips.utils.Constants.RESULT_DATA_KEY;
@@ -86,6 +96,7 @@ public class AddNoteActivity extends AppCompatActivity {
     private static final String LOCATION_ADDRESS_KEY = "location-address";
 
     protected Location mLastLocation;
+    protected LocationRequest mLocationRequest;
     private AddressResultReceiver mResultReceiver;
 
     private FusedLocationProviderClient mFusedLocationClient;
@@ -97,6 +108,8 @@ public class AddNoteActivity extends AppCompatActivity {
     private boolean mAddressRequested;
 
     private String mAddressOutput;
+
+    private CheckinMinimal mCheckinMinimal;
 
     private TextView mLocationAddressTextView;
 
@@ -141,7 +154,6 @@ public class AddNoteActivity extends AppCompatActivity {
 
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
-        mAddressOutput = "";
         updateValuesFromBundle(savedInstanceState);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -210,7 +222,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
         TimePickerDialog.OnTimeSetListener timePickerListener = (timePicker, hourOfDay, minute) -> {
             setTimeCalendarInfo(calendar, hourOfDay, minute);
-            String timeStr = hourOfDay+":"+minute;
+            String timeStr = hourOfDay + ":" + minute;
             timeEditTxt.setText(timeStr);
         };
 
@@ -274,7 +286,6 @@ public class AddNoteActivity extends AppCompatActivity {
             errors = true;
         }
 
-
         double budget = 0;
         if (noteBudgetEditText.getText() != null && noteBudgetEditText.length() != 0)
             budget = Double.valueOf(noteBudgetEditText.getText().toString());
@@ -316,6 +327,19 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
 
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            List<Location> locationList = locationResult.getLocations();
+            if (locationList.size() > 0) {
+                //The last location in the list is the newest
+                Location location = locationList.get(locationList.size() - 1);
+                Log.d(LOCATION_CALLBACK, "Location: " + location.getLatitude() + " " + location.getLongitude());
+                mLastLocation = location;
+            }
+        }
+    };
+
     @Override
     public void onStart() {
         super.onStart();
@@ -323,8 +347,80 @@ public class AddNoteActivity extends AppCompatActivity {
         if (!checkPermissions()) {
             requestPermissions();
         } else {
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(120000); // two minute interval
+            mLocationRequest.setFastestInterval(120000);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             getAddress();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //stop location updates when Activity is no longer active
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
+    /**
+     * Return the current state of the permissions needed.
+     */
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+    /**
+     * Gets the address for the last known location.
+     */
+    private void getAddress() {
+        //Location Permission already granted
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions();
+                return;
+            }
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        } else {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        }
+
+        if (!Geocoder.isPresent()) {
+            showSnackbar(getString(R.string.no_geocoder_available));
+            return;
+        }
+        if (mAddressRequested) {
+            startIntentService();
+        }
+        /*
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location == null) {
+                        Log.w(FETCH_ADDRESS_INTENT_SERVICE, "onSuccess:null");
+                        return;
+                    }
+
+                    mLastLocation = location;
+
+                    // Determine whether a Geocoder is available.
+                    if (!Geocoder.isPresent()) {
+                        showSnackbar(getString(R.string.no_geocoder_available));
+                        return;
+                    }
+
+                    // If the user pressed the fetch address button before we had the location,
+                    // this will be set to true indicating that we should kick off the intent
+                    // service after fetching the location.
+                    if (mAddressRequested) {
+                        startIntentService();
+                    }
+                })
+                .addOnFailureListener(this, e -> Log.w(FETCH_ADDRESS_INTENT_SERVICE, "getLastLocation:onFailure", e));
+                */
     }
 
     /**
@@ -339,7 +435,7 @@ public class AddNoteActivity extends AppCompatActivity {
             // Check savedInstanceState to see if the location address string was previously found
             // and stored in the Bundle. If it was found, display the address string in the UI.
             if (savedInstanceState.keySet().contains(LOCATION_ADDRESS_KEY)) {
-                mAddressOutput = savedInstanceState.getString(LOCATION_ADDRESS_KEY);
+                mCheckinMinimal = savedInstanceState.getParcelable(LOCATION_ADDRESS_KEY);
                 displayAddressOutput();
             }
         }
@@ -348,7 +444,6 @@ public class AddNoteActivity extends AppCompatActivity {
     /**
      * Runs when user clicks the Fetch Address button.
      */
-    @SuppressWarnings("unused")
     public void fetchAddressButtonHandler(View view) {
         if (mLastLocation != null) {
             startIntentService();
@@ -359,6 +454,7 @@ public class AddNoteActivity extends AppCompatActivity {
         // mAddressRequested to true. As far as the user is concerned, pressing the Fetch Address button
         // immediately kicks off the process of getting the address.
         mAddressRequested = true;
+        getAddress();
         updateUIWidgets();
     }
 
@@ -382,49 +478,13 @@ public class AddNoteActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    /**
-     * Gets the address for the last known location.
-     */
-    @SuppressWarnings("MissingPermission")
-    private void getAddress() {
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location == null) {
-                            Log.w(FETCH_ADDRESS_INTENT_SERVICE, "onSuccess:null");
-                            return;
-                        }
-
-                        mLastLocation = location;
-
-                        // Determine whether a Geocoder is available.
-                        if (!Geocoder.isPresent()) {
-                            showSnackbar(getString(R.string.no_geocoder_available));
-                            return;
-                        }
-
-                        // If the user pressed the fetch address button before we had the location,
-                        // this will be set to true indicating that we should kick off the intent
-                        // service after fetching the location.
-                        if (mAddressRequested) {
-                            startIntentService();
-                        }
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(FETCH_ADDRESS_INTENT_SERVICE, "getLastLocation:onFailure", e);
-                    }
-                });
-    }
 
     /**
      * Updates the address in the UI.
      */
     private void displayAddressOutput() {
-        mLocationAddressTextView.setText(mAddressOutput);
+        if(mCheckinMinimal != null)
+            mLocationAddressTextView.setText(mCheckinMinimal.getAddress());
     }
 
     /**
@@ -440,27 +500,16 @@ public class AddNoteActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Shows a toast with the given text.
-     */
-    private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save whether the address has been requested.
         savedInstanceState.putBoolean(ADDRESS_REQUESTED_KEY, mAddressRequested);
 
-        // Save the address string.
-        savedInstanceState.putString(LOCATION_ADDRESS_KEY, mAddressOutput);
+        if(mCheckinMinimal!=null)
+            savedInstanceState.putParcelable(LOCATION_ADDRESS_KEY, mCheckinMinimal);
         super.onSaveInstanceState(savedInstanceState);
     }
-    /**
-     * Shows a {@link Snackbar} using {@code text}.
-     *
-     * @param text The Snackbar text.
-     */
+
     private void showSnackbar(final String text) {
         View container = findViewById(android.R.id.content);
         if (container != null) {
@@ -483,15 +532,6 @@ public class AddNoteActivity extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
-    /**
-     * Return the current state of the permissions needed.
-     */
-    private boolean checkPermissions() {
-        int permissionState = ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
-    }
-
     private void requestPermissions() {
         boolean shouldProvideRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -503,14 +543,11 @@ public class AddNoteActivity extends AppCompatActivity {
             Log.i(FETCH_ADDRESS_INTENT_SERVICE, "Displaying permission rationale to provide additional context.");
 
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Request permission
-                            ActivityCompat.requestPermissions(AddNoteActivity.this,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    REQUEST_PERMISSIONS_REQUEST_CODE);
-                        }
+                    view -> {
+                        // Request permission
+                        ActivityCompat.requestPermissions(AddNoteActivity.this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                REQUEST_PERMISSIONS_REQUEST_CODE);
                     });
 
         } else {
@@ -552,25 +589,22 @@ public class AddNoteActivity extends AppCompatActivity {
                 // when permissions are denied. Otherwise, your app could appear unresponsive to
                 // touches or interactions which have required permissions.
                 showSnackbar(R.string.permission_denied_explanation, R.string.settings,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // Build intent that displays the App settings screen.
-                                Intent intent = new Intent();
-                                intent.setAction(
-                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package",
-                                        BuildConfig.APPLICATION_ID, null);
-                                intent.setData(uri);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
+                        view -> {
+                            // Build intent that displays the App settings screen.
+                            Intent intent = new Intent();
+                            intent.setAction(
+                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                         });
             }
         }
     }
 
-    
+
     /**
      * Receiver for data sent from FetchAddressIntentService.
      */
@@ -586,13 +620,8 @@ public class AddNoteActivity extends AppCompatActivity {
         protected void onReceiveResult(int resultCode, Bundle resultData) {
 
             // Display the address string or an error message sent from the intent service.
-            mAddressOutput = resultData.getString(RESULT_DATA_KEY);
+            mCheckinMinimal = resultData.getParcelable(RESULT_DATA_KEY);
             displayAddressOutput();
-
-            // Show a toast message if an address was found.
-            if (resultCode == SUCCESS_RESULT) {
-                showToast(getString(R.string.address_found));
-            }
 
             // Reset. Enable the Fetch Address button and stop showing the progress bar.
             mAddressRequested = false;

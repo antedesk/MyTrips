@@ -17,10 +17,12 @@ import java.util.List;
 import java.util.Locale;
 
 import it.antedesk.mytrips.R;
+import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.utils.Constants;
 
 import static it.antedesk.mytrips.utils.Constants.FAILURE_RESULT;
 import static it.antedesk.mytrips.utils.Constants.FETCH_ADDRESS_INTENT_SERVICE;
+import static it.antedesk.mytrips.utils.Constants.LOCATION_DATA_EXTRA;
 import static it.antedesk.mytrips.utils.Constants.RESULT_DATA_KEY;
 import static it.antedesk.mytrips.utils.Constants.SUCCESS_RESULT;
 
@@ -67,14 +69,16 @@ public class FetchAddressIntentService extends IntentService {
         }
 
         // Get the location passed to this service through an extra.
-        Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
+        Location location = intent.getParcelableExtra(LOCATION_DATA_EXTRA);
 
+        CheckinMinimal checkin = new CheckinMinimal();
         // Make sure that the location data was really sent over through an extra. If it wasn't,
         // send an error error message and return.
         if (location == null) {
             errorMessage = getString(R.string.no_location_data_provided);
+            checkin.setAddress(errorMessage);
             Log.wtf(FETCH_ADDRESS_INTENT_SERVICE, errorMessage);
-            deliverResultToReceiver(FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(FAILURE_RESULT, null);
             return;
         }
 
@@ -120,35 +124,31 @@ public class FetchAddressIntentService extends IntentService {
                 errorMessage = getString(R.string.no_address_found);
                 Log.e(FETCH_ADDRESS_INTENT_SERVICE, errorMessage);
             }
-            deliverResultToReceiver(FAILURE_RESULT, errorMessage);
+            checkin.setAddress(errorMessage);
+            deliverResultToReceiver(FAILURE_RESULT, checkin);
         } else {
             Address address = addresses.get(0);
             ArrayList<String> addressFragments = new ArrayList<>();
-            //TODO use CheckInMinimal to return user's address
-            // Fetch the address lines using {@code getAddressLine},
-            // join them, and send them to the thread. The {@link android.location.address}
-            // class provides other options for fetching address details that you may prefer
-            // to use. Here are some examples:
-            // getLocality() ("Mountain View", for example)
-            // getAdminArea() ("CA", for example)
-            // getPostalCode() ("94043", for example)
-            // getCountryCode() ("US", for example)
-            // getCountryName() ("United States", for example)
             for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
                 addressFragments.add(address.getAddressLine(i));
             }
+            checkin.setLatitude(address.getLatitude());
+            checkin.setLongitude(address.getLongitude());
+            checkin.setCity(address.getLocality());
+            checkin.setCountry(address.getCountryName());
+            checkin.setCountryCode(address.getCountryCode());
+            checkin.setAddress(TextUtils.join(System.getProperty("line.separator"), addressFragments));
             Log.i(FETCH_ADDRESS_INTENT_SERVICE, getString(R.string.address_found));
-            deliverResultToReceiver(SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"), addressFragments));
+            deliverResultToReceiver(SUCCESS_RESULT, checkin);
         }
     }
 
     /**
      * Sends a resultCode and message to the receiver.
      */
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, CheckinMinimal checkin) {
         Bundle bundle = new Bundle();
-        bundle.putString(RESULT_DATA_KEY, message);
+        bundle.putParcelable(RESULT_DATA_KEY, checkin);
         mReceiver.send(resultCode, bundle);
     }
 }

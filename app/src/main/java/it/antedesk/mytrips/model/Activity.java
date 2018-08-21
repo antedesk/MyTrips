@@ -15,8 +15,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "activities",
         indices = { @Index(value = {"id"}, unique = true),
-                    @Index(value = {"diary_id"}),
-                    /*@Index(value = {"check_in_id"})*/ },
+                    @Index(value = {"diary_id"}) },
         foreignKeys = { @ForeignKey(entity = Diary.class,
                                     parentColumns = "id",
                                     childColumns = "diary_id",
