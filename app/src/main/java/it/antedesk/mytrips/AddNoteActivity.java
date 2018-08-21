@@ -1,16 +1,17 @@
 package it.antedesk.mytrips;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,30 +24,29 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,13 +55,15 @@ import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.service.FetchAddressIntentService;
 import it.antedesk.mytrips.viewmodel.AddNoteViewModel;
 
-import static it.antedesk.mytrips.utils.Constants.FETCH_ADDRESS_INTENT_SERVICE;
-import static it.antedesk.mytrips.utils.Constants.LOCATION_CALLBACK;
+import static it.antedesk.mytrips.utils.Constants.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
+import static it.antedesk.mytrips.utils.Constants.KEY_LOCATION;
+import static it.antedesk.mytrips.utils.Constants.KEY_REQUESTING_LOCATION_UPDATES;
 import static it.antedesk.mytrips.utils.Constants.LOCATION_DATA_EXTRA;
 import static it.antedesk.mytrips.utils.Constants.RECEIVER;
+import static it.antedesk.mytrips.utils.Constants.REQUEST_CHECK_SETTINGS;
 import static it.antedesk.mytrips.utils.Constants.RESULT_DATA_KEY;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
-import static it.antedesk.mytrips.utils.Constants.SUCCESS_RESULT;
+import static it.antedesk.mytrips.utils.Constants.UPDATE_INTERVAL_IN_MILLISECONDS;
 
 public class AddNoteActivity extends AppCompatActivity {
 
@@ -85,6 +87,10 @@ public class AddNoteActivity extends AppCompatActivity {
     @BindView(R.id.note_money_edt)
     TextInputEditText noteBudgetEditText;
 
+    @BindView(R.id.location_address_view)
+    EditText mLocationAddressET;
+
+
     private boolean errors = false;
     private Date currentDate;
     private long diaryId;
@@ -92,10 +98,6 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
-    private static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
-    private static final String LOCATION_ADDRESS_KEY = "location-address";
-
-    protected Location mLastLocation;
     protected LocationRequest mLocationRequest;
     private AddressResultReceiver mResultReceiver;
 
@@ -107,15 +109,44 @@ public class AddNoteActivity extends AppCompatActivity {
      */
     private boolean mAddressRequested;
 
-    private String mAddressOutput;
-
     private CheckinMinimal mCheckinMinimal;
 
-    private TextView mLocationAddressTextView;
-
-    private ProgressBar mProgressBar;
 
     private Button mFetchAddressButton;
+    private static final String TAG = AddNoteActivity.class.getSimpleName();
+
+
+    // Keys for storing activity state in the Bundle.
+
+
+    /**
+     * Provides access to the Location Settings API.
+     */
+    private SettingsClient mSettingsClient;
+
+    /**
+     * Stores the types of location services the client is interested in using. Used for checking
+     * settings to determine if the device has optimal location settings.
+     */
+    private LocationSettingsRequest mLocationSettingsRequest;
+
+    /**
+     * Callback for Location events.
+     */
+    private LocationCallback mLocationCallback;
+
+    /**
+     * Represents a geographical location.
+     */
+    private Location mCurrentLocation;
+    private ProgressDialog mProgressDialog;
+
+    /**
+     * Tracks the status of the location updates request. Value changes when the user presses the
+     * Start Updates and Stop Updates buttons.
+     */
+    private Boolean mRequestingLocationUpdates;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,18 +176,25 @@ public class AddNoteActivity extends AppCompatActivity {
         setupSpinners();
         setupTexListener();
 
-
         mResultReceiver = new AddressResultReceiver(new Handler());
 
-        mLocationAddressTextView = findViewById(R.id.location_address_view);
-        mProgressBar = findViewById(R.id.progress_bar_add_loc);
+        mLocationAddressET = findViewById(R.id.location_address_view);
         mFetchAddressButton = findViewById(R.id.fetch_address_button);
 
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
+        mRequestingLocationUpdates = true;
+
+        // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mSettingsClient = LocationServices.getSettingsClient(this);
+
+        // create the process of building the LocationCallback, LocationRequest, and LocationSettingsRequest objects.
+        createLocationCallback();
+        createLocationRequest();
+        buildLocationSettingsRequest();
 
         updateUIWidgets();
     }
@@ -326,43 +364,212 @@ public class AddNoteActivity extends AppCompatActivity {
         Snackbar.make(findViewById(R.id.form_scroller), getString(messageId), Snackbar.LENGTH_LONG).show();
     }
 
+    /**
+     * Updates fields based on data stored in the bundle.
+     */
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.keySet().contains(KEY_REQUESTING_LOCATION_UPDATES)) {
+                mRequestingLocationUpdates = savedInstanceState.getBoolean(
+                        KEY_REQUESTING_LOCATION_UPDATES);
+            }
 
-    LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            List<Location> locationList = locationResult.getLocations();
-            if (locationList.size() > 0) {
-                //The last location in the list is the newest
-                Location location = locationList.get(locationList.size() - 1);
-                Log.d(LOCATION_CALLBACK, "Location: " + location.getLatitude() + " " + location.getLongitude());
-                mLastLocation = location;
+            if (savedInstanceState.keySet().contains(KEY_LOCATION)) {
+                mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             }
         }
-    };
+    }
+
+    /**
+     * Sets up the location request.
+     */
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    /**
+     * Creates a callback for receiving location events.
+     */
+    private void createLocationCallback() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                mCurrentLocation = locationResult.getLastLocation();
+                if(mAddressRequested)
+                    startIntentService();
+            }
+        };
+    }
+
+    private void buildLocationSettingsRequest() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+    }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            // Check for the integer request code originally supplied to startResolutionForResult().
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        Log.i(TAG, "User agreed to make required location settings changes.");
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Log.i(TAG, "User chose not to make required location settings changes.");
+                        mRequestingLocationUpdates = false;
+                        break;
+                }
+                break;
+        }
+    }
 
-        if (!checkPermissions()) {
+    /**
+     * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
+     * runtime permission has been granted.
+     */
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates() {
+        // Begin by checking if the device has the necessary location settings.
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(this, locationSettingsResponse -> {
+                    Log.i(TAG, "All location settings are satisfied.");
+                    mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                })
+                .addOnFailureListener(this, e -> {
+                    int statusCode = ((ApiException) e).getStatusCode();
+                    switch (statusCode) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
+                                    "location settings ");
+                            try {
+                                ResolvableApiException rae = (ResolvableApiException) e;
+                                rae.startResolutionForResult(AddNoteActivity.this, REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException sie) {
+                                Log.i(TAG, "PendingIntent unable to execute request.");
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            String errorMessage = "Location settings are inadequate, and cannot be " +
+                                    "fixed here. Fix in Settings.";
+                            Log.e(TAG, errorMessage);
+                            Toast.makeText(AddNoteActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                            mRequestingLocationUpdates = false;
+                    }
+                });
+    }
+
+    /**
+     * Removes location updates from the FusedLocationApi.
+     */
+    private void stopLocationUpdates() {
+        if (!mRequestingLocationUpdates) {
+            Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.");
+            return;
+        }
+
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(this, task -> mRequestingLocationUpdates = false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mRequestingLocationUpdates && checkPermissions()) {
+            startLocationUpdates();
+        } else if (!checkPermissions()) {
             requestPermissions();
-        } else {
-            mLocationRequest = new LocationRequest();
-            mLocationRequest.setInterval(120000); // two minute interval
-            mLocationRequest.setFastestInterval(120000);
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            getAddress();
         }
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
-
-        //stop location updates when Activity is no longer active
-        if (mFusedLocationClient != null) {
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        // Remove location updates to save battery.
+        stopLocationUpdates();
+    }
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
         }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+    /**
+     * Toggles the visibility of the progress bar. Enables or disables the Fetch Address button.
+     */
+    private void updateUIWidgets() {
+        if (mAddressRequested) {
+            showProgressDialog();
+            mFetchAddressButton.setEnabled(false);
+        } else {
+            hideProgressDialog();
+            mFetchAddressButton.setEnabled(true);
+        }
+    }
+
+    /**
+     * Runs when user clicks the Fetch Address button.
+     */
+    public void fetchAddressButtonHandler(View view) {
+        if (mCurrentLocation != null) {
+            startIntentService();
+        } else {
+            mAddressRequested = true;
+            updateUIWidgets();
+            startLocationUpdates();
+        }
+    }
+
+    /**
+     * Creates an intent, adds location data to it as an extra, and starts the intent service for
+     * fetching an address.
+     */
+    private void startIntentService() {
+        // Create an intent for passing to the intent service responsible for fetching the address.
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        // Pass the result receiver as an extra to the service.
+        intent.putExtra(RECEIVER, mResultReceiver);
+        // Pass the location data as an extra to the service.
+        intent.putExtra(LOCATION_DATA_EXTRA, mCurrentLocation);
+
+        startService(intent);
+    }
+
+    /**
+     * Updates the address in the UI.
+     */
+    private void displayAddressOutput() {
+        if(mCheckinMinimal != null)
+            mLocationAddressET.setText(mCheckinMinimal.getAddress());
+    }
+
+    /**
+     * Shows a {@link Snackbar}.
+     *
+     * @param mainTextStringId The id for the string resource for the Snackbar text.
+     * @param actionStringId   The text of the action item.
+     * @param listener         The listener associated with the Snackbar action.
+     */
+    private void showSnackbarPermission(final int mainTextStringId, final int actionStringId,
+                                        View.OnClickListener listener) {
+        Snackbar.make(
+                findViewById(android.R.id.content),
+                getString(mainTextStringId),
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(actionStringId), listener).show();
     }
 
     /**
@@ -373,164 +580,6 @@ public class AddNoteActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION);
         return permissionState == PackageManager.PERMISSION_GRANTED;
     }
-    /**
-     * Gets the address for the last known location.
-     */
-    private void getAddress() {
-        //Location Permission already granted
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions();
-                return;
-            }
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-        } else {
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-        }
-
-        if (!Geocoder.isPresent()) {
-            showSnackbar(getString(R.string.no_geocoder_available));
-            return;
-        }
-        if (mAddressRequested) {
-            startIntentService();
-        }
-        /*
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, location -> {
-                    if (location == null) {
-                        Log.w(FETCH_ADDRESS_INTENT_SERVICE, "onSuccess:null");
-                        return;
-                    }
-
-                    mLastLocation = location;
-
-                    // Determine whether a Geocoder is available.
-                    if (!Geocoder.isPresent()) {
-                        showSnackbar(getString(R.string.no_geocoder_available));
-                        return;
-                    }
-
-                    // If the user pressed the fetch address button before we had the location,
-                    // this will be set to true indicating that we should kick off the intent
-                    // service after fetching the location.
-                    if (mAddressRequested) {
-                        startIntentService();
-                    }
-                })
-                .addOnFailureListener(this, e -> Log.w(FETCH_ADDRESS_INTENT_SERVICE, "getLastLocation:onFailure", e));
-                */
-    }
-
-    /**
-     * Updates fields based on data stored in the bundle.
-     */
-    private void updateValuesFromBundle(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            // Check savedInstanceState to see if the address was previously requested.
-            if (savedInstanceState.keySet().contains(ADDRESS_REQUESTED_KEY)) {
-                mAddressRequested = savedInstanceState.getBoolean(ADDRESS_REQUESTED_KEY);
-            }
-            // Check savedInstanceState to see if the location address string was previously found
-            // and stored in the Bundle. If it was found, display the address string in the UI.
-            if (savedInstanceState.keySet().contains(LOCATION_ADDRESS_KEY)) {
-                mCheckinMinimal = savedInstanceState.getParcelable(LOCATION_ADDRESS_KEY);
-                displayAddressOutput();
-            }
-        }
-    }
-
-    /**
-     * Runs when user clicks the Fetch Address button.
-     */
-    public void fetchAddressButtonHandler(View view) {
-        if (mLastLocation != null) {
-            startIntentService();
-            return;
-        }
-
-        // If we have not yet retrieved the user location, we process the user's request by setting
-        // mAddressRequested to true. As far as the user is concerned, pressing the Fetch Address button
-        // immediately kicks off the process of getting the address.
-        mAddressRequested = true;
-        getAddress();
-        updateUIWidgets();
-    }
-
-    /**
-     * Creates an intent, adds location data to it as an extra, and starts the intent service for
-     * fetching an address.
-     */
-    private void startIntentService() {
-        // Create an intent for passing to the intent service responsible for fetching the address.
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
-
-        // Pass the result receiver as an extra to the service.
-        intent.putExtra(RECEIVER, mResultReceiver);
-
-        // Pass the location data as an extra to the service.
-        intent.putExtra(LOCATION_DATA_EXTRA, mLastLocation);
-
-        // Start the service. If the service isn't already running, it is instantiated and started
-        // (creating a process for it if needed); if it is running then it remains running. The
-        // service kills itself automatically once all intents are processed.
-        startService(intent);
-    }
-
-
-    /**
-     * Updates the address in the UI.
-     */
-    private void displayAddressOutput() {
-        if(mCheckinMinimal != null)
-            mLocationAddressTextView.setText(mCheckinMinimal.getAddress());
-    }
-
-    /**
-     * Toggles the visibility of the progress bar. Enables or disables the Fetch Address button.
-     */
-    private void updateUIWidgets() {
-        if (mAddressRequested) {
-            mProgressBar.setVisibility(ProgressBar.VISIBLE);
-            mFetchAddressButton.setEnabled(false);
-        } else {
-            mProgressBar.setVisibility(ProgressBar.GONE);
-            mFetchAddressButton.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save whether the address has been requested.
-        savedInstanceState.putBoolean(ADDRESS_REQUESTED_KEY, mAddressRequested);
-
-        if(mCheckinMinimal!=null)
-            savedInstanceState.putParcelable(LOCATION_ADDRESS_KEY, mCheckinMinimal);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    private void showSnackbar(final String text) {
-        View container = findViewById(android.R.id.content);
-        if (container != null) {
-            Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    /**
-     * Shows a {@link Snackbar}.
-     *
-     * @param mainTextStringId The id for the string resource for the Snackbar text.
-     * @param actionStringId   The text of the action item.
-     * @param listener         The listener associated with the Snackbar action.
-     */
-    private void showSnackbar(final int mainTextStringId, final int actionStringId,
-                              View.OnClickListener listener) {
-        Snackbar.make(findViewById(android.R.id.content),
-                getString(mainTextStringId),
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(actionStringId), listener).show();
-    }
 
     private void requestPermissions() {
         boolean shouldProvideRationale =
@@ -540,21 +589,15 @@ public class AddNoteActivity extends AppCompatActivity {
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
-            Log.i(FETCH_ADDRESS_INTENT_SERVICE, "Displaying permission rationale to provide additional context.");
-
-            showSnackbar(R.string.permission_rationale, android.R.string.ok,
-                    view -> {
-                        // Request permission
+            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+            showSnackbarPermission(R.string.permission_rationale,
+                    android.R.string.ok, view -> {
                         ActivityCompat.requestPermissions(AddNoteActivity.this,
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                 REQUEST_PERMISSIONS_REQUEST_CODE);
                     });
-
         } else {
-            Log.i(FETCH_ADDRESS_INTENT_SERVICE, "Requesting permission");
-            // Request permission. It's possible this can be auto answered if device policy
-            // sets the permission in a given state or the user denied the permission
-            // previously and checked "Never ask again".
+            Log.i(TAG, "Requesting permission");
             ActivityCompat.requestPermissions(AddNoteActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_PERMISSIONS_REQUEST_CODE);
@@ -567,29 +610,22 @@ public class AddNoteActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        Log.i(FETCH_ADDRESS_INTENT_SERVICE, "onRequestPermissionResult");
+        Log.i(TAG, "onRequestPermissionResult");
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length <= 0) {
                 // If user interaction was interrupted, the permission request is cancelled and you
                 // receive empty arrays.
-                Log.i(FETCH_ADDRESS_INTENT_SERVICE, "User interaction was cancelled.");
+                Log.i(TAG, "User interaction was cancelled.");
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted.
-                getAddress();
+                if (mRequestingLocationUpdates) {
+                    Log.i(TAG, "Permission granted, updates requested, starting location updates");
+                    startLocationUpdates();
+                }
             } else {
                 // Permission denied.
 
-                // Notify the user via a SnackBar that they have rejected a core permission for the
-                // app, which makes the Activity useless. In a real app, core permissions would
-                // typically be best requested during a welcome-screen flow.
-
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-                // touches or interactions which have required permissions.
-                showSnackbar(R.string.permission_denied_explanation, R.string.settings,
-                        view -> {
+                showSnackbarPermission(R.string.permission_denied_explanation,
+                        R.string.settings, view -> {
                             // Build intent that displays the App settings screen.
                             Intent intent = new Intent();
                             intent.setAction(
