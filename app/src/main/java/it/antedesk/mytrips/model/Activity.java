@@ -106,6 +106,8 @@ public class Activity implements Parcelable{
         }
     };
 
+    public Activity() { }
+
     public long getId() {
         return id;
     }

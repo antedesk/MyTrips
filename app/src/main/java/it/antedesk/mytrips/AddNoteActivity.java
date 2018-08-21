@@ -79,49 +79,38 @@ public class AddNoteActivity extends AppCompatActivity {
     @BindView(R.id.note_name_txtinl)
     TextInputLayout noteNameInLayout;
     @BindView(R.id.note_name_edtxt)
-    TextInputEditText noteNameEditText;
+    TextInputEditText noteTitleEditText;
     @BindView(R.id.note_description_txtinl)
     TextInputLayout noteDescInLayout;
     @BindView(R.id.note_description_edtxt)
     TextInputEditText noteDescEditText;
     @BindView(R.id.note_money_edt)
     TextInputEditText noteBudgetEditText;
-
     @BindView(R.id.location_address_view)
     EditText mLocationAddressET;
+    @BindView(R.id.fetch_address_button)
+    Button mFetchAddressButton;
 
+    private ProgressDialog mProgressDialog;
+
+    private static final String TAG = AddNoteActivity.class.getSimpleName();
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
     private boolean errors = false;
-    private Date currentDate;
     private long diaryId;
-
-
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private Date currentDate;
 
     protected LocationRequest mLocationRequest;
     private AddressResultReceiver mResultReceiver;
-
     private FusedLocationProviderClient mFusedLocationClient;
 
-    /**
-     * Tracks whether the user has requested an address. Becomes true when the user requests an
-     * address and false when the address (or an error message) is delivered.
-     */
+    //Tracks whether the user has requested an address.
+    // true: user requests an address and false when the address (or an error message) is delivered.
     private boolean mAddressRequested;
 
     private CheckinMinimal mCheckinMinimal;
 
-
-    private Button mFetchAddressButton;
-    private static final String TAG = AddNoteActivity.class.getSimpleName();
-
-
-    // Keys for storing activity state in the Bundle.
-
-
-    /**
-     * Provides access to the Location Settings API.
-     */
+    //Provides access to the Location Settings API.
     private SettingsClient mSettingsClient;
 
     /**
@@ -129,17 +118,11 @@ public class AddNoteActivity extends AppCompatActivity {
      * settings to determine if the device has optimal location settings.
      */
     private LocationSettingsRequest mLocationSettingsRequest;
-
-    /**
-     * Callback for Location events.
-     */
+    // Callback for Location events.
     private LocationCallback mLocationCallback;
 
-    /**
-     * Represents a geographical location.
-     */
+    // Represents a geographical location.
     private Location mCurrentLocation;
-    private ProgressDialog mProgressDialog;
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -178,9 +161,6 @@ public class AddNoteActivity extends AppCompatActivity {
 
         mResultReceiver = new AddressResultReceiver(new Handler());
 
-        mLocationAddressET = findViewById(R.id.location_address_view);
-        mFetchAddressButton = findViewById(R.id.fetch_address_button);
-
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
         mRequestingLocationUpdates = true;
@@ -203,7 +183,7 @@ public class AddNoteActivity extends AppCompatActivity {
      * Listeners for the TextInputEditText
      */
     private void setupTexListener() {
-        noteNameEditText.addTextChangedListener(new TextWatcher() {
+        noteTitleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -217,9 +197,9 @@ public class AddNoteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > noteNameInLayout.getCounterMaxLength())
-                    noteNameEditText.setError(getString(R.string.error_str_len) + noteNameInLayout.getCounterMaxLength());
+                    noteTitleEditText.setError(getString(R.string.error_str_len) + noteNameInLayout.getCounterMaxLength());
                 else
-                    noteNameEditText.setError(null);
+                    noteTitleEditText.setError(null);
             }
         });
 
@@ -303,12 +283,12 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private Note getFormData() {
 
-        if (noteNameEditText.getError() != null || noteDescEditText.getError() != null) {
+        if (noteTitleEditText.getError() != null || noteDescEditText.getError() != null) {
             errors = true;
         }
 
-        if (noteNameEditText.length() == 0) {
-            noteNameEditText.setError(getString(R.string.required_field));
+        if (noteTitleEditText.length() == 0) {
+            noteTitleEditText.setError(getString(R.string.required_field));
             errors = true;
         }
 
@@ -328,23 +308,35 @@ public class AddNoteActivity extends AppCompatActivity {
         if (noteBudgetEditText.getText() != null && noteBudgetEditText.length() != 0)
             budget = Double.valueOf(noteBudgetEditText.getText().toString());
 
-        return errors ? null : new Note(
-                diaryId,
-                noteNameEditText.getText().toString(),
-                noteDescEditText.getText().toString(),
-                calendar.getTime(),
-                activitySpinner.getSelectedItem().toString(),
-                budget,
-                currenciesSpinner.getSelectedItem().toString().split(" - ")[0],
-                41.890251,//41.9027835,
-                12.492373,//12.4963655,
-                "vattela a pesca, 45",
-                "Roma",
-                "Italia",
-                "IT",
-                "sun",
-                30
-        );
+        Note note = null;
+        if(!errors){
+            note = new Note();
+            note.setDiaryId(diaryId);
+            note.setTitle(noteTitleEditText.getText().toString());
+            note.setDescription(noteDescEditText.getText().toString());
+            note.setDateTime(calendar.getTime());
+            note.setCategory(activitySpinner.getSelectedItem().toString());
+            note.setBudget(budget);
+            note.setCurrency(currenciesSpinner.getSelectedItem().toString().split(" - ")[0]);
+            if(mCheckinMinimal!=null &&
+                    !mCheckinMinimal.getAddress().equals(getString(R.string.no_address_found)) &&
+                    !mCheckinMinimal.getAddress().equals(getString(R.string.no_location_data_provided))&&
+                    !mCheckinMinimal.getAddress().equals(getString(R.string.service_not_available))&&
+                    !mCheckinMinimal.getAddress().equals(getString(R.string.invalid_lat_long_used))) {
+                note.setLatitude(mCheckinMinimal.getLatitude());
+                note.setLongitude(mCheckinMinimal.getLongitude());
+                note.setAddress(mCheckinMinimal.getAddress());
+                note.setCity(mCheckinMinimal.getCity());
+                note.setCountry(mCheckinMinimal.getCountry());
+                note.setCountryCode(mCheckinMinimal.getCountryCode());
+            } else {
+                snackBarError(R.string.no_location_data_provided);
+            }
+            note.setWeather("sun");
+            note.setTemperature(30);
+        }
+
+        return note;
     }
 
     public void onSaveNoteClick(View view) {
@@ -493,6 +485,7 @@ public class AddNoteActivity extends AppCompatActivity {
         // Remove location updates to save battery.
         stopLocationUpdates();
     }
+
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);

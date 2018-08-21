@@ -28,11 +28,7 @@ public class Note extends Activity implements Parcelable {
     }
 
     @Ignore
-    public Note(Parcel in, String weather, double temperature) {
-        super(in);
-        this.weather = weather;
-        this.temperature = temperature;
-    }
+    public Note(){ }
 
     @Ignore
     protected Note(Parcel in) {

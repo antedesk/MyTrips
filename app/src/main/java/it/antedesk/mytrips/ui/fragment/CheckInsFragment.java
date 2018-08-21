@@ -77,11 +77,14 @@ public class CheckInsFragment extends Fragment implements OnMapReadyCallback {
         LoadDiaryCheckInsViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiaryCheckInsViewModel.class);
         dataViewModel.getCheckinsByDiaryId(diaryId).observe(this, (List<CheckinMinimal> checkIns) -> {
             if (checkIns != null && checkIns.size() != 0) {
-                LatLng firstCheckin = new LatLng(checkIns.get(0).getLatitude(), checkIns.get(0).getLongitude());
                 for (CheckinMinimal checkIn : checkIns) {
+                    if(checkIn.getAddress() == null || checkIn.getAddress().isEmpty())
+                        continue;
                     LatLng marker = new LatLng(checkIn.getLatitude(), checkIn.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(marker).title("Marker in position " + checkIns.indexOf(checkIn)));
                 }
+                //TODO improve this logic. it's possible that a checkin doesn't have a location
+                LatLng firstCheckin = new LatLng(checkIns.get(0).getLatitude(), checkIns.get(0).getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(firstCheckin));
             }
         });
