@@ -31,10 +31,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -43,6 +45,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -87,7 +92,7 @@ public class AddNoteActivity extends AppCompatActivity {
     @BindView(R.id.note_money_edt)
     TextInputEditText noteBudgetEditText;
     @BindView(R.id.location_address_view)
-    EditText mLocationAddressET;
+    TextView mLocationAddressET;
     @BindView(R.id.fetch_address_button)
     Button mFetchAddressButton;
 
@@ -123,6 +128,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
     // Represents a geographical location.
     private Location mCurrentLocation;
+    private Location mLocation2Geocode;
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -177,6 +183,28 @@ public class AddNoteActivity extends AppCompatActivity {
         buildLocationSettingsRequest();
 
         updateUIWidgets();
+
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.i(TAG, "Place: " + place.getName());
+                mLocation2Geocode = new Location(mCurrentLocation.getProvider());
+                mLocation2Geocode.setLatitude(place.getLatLng().latitude);
+                mLocation2Geocode.setLongitude(place.getLatLng().longitude);
+
+                mAddressRequested = true;
+                startIntentService();
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+                snackBarError(R.string.no_address_found);
+            }
+        });
     }
 
     /**
@@ -318,7 +346,7 @@ public class AddNoteActivity extends AppCompatActivity {
             note.setCategory(activitySpinner.getSelectedItem().toString());
             note.setBudget(budget);
             note.setCurrency(currenciesSpinner.getSelectedItem().toString().split(" - ")[0]);
-            if(mCheckinMinimal!=null &&
+            if(mCheckinMinimal!=null && !mCheckinMinimal.getAddress().equals("") &&
                     !mCheckinMinimal.getAddress().equals(getString(R.string.no_address_found)) &&
                     !mCheckinMinimal.getAddress().equals(getString(R.string.no_location_data_provided))&&
                     !mCheckinMinimal.getAddress().equals(getString(R.string.service_not_available))&&
@@ -518,6 +546,7 @@ public class AddNoteActivity extends AppCompatActivity {
      */
     public void fetchAddressButtonHandler(View view) {
         if (mCurrentLocation != null) {
+            mLocation2Geocode = mCurrentLocation;
             startIntentService();
         } else {
             mAddressRequested = true;
@@ -536,7 +565,7 @@ public class AddNoteActivity extends AppCompatActivity {
         // Pass the result receiver as an extra to the service.
         intent.putExtra(RECEIVER, mResultReceiver);
         // Pass the location data as an extra to the service.
-        intent.putExtra(LOCATION_DATA_EXTRA, mCurrentLocation);
+        intent.putExtra(LOCATION_DATA_EXTRA, mLocation2Geocode);
 
         startService(intent);
     }
