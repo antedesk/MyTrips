@@ -60,10 +60,12 @@ import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.service.FetchAddressIntentService;
 import it.antedesk.mytrips.viewmodel.AddNoteViewModel;
 
+import static it.antedesk.mytrips.utils.Constants.CURRENT_CHECKIN_INFO;
 import static it.antedesk.mytrips.utils.Constants.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static it.antedesk.mytrips.utils.Constants.KEY_LOCATION;
 import static it.antedesk.mytrips.utils.Constants.KEY_REQUESTING_LOCATION_UPDATES;
 import static it.antedesk.mytrips.utils.Constants.LOCATION_DATA_EXTRA;
+import static it.antedesk.mytrips.utils.Constants.LOCATION_TO_GEOCODE;
 import static it.antedesk.mytrips.utils.Constants.RECEIVER;
 import static it.antedesk.mytrips.utils.Constants.REQUEST_CHECK_SETTINGS;
 import static it.antedesk.mytrips.utils.Constants.RESULT_DATA_KEY;
@@ -385,6 +387,17 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     /**
+     * Stores activity data in the Bundle.
+     */
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
+        savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
+        savedInstanceState.putParcelable(LOCATION_TO_GEOCODE, mLocation2Geocode);
+        savedInstanceState.putParcelable(CURRENT_CHECKIN_INFO, mCheckinMinimal);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    /**
      * Updates fields based on data stored in the bundle.
      */
     private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -396,6 +409,14 @@ public class AddNoteActivity extends AppCompatActivity {
 
             if (savedInstanceState.keySet().contains(KEY_LOCATION)) {
                 mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            }
+
+            if (savedInstanceState.keySet().contains(LOCATION_TO_GEOCODE)){
+                mLocation2Geocode = savedInstanceState.getParcelable(LOCATION_TO_GEOCODE);
+                if(savedInstanceState.keySet().contains(CURRENT_CHECKIN_INFO)){
+                    mCheckinMinimal = savedInstanceState.getParcelable(CURRENT_CHECKIN_INFO);
+                    mLocationAddressET.setText(mCheckinMinimal.getAddress());
+                }
             }
         }
     }

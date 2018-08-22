@@ -15,7 +15,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 parentColumns = "id",
                 childColumns = "note_id",
                 onDelete = CASCADE)})
-public class Image {
+public class ImageInfo {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -26,7 +26,7 @@ public class Image {
     @ColumnInfo(name = "is_cover")
     private boolean isCover;
 
-    public Image(long id, long noteId, String name, String path, boolean isCover) {
+    public ImageInfo(long id, long noteId, String name, String path, boolean isCover) {
         this.id = id;
         this.noteId = noteId;
         this.name = name;

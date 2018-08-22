@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.R;
-import it.antedesk.mytrips.model.Image;
+import it.antedesk.mytrips.model.ImageInfo;
 import it.antedesk.mytrips.model.Note;
 
 public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAdapterViewHolder> {
@@ -84,7 +84,7 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
     }
 
 
-    private Image getCoverImage(Note note){
+    private ImageInfo getCoverImage(Note note){
 
         return null;
     }
