@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/add_diary_margin_top"
             android:contentDescription="@string/diary_name_description"
-            android:src="@mipmap/fake_icon" />
+            android:src="@drawable/ic_title" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/diary_name_txtinl"
@@ -41,29 +41,30 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/title_placeholder_txt"
                 android:inputType="textPersonName"
+                android:maxLines="1"
                 android:orientation="horizontal"
-                android:scrollHorizontally="true"
-                android:maxLines="1"/>
+                android:scrollHorizontally="true" />
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:id="@+id/container_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:layout_below="@+id/diary_name_txtinl"
+            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/diary_description_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/description_icon"
-                android:src="@mipmap/fake_icon" />
+                android:src="@drawable/ic_description" />
+
             <TextView
                 android:id="@+id/diary_description_tv"
                 style="@style/BaseTextView"
-                android:drawable="@mipmap/fake_icon"
                 android:text="@string/description_placeholder_tv"
                 android:textSize="@dimen/form_tv_size" />
         </LinearLayout>
@@ -72,8 +73,8 @@
             android:id="@+id/diary_description_txtinl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:layout_below="@+id/container_description"
+            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:inputType="textMultiLine"
             app:counterEnabled="true"
             app:counterMaxLength="@integer/diary_description_et_limit"
@@ -90,19 +91,24 @@
                 android:hint="@string/diary_description_placeholder" />
         </android.support.design.widget.TextInputLayout>
 
+        <View
+            android:id="@+id/divider_1"
+            style="@style/dividerHorizontal"
+            android:layout_below="@+id/diary_description_txtinl" />
+
         <ImageView
             android:id="@+id/diary_start_date_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/divider_1"
             android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:layout_below="@+id/diary_description_txtinl"
             android:contentDescription="@string/start_date_icon_description"
-            android:src="@mipmap/fake_icon" />
+            android:src="@drawable/ic_start_date" />
 
         <EditText
             android:id="@+id/diary_start_date_edt"
             style="@style/DatePickerEditText"
-            android:layout_below="@+id/diary_description_txtinl"
+            android:layout_below="@+id/divider_1"
             android:layout_toEndOf="@+id/diary_start_date_icon"
             android:hint="@string/start_date_placeholder_et"
             tools:ignore="TextFields" />
@@ -111,10 +117,10 @@
             android:id="@+id/diary_end_date_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:layout_below="@+id/diary_start_date_icon"
+            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:contentDescription="@string/start_date_icon_description"
-            android:src="@mipmap/fake_icon" />
+            android:src="@drawable/ic_end_date" />
 
         <EditText
             android:id="@+id/diary_end_date_edt"
@@ -123,85 +129,110 @@
             android:layout_toEndOf="@+id/diary_end_date_icon"
             android:hint="@string/end_date_placeholder_edt"
             tools:ignore="TextFields" />
+
+        <View
+            android:id="@+id/divider_2"
+            style="@style/dividerHorizontal"
+            android:layout_below="@+id/diary_end_date_icon" />
+
         <LinearLayout
             android:id="@+id/diary_budget_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/divider_2"
             android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:gravity="center_vertical"
-            android:layout_below="@+id/diary_end_date_icon">
+            android:gravity="center_vertical">
+
             <ImageView
                 android:id="@+id/diary_money_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/add_money"
-                android:src="@mipmap/fake_icon" />
+                android:src="@drawable/ic_budget" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/diary_money_txt_inl"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 app:hintEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/diary_money_edt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/money_placeholder_edt"
                     android:inputType="numberDecimal"
-                    android:maxLines="1"
-                    android:hint="@string/money_placeholder_edt" />
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/diary_currency_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/currency_icon"
+                android:src="@drawable/ic_cuncurrency" />
             <Spinner
                 android:id="@+id/diary_currency_spinner"
-                style="@style/AddDiarySpinner"/>
+                style="@style/AddDiarySpinner" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/diary_category_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/diary_budget_container"
             android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:gravity="center_vertical"
-            android:layout_below="@+id/diary_budget_container">
+            android:gravity="center_vertical">
+
             <ImageView
                 android:id="@+id/diary_category_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/end_date_icon_description"
-                android:src="@mipmap/fake_icon" />
+                android:contentDescription="@string/category_icon_description"
+                android:src="@drawable/ic_set_type" />
+
             <Spinner
                 android:id="@+id/diary_category_spinner"
-                style="@style/AddDiarySpinner"/>
+                style="@style/AddDiarySpinner" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/diary_cotraveler_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/diary_category_container"
             android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:gravity="center_vertical"
-            android:layout_below="@+id/diary_category_container">
+            android:gravity="center_vertical">
+
             <ImageView
                 android:id="@+id/diary_cotraveler_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/end_date_icon_description"
-                android:src="@mipmap/fake_icon" />
+                android:src="@drawable/ic_mates" />
 
             <Spinner
                 android:id="@+id/diary_cotraveler_spinner"
-                style="@style/AddDiarySpinner"/>
+                style="@style/AddDiarySpinner" />
         </LinearLayout>
+
+        <View
+            android:id="@+id/divider_3"
+            style="@style/dividerHorizontal"
+            android:layout_below="@+id/diary_cotraveler_container" />
+
         <Button
             android:id="@+id/save_button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/divider_3"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/diary_cotraveler_container"
-            android:background="@drawable/button_round_corners"
-            android:text="@string/save_txt_button"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
             android:layout_marginBottom="@dimen/save_button_margin_bottom"
-            android:elevation="@dimen/button_elevation"/>
+            android:layout_marginTop="@dimen/add_diary_margin_top"
+            android:background="@drawable/button_round_corners"
+            android:elevation="@dimen/button_elevation"
+            android:onClick="onSaveClick"
+            android:text="@string/save_txt_button" />
     </RelativeLayout>
 </ScrollView>
