@@ -289,5 +289,9 @@
     <string name="location_settings_inadequate_warning">The location settings on the device are not
         adequate to run this sample. Fix in Settings.</string>
     <string name="loading">Retrieving current location</string>
+    <string name="time_icon_desc">time icon</string>
+    <string name="category_icon_description">category icon</string>
+    <string name="title_icon_desc">title icon</string>
+    <string name="currency_icon">currency icon</string>
 
 </resources>

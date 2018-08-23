@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/add_diary_margin_top"
             android:contentDescription="@string/diary_name_description"
-            android:src="@mipmap/fake_icon" />
+            android:src="@drawable/ic_title" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/diary_name_txtinl"
@@ -60,12 +60,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/description_icon"
-                android:src="@mipmap/fake_icon" />
+                android:src="@drawable/ic_description" />
 
             <TextView
                 android:id="@+id/diary_description_tv"
                 style="@style/BaseTextView"
-                android:drawable="@mipmap/fake_icon"
                 android:text="@string/description_placeholder_tv"
                 android:textSize="@dimen/form_tv_size" />
         </LinearLayout>
@@ -104,7 +103,7 @@
             android:layout_below="@+id/divider_1"
             android:layout_marginTop="@dimen/add_diary_margin_top"
             android:contentDescription="@string/start_date_icon_description"
-            android:src="@mipmap/fake_icon" />
+            android:src="@drawable/ic_start_date" />
 
         <EditText
             android:id="@+id/diary_start_date_edt"
@@ -121,7 +120,7 @@
             android:layout_below="@+id/diary_start_date_icon"
             android:layout_marginTop="@dimen/add_diary_margin_top"
             android:contentDescription="@string/start_date_icon_description"
-            android:src="@mipmap/fake_icon" />
+            android:src="@drawable/ic_end_date" />
 
         <EditText
             android:id="@+id/diary_end_date_edt"
@@ -149,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/add_money"
-                android:src="@mipmap/fake_icon" />
+                android:src="@drawable/ic_budget" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/diary_money_txt_inl"
@@ -167,6 +166,12 @@
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/diary_currency_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/currency_icon"
+                android:src="@drawable/ic_cuncurrency" />
             <Spinner
                 android:id="@+id/diary_currency_spinner"
                 style="@style/AddDiarySpinner" />
@@ -184,8 +189,8 @@
                 android:id="@+id/diary_category_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/end_date_icon_description"
-                android:src="@mipmap/fake_icon" />
+                android:contentDescription="@string/category_icon_description"
+                android:src="@drawable/ic_set_type" />
 
             <Spinner
                 android:id="@+id/diary_category_spinner"
@@ -205,7 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/end_date_icon_description"
-                android:src="@mipmap/fake_icon" />
+                android:src="@drawable/ic_mates" />
 
             <Spinner
                 android:id="@+id/diary_cotraveler_spinner"
