@@ -18,6 +18,7 @@ public final class Constants {
     public final static String KEY_LOCATION = "location";
     public final static String LOCATION_TO_GEOCODE = "LOCATION_TO_GEOCODE";
     public final static String CURRENT_CHECKIN_INFO = "CURRENT_CHECKIN_INFO";
+    public final static String SELECTED_DATETIME = "SELECTED_DATETIME";
 
 
     /**

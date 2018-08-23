@@ -69,6 +69,7 @@ import static it.antedesk.mytrips.utils.Constants.LOCATION_TO_GEOCODE;
 import static it.antedesk.mytrips.utils.Constants.RECEIVER;
 import static it.antedesk.mytrips.utils.Constants.REQUEST_CHECK_SETTINGS;
 import static it.antedesk.mytrips.utils.Constants.RESULT_DATA_KEY;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DATETIME;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 import static it.antedesk.mytrips.utils.Constants.UPDATE_INTERVAL_IN_MILLISECONDS;
 
@@ -393,7 +394,10 @@ public class AddNoteActivity extends AppCompatActivity {
         savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
         savedInstanceState.putParcelable(LOCATION_TO_GEOCODE, mLocation2Geocode);
-        savedInstanceState.putParcelable(CURRENT_CHECKIN_INFO, mCheckinMinimal);
+        if(mCheckinMinimal != null)
+            savedInstanceState.putParcelable(CURRENT_CHECKIN_INFO, mCheckinMinimal);
+        if(calendar != null)
+            savedInstanceState.putLong(SELECTED_DATETIME, calendar.getTimeInMillis());
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -417,6 +421,10 @@ public class AddNoteActivity extends AppCompatActivity {
                     mCheckinMinimal = savedInstanceState.getParcelable(CURRENT_CHECKIN_INFO);
                     mLocationAddressET.setText(mCheckinMinimal.getAddress());
                 }
+            }
+            if(savedInstanceState.containsKey(SELECTED_DATETIME)) {
+                calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(savedInstanceState.getLong(SELECTED_DATETIME));
             }
         }
     }

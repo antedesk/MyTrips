@@ -177,8 +177,9 @@
                 style="@style/AddDiarySpinner" />
         </LinearLayout>
 
+
         <LinearLayout
-            android:id="@+id/diary_category_container"
+            android:id="@+id/diary_category_cotrav_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/diary_budget_container"
@@ -195,16 +196,6 @@
             <Spinner
                 android:id="@+id/diary_category_spinner"
                 style="@style/AddDiarySpinner" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/diary_cotraveler_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/diary_category_container"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:gravity="center_vertical">
-
             <ImageView
                 android:id="@+id/diary_cotraveler_icon"
                 android:layout_width="wrap_content"
@@ -220,7 +211,7 @@
         <View
             android:id="@+id/divider_3"
             style="@style/dividerHorizontal"
-            android:layout_below="@+id/diary_cotraveler_container" />
+            android:layout_below="@+id/diary_category_cotrav_container" />
 
         <Button
             android:id="@+id/save_button"
