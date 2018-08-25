@@ -98,27 +98,29 @@
             android:id="@+id/dates_container"
             android:layout_width="match_parent"
             android:layout_below="@+id/divider_1"
+            android:weightSum="5"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/diary_start_date_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/add_diary_margin_top"
-                android:src="@drawable/ic_start_date"
-                android:contentDescription="@string/start_date_icon_description" />
+                android:src="@drawable/ic_start_date" />
 
             <EditText
                 android:id="@+id/diary_start_date_edt"
                 style="@style/DatePickerEditText"
+                android:layout_weight="2"
                 android:hint="@string/start_date_placeholder_et"
                 tools:ignore="TextFields" />
 
             <ImageView
                 android:id="@+id/diary_end_date_icon"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/add_diary_margin_top"
-                android:layout_marginStart="@dimen/margin20dp"
+                android:layout_marginStart="@dimen/add_diary_margin_top"
                 android:contentDescription="@string/start_date_icon_description"
                 android:src="@drawable/ic_end_date" />
 
@@ -126,6 +128,7 @@
                 android:id="@+id/diary_end_date_edt"
                 style="@style/DatePickerEditText"
                 android:hint="@string/end_date_placeholder_edt"
+                android:layout_weight="2"
                 tools:ignore="TextFields" />
         </LinearLayout>
         <View
@@ -181,28 +184,34 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/diary_budget_container"
             android:layout_marginTop="@dimen/add_diary_margin_top"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/diary_category_icon"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:contentDescription="@string/category_icon_description"
                 android:src="@drawable/ic_set_type" />
 
             <Spinner
                 android:id="@+id/diary_category_spinner"
-                style="@style/AddDiarySpinner" />
+                style="@style/AddDiarySpinner"
+                android:layout_width="0dp"
+                android:layout_weight="2" />
             <ImageView
                 android:id="@+id/diary_cotraveler_icon"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/end_date_icon_description"
                 android:src="@drawable/ic_mates" />
 
             <Spinner
                 android:id="@+id/diary_cotraveler_spinner"
-                style="@style/AddDiarySpinner" />
+                style="@style/AddDiarySpinner"
+                android:layout_width="0dp"
+                android:layout_weight="2" />
         </LinearLayout>
 
         <View

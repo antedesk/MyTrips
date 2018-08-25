@@ -75,7 +75,6 @@ import static it.antedesk.mytrips.utils.Constants.UPDATE_INTERVAL_IN_MILLISECOND
 
 public class AddNoteActivity extends AppCompatActivity {
 
-    private Calendar calendar = Calendar.getInstance();
     @BindView(R.id.note_start_date_edt)
     EditText dateEditTxt;
     @BindView(R.id.note_time_edt)
@@ -99,6 +98,7 @@ public class AddNoteActivity extends AppCompatActivity {
     @BindView(R.id.fetch_address_button)
     Button mFetchAddressButton;
 
+
     private ProgressDialog mProgressDialog;
 
     private static final String TAG = AddNoteActivity.class.getSimpleName();
@@ -107,6 +107,7 @@ public class AddNoteActivity extends AppCompatActivity {
     private boolean errors = false;
     private long diaryId;
     private Date currentDate;
+    private Calendar calendar = Calendar.getInstance();
 
     protected LocationRequest mLocationRequest;
     private AddressResultReceiver mResultReceiver;
@@ -208,6 +209,20 @@ public class AddNoteActivity extends AppCompatActivity {
                 snackBarError(R.string.no_address_found);
             }
         });
+    }
+    /**
+     * Stores activity data in the Bundle.
+     */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
+        savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
+        savedInstanceState.putParcelable(LOCATION_TO_GEOCODE, mLocation2Geocode);
+        if(mCheckinMinimal != null)
+            savedInstanceState.putParcelable(CURRENT_CHECKIN_INFO, mCheckinMinimal);
+        if(currentDate != null)
+            savedInstanceState.putLong(SELECTED_DATETIME, currentDate.getTime());
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     /**
@@ -324,13 +339,11 @@ public class AddNoteActivity extends AppCompatActivity {
         }
 
         if (currentDate == null) {
-            snackBarError(R.string.missing_data);
             dateEditTxt.setError(getString(R.string.missing_date));
             errors = true;
         }
 
         if (currentDate == null || timeEditTxt.getText().length() == 0) {
-            snackBarError(R.string.missing_data);
             timeEditTxt.setError(getString(R.string.missing_time));
             errors = true;
         }
@@ -347,6 +360,8 @@ public class AddNoteActivity extends AppCompatActivity {
             note.setDescription(noteDescEditText.getText().toString());
             note.setDateTime(calendar.getTime());
             note.setCategory(activitySpinner.getSelectedItem().toString());
+            note.setCategoryId(getResources()
+                    .getStringArray(R.array.activity_category_id_array)[activitySpinner.getSelectedItemPosition()]);
             note.setBudget(budget);
             note.setCurrency(currenciesSpinner.getSelectedItem().toString().split(" - ")[0]);
             if(mCheckinMinimal!=null && !mCheckinMinimal.getAddress().equals("") &&
@@ -387,19 +402,6 @@ public class AddNoteActivity extends AppCompatActivity {
         Snackbar.make(findViewById(R.id.form_scroller), getString(messageId), Snackbar.LENGTH_LONG).show();
     }
 
-    /**
-     * Stores activity data in the Bundle.
-     */
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
-        savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
-        savedInstanceState.putParcelable(LOCATION_TO_GEOCODE, mLocation2Geocode);
-        if(mCheckinMinimal != null)
-            savedInstanceState.putParcelable(CURRENT_CHECKIN_INFO, mCheckinMinimal);
-        if(calendar != null)
-            savedInstanceState.putLong(SELECTED_DATETIME, calendar.getTimeInMillis());
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
     /**
      * Updates fields based on data stored in the bundle.
@@ -423,8 +425,8 @@ public class AddNoteActivity extends AppCompatActivity {
                 }
             }
             if(savedInstanceState.containsKey(SELECTED_DATETIME)) {
-                calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(savedInstanceState.getLong(SELECTED_DATETIME));
+                currentDate = calendar.getTime();
             }
         }
     }

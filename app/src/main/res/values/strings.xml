@@ -226,15 +226,12 @@
         <item>ZWD - Zimbabwe Dollar</item>
     </string-array>
     <string name="title_activity_diary_detail">DiaryDetailActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
     <string name="tab_notes">Notes</string>
     <string name="checkins">Check-ins</string>
     <string name="cover_photo_description">cover photo</string>
     <string name="activity_icon_description">activity icon</string>
-    <string name="note_description_placeholder">This is a long1, long2, long3, long4, long5, long6, long7, long8, long, long, long note placeholder</string>
+    <string name="note_description_placeholder">Write something about your note…</string>
 
     <string name="note_category_breakfast">Breakfast</string>
     <string name="note_category_lunch">Lunch</string>
@@ -259,6 +256,19 @@
         <item>Cultural visit</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="activity_category_id_array">
+        <item>BRKFST</item>
+        <item>LNCH</item>
+        <item>DNNR</item>
+        <item>TRNSFR</item>
+        <item>OVRNGHY</item>
+        <item>EXCRSN</item>
+        <item>SHPPNG</item>
+        <item>CLTRL</item>
+        <item>OTHR</item>
+    </string-array>
+
     <string name="title_activity_maps">Map</string>
     <string name="note_date_placeholder_et">Set Date</string>
     <string name="note_time_placeholder_edt">Set Time</string>
@@ -293,5 +303,8 @@
     <string name="category_icon_description">category icon</string>
     <string name="title_icon_desc">title icon</string>
     <string name="currency_icon">currency icon</string>
+    <string name="world_icon_description">world icon</string>
+    <string name="logo_app_description">logo app</string>
+    <string name="copyright">Powered By Antedesk</string>
 
 </resources>

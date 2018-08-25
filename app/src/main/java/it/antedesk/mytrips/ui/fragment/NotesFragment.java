@@ -3,6 +3,8 @@ package it.antedesk.mytrips.ui.fragment;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +26,10 @@ import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
 public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewAdapterOnClickHandler {
 
+    private static final String LIST_STATE = "listState";
+
+    private Parcelable mListState = null;
+    private RecyclerView mNoteRecyclerView;
     private NoteViewAdapter noteApter;
 
     public NotesFragment() {
@@ -56,12 +62,17 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
         GridLayoutManager mLayoutManager
                 = new GridLayoutManager(Objects.requireNonNull(getActivity()).getApplicationContext(), numberOfColumns);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.notes_recycler_view);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        mNoteRecyclerView = rootView.findViewById(R.id.notes_recycler_view);
+        mNoteRecyclerView.setLayoutManager(mLayoutManager);
+        mNoteRecyclerView.setHasFixedSize(true);
+
+        if(savedInstanceState!=null
+                && savedInstanceState.containsKey(LIST_STATE)) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE);
+        }
 
         noteApter = new NoteViewAdapter(this);
-        recyclerView.setAdapter(noteApter);
+        mNoteRecyclerView.setAdapter(noteApter);
 
         return rootView;
     }
@@ -87,7 +98,16 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
         dataViewModel.getDiaryNotes(diaryId).observe(this, (List<Note> notes) -> {
             if (notes != null)
                 noteApter.setNotesData(notes);
+            if (mListState!=null)
+                mNoteRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mListState = mNoteRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(LIST_STATE, mListState);
     }
 
     @Override

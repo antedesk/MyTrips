@@ -29,8 +29,7 @@
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                />
+                android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
 
             <Button
                 android:id="@+id/fetch_address_button"
@@ -40,21 +39,33 @@
                 android:text="@string/fetch_address" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/location_address_view"
+        <LinearLayout
+            android:id="@+id/address_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_5dp"
-            android:layout_below="@+id/location_address_ll"
-            android:text="@string/location_hint"
-            android:gravity="center_horizontal"
-            android:textSize="@dimen/default_tv_size"
-            android:maxLines="1" />
+            android:gravity="center_vertical"
+            android:layout_below="@+id/location_address_ll">
 
+            <ImageView
+                android:id="@+id/note_world_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/world_icon_description"
+                android:src="@drawable/ic_world" />
+            <TextView
+                android:id="@+id/location_address_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/location_hint"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/default_tv_size"
+                android:maxLines="1" />
+        </LinearLayout>
         <View
             android:id="@+id/divider_4"
             style="@style/dividerHorizontal"
-            android:layout_below="@+id/location_address_view" />
+            android:layout_below="@+id/address_container" />
 
         <Button
             android:id="@+id/save_button"

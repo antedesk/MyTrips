@@ -17,14 +17,14 @@ public interface NoteDao extends BaseDao<Note>{
     @Query("SELECT * FROM notes WHERE id=:id")
     Note retrieveNoteById(long id);
 
-    @Query("SELECT * FROM notes WHERE diary_id=:diaryId")
+    @Query("SELECT * FROM notes WHERE diary_id=:diaryId ORDER BY date_time DESC")
     List<Note> retrieveNotesByDiaryId(final long diaryId);
 
-    @Query("SELECT * FROM notes WHERE diary_id=:id")
+    @Query("SELECT * FROM notes WHERE diary_id=:id ORDER BY date_time DESC")
     List<Note> loadNotesByDiaryId(long id);
 
-    @Query("SELECT category, latitude, longitude, address, city, country, country_code " +
-            "FROM notes WHERE diary_id=:diaryId")
+    @Query("SELECT id, title, category, category_id, latitude, longitude, address, city, country, country_code " +
+            "FROM notes WHERE diary_id=:diaryId AND latitude IS NOT NULL  AND longitude IS NOT NULL")
     List<CheckinMinimal> getCheckinsByDiaryId(long diaryId);
 
     @Query("SELECT COUNT(DISTINCT address) " +

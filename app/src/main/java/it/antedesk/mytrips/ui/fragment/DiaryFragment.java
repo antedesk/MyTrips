@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import it.antedesk.mytrips.DiaryDetailActivity;
 import it.antedesk.mytrips.R;
 import it.antedesk.mytrips.model.Diary;
@@ -34,8 +37,13 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
      * fragment.
      */
     private static final String IS_A_PLAN = "is_a_plan";
+    private static final String LIST_STATE = "listState";
+
+    private Parcelable mListState = null;
+    private RecyclerView mDiaryRecyclerView;
 
     private DiaryViewAdapter dvApter;
+
 
     public DiaryFragment() {
     }
@@ -67,19 +75,24 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
         GridLayoutManager mLayoutManager
                 = new GridLayoutManager(Objects.requireNonNull(getActivity()).getApplicationContext(), numberOfColumns);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.diaries_recycler_view);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        mDiaryRecyclerView = rootView.findViewById(R.id.diaries_recycler_view);
+        mDiaryRecyclerView.setLayoutManager(mLayoutManager);
+        mDiaryRecyclerView.setHasFixedSize(true);
+
+        if(savedInstanceState!=null
+                && savedInstanceState.containsKey(LIST_STATE)) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE);
+        }
+
 
         dvApter = new DiaryViewAdapter(this);
-        recyclerView.setAdapter(dvApter);
+        mDiaryRecyclerView.setAdapter(dvApter);
 
         return rootView;
     }
 
     @Override
     public void onClick(Diary selectedDiary) {
-        Snackbar.make(getActivity().findViewById(R.id.diaries_recycler_view),"Selected "+selectedDiary.getName(), Snackbar.LENGTH_LONG).show();
         Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
         intent.putExtra(SELECTED_DIARY, selectedDiary);
         startActivity(intent);
@@ -91,13 +104,24 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
             dataViewModel.getPlans().observe(this, plans -> {
                 if(plans!=null)
                     dvApter.setDiarysData(plans);
+                if (mListState!=null)
+                    mDiaryRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
             });
         } else {
             dataViewModel.getDiaries().observe(this, diaries -> {
                 if(diaries!=null)
                     dvApter.setDiarysData(diaries);
+                if (mListState!=null)
+                    mDiaryRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
             });
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mListState = mDiaryRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(LIST_STATE, mListState);
     }
 
     @Override

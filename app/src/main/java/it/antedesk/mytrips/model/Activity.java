@@ -31,6 +31,8 @@ public class Activity implements Parcelable{
     @ColumnInfo(name = "date_time")
     private Date dateTime;
     private String category;
+    @ColumnInfo(name = "category_id")
+    private String categoryId;
     private double budget;
     private String currency;
     private double latitude;
@@ -43,13 +45,14 @@ public class Activity implements Parcelable{
 
     @Ignore
     public Activity(long diaryId, String title, String description, Date dateTime, String category,
-                    double budget, String currency, double latitude, double longitude,
+                    String categoryId, double budget, String currency, double latitude, double longitude,
                     String address, String city, String country, String countryCode) {
         this.diaryId = diaryId;
         this.title = title;
         this.description = description;
         this.dateTime = dateTime;
         this.category = category;
+        this.categoryId = categoryId;
         this.budget = budget;
         this.currency = currency;
         this.latitude = latitude;
@@ -61,7 +64,7 @@ public class Activity implements Parcelable{
     }
 
     public Activity(long id, long diaryId, String title, String description, Date dateTime, String category,
-                    double budget, String currency, double latitude, double longitude,
+                    String categoryId, double budget, String currency, double latitude, double longitude,
                     String address, String city, String country, String countryCode) {
         this.id = id;
         this.diaryId = diaryId;
@@ -69,6 +72,7 @@ public class Activity implements Parcelable{
         this.description = description;
         this.dateTime = dateTime;
         this.category = category;
+        this.categoryId = categoryId;
         this.budget = budget;
         this.currency = currency;
         this.latitude = latitude;
@@ -79,12 +83,17 @@ public class Activity implements Parcelable{
         this.countryCode = countryCode;
     }
 
+    @Ignore
+    public Activity() { }
+
+    @Ignore
     protected Activity(Parcel in) {
         id = in.readLong();
         diaryId = in.readLong();
         title = in.readString();
         description = in.readString();
         category = in.readString();
+        categoryId = in.readString();
         budget = in.readDouble();
         currency = in.readString();
         latitude = in.readDouble();
@@ -92,6 +101,7 @@ public class Activity implements Parcelable{
         address = in.readString();
         city = in.readString();
         country = in.readString();
+        countryCode = in.readString();
     }
 
     public static final Creator<Activity> CREATOR = new Creator<Activity>() {
@@ -105,8 +115,6 @@ public class Activity implements Parcelable{
             return new Activity[size];
         }
     };
-
-    public Activity() { }
 
     public long getId() {
         return id;
@@ -220,12 +228,19 @@ public class Activity implements Parcelable{
         this.countryCode = countryCode;
     }
 
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
-    // TODO complete
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
@@ -233,7 +248,15 @@ public class Activity implements Parcelable{
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(category);
+        dest.writeString(categoryId);
         dest.writeDouble(budget);
         dest.writeString(currency);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeString(address);
+        dest.writeString(city);
+        dest.writeString(country);
+        dest.writeString(countryCode);
     }
+
 }

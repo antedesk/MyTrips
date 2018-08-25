@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="add_diary_grid_padding">180dp</dimen>
+    <dimen name="add_diary_grid_padding">100dp</dimen>
 </resources>

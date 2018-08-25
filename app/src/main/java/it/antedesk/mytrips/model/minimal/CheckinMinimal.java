@@ -7,7 +7,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CheckinMinimal implements Parcelable {
+    private long id;
+    private String title;
     private String category;
+    @ColumnInfo(name = "category_id")
+    private String categoryId;
     private double latitude;
     private double longitude;
     private String address;
@@ -16,9 +20,12 @@ public class CheckinMinimal implements Parcelable {
     @ColumnInfo(name = "country_code")
     private String countryCode;
 
-    public CheckinMinimal(String category, double latitude, double longitude, String address,
+    public CheckinMinimal(long id, String title, String category, String categoryId, double latitude, double longitude, String address,
                           String city, String country, String countryCode) {
+        this.id = id;
+        this.title = title;
         this.category = category;
+        this.categoryId = categoryId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
@@ -32,7 +39,10 @@ public class CheckinMinimal implements Parcelable {
 
     @Ignore
     protected CheckinMinimal(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
         category = in.readString();
+        categoryId = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
         address = in.readString();
@@ -52,6 +62,22 @@ public class CheckinMinimal implements Parcelable {
             return new CheckinMinimal[size];
         }
     };
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getCategory() {
         return category;
@@ -109,6 +135,14 @@ public class CheckinMinimal implements Parcelable {
         this.countryCode = countryCode;
     }
 
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -116,7 +150,10 @@ public class CheckinMinimal implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
         dest.writeString(category);
+        dest.writeString(categoryId);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         dest.writeString(address);

@@ -26,6 +26,9 @@ import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.AddDiaryViewModel;
 
 import static it.antedesk.mytrips.utils.Constants.IS_PLAN;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DATETIME;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_ENDDATE;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_STARTDATE;
 
 public class AddDiaryActivity extends AppCompatActivity {
 
@@ -69,6 +72,17 @@ public class AddDiaryActivity extends AppCompatActivity {
             finish();
         }
 
+        if(savedInstanceState != null) {
+            if (savedInstanceState.containsKey(SELECTED_STARTDATE)) {
+                calendar.setTimeInMillis(savedInstanceState.getLong(SELECTED_STARTDATE));
+                currentStartDate = calendar.getTime();
+            }
+            if (savedInstanceState.containsKey(SELECTED_ENDDATE)) {
+                    calendar.setTimeInMillis(savedInstanceState.getLong(SELECTED_ENDDATE));
+                currentEndDate = calendar.getTime();
+            }
+        }
+
         isPlan = intent != null && intent.getBooleanExtra(IS_PLAN, false);
         String pageTitle = isPlan ? getString(R.string.add_plan_str) : getString(R.string.add_diary_str);
         setTitle(pageTitle);
@@ -77,6 +91,16 @@ public class AddDiaryActivity extends AppCompatActivity {
         setupSpinners();
         setupTexListener();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(currentStartDate != null)
+            outState.putLong(SELECTED_STARTDATE, currentStartDate.getTime());
+        if(currentEndDate != null)
+            outState.putLong(SELECTED_ENDDATE, currentEndDate.getTime());
     }
 
     /**

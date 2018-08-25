@@ -11,6 +11,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -73,6 +75,30 @@ public class CheckInsFragment extends Fragment implements OnMapReadyCallback {
         loadMarkers();
     }
 
+    private int getMarkerIcon(String categoryId){
+        switch(categoryId)
+        {
+            case "BRKFST":
+                return R.drawable.ic_world;
+            case "LNCH":
+                return R.drawable.ic_world;
+            case "DNNR":
+                return R.drawable.ic_world;
+            case "TRNSFR":
+                return R.drawable.ic_world;
+            case "OVRNGHY":
+                return R.drawable.ic_world;
+            case "EXCRSN":
+                return R.drawable.ic_world;
+            case "SHPPNG":
+                return R.drawable.ic_world;
+            case "CLTRL":
+                return R.drawable.ic_world;
+            default:
+                return R.drawable.ic_world;
+        }
+    }
+
     private void loadMarkers(){
         LoadDiaryCheckInsViewModel dataViewModel = ViewModelProviders.of(this).get(LoadDiaryCheckInsViewModel.class);
         dataViewModel.getCheckinsByDiaryId(diaryId).observe(this, (List<CheckinMinimal> checkIns) -> {
@@ -81,11 +107,12 @@ public class CheckInsFragment extends Fragment implements OnMapReadyCallback {
                     if(checkIn.getAddress() == null || checkIn.getAddress().isEmpty())
                         continue;
                     LatLng marker = new LatLng(checkIn.getLatitude(), checkIn.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(marker).title("Marker in position " + checkIns.indexOf(checkIn)));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(marker).title(checkIn.getTitle())
+                            .icon(BitmapDescriptorFactory.fromResource(getMarkerIcon(checkIn.getCategoryId()))));
                 }
-                //TODO improve this logic. it's possible that a checkin doesn't have a location
                 LatLng firstCheckin = new LatLng(checkIns.get(0).getLatitude(), checkIns.get(0).getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(firstCheckin));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstCheckin,13));
             }
         });
     }

@@ -39,4 +39,6 @@
     <dimen name="add_note_margin_top">8dp</dimen>
     <dimen name="money_txted_width">130dp</dimen>
     <dimen name="margin20dp">20dp</dimen>
+    <dimen name="textsize_copyright">20sp</dimen>
+    <dimen name="text_size_appname_login">40sp</dimen>
 </resources>

@@ -8,6 +8,8 @@
     card_view:cardElevation="@dimen/cardview_elevation"
     card_view:cardPreventCornerOverlap="true"
     card_view:cardUseCompatPadding="true"
+    android:layout_marginStart="@dimen/home_horizontal_margin"
+    android:layout_marginEnd="@dimen/home_horizontal_margin"
     tools:ignore="MissingPrefix">
 
     <RelativeLayout
