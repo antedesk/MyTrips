@@ -189,7 +189,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/currency_icon"
-            android:src="@drawable/ic_cuncurrency" />
+            android:src="@drawable/ic_currency" />
         <Spinner
             android:id="@+id/note_currency_spinner"
             style="@style/AddDiarySpinner" />

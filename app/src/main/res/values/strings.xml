@@ -14,7 +14,7 @@
     <string name="title_placeholder_txt">My Awesome Trip</string>
     <string name="diary_description_placeholder">This is my first trip in the city of nowhere\.\.\.</string>
     <string name="category_placeholer">Adventure</string>
-    <string name="date_placeholder">10/12/2017</string>
+    <string name="date_placeholder">10 aug 2017</string>
     <string name="no_content_placeholder">No content at the moment!\nAre you ready for your next trip?</string>
     <string name="add_diary_str">Add Diary</string>
     <string name="add_plan_str">Add Plan</string>

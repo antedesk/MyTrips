@@ -42,6 +42,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
 
+        toolbar.setLogo(R.drawable.ic_white_ship);
         // trick to make scrollview working with tabbeView
         scrollView.setFillViewport (true);
 

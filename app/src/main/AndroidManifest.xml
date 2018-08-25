@@ -40,7 +40,7 @@
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +61,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".AddActivityActivity"></activity>
+        <activity android:name=".AddActivityActivity" />
     </application>
 
 </manifest>

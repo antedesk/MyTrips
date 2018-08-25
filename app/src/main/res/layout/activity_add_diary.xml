@@ -96,44 +96,43 @@
             style="@style/dividerHorizontal"
             android:layout_below="@+id/diary_description_txtinl" />
 
-        <ImageView
-            android:id="@+id/diary_start_date_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/dates_container"
+            android:layout_width="match_parent"
             android:layout_below="@+id/divider_1"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:contentDescription="@string/start_date_icon_description"
-            android:src="@drawable/ic_start_date" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/diary_start_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_diary_margin_top"
+                android:src="@drawable/ic_start_date" />
 
-        <EditText
-            android:id="@+id/diary_start_date_edt"
-            style="@style/DatePickerEditText"
-            android:layout_below="@+id/divider_1"
-            android:layout_toEndOf="@+id/diary_start_date_icon"
-            android:hint="@string/start_date_placeholder_et"
-            tools:ignore="TextFields" />
+            <EditText
+                android:id="@+id/diary_start_date_edt"
+                style="@style/DatePickerEditText"
+                android:hint="@string/start_date_placeholder_et"
+                tools:ignore="TextFields" />
 
-        <ImageView
-            android:id="@+id/diary_end_date_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/diary_start_date_icon"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:contentDescription="@string/start_date_icon_description"
-            android:src="@drawable/ic_end_date" />
+            <ImageView
+                android:id="@+id/diary_end_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_diary_margin_top"
+                android:layout_marginStart="@dimen/add_diary_margin_top"
+                android:contentDescription="@string/start_date_icon_description"
+                android:src="@drawable/ic_end_date" />
 
-        <EditText
-            android:id="@+id/diary_end_date_edt"
-            style="@style/DatePickerEditText"
-            android:layout_below="@+id/diary_start_date_edt"
-            android:layout_toEndOf="@+id/diary_end_date_icon"
-            android:hint="@string/end_date_placeholder_edt"
-            tools:ignore="TextFields" />
-
+            <EditText
+                android:id="@+id/diary_end_date_edt"
+                style="@style/DatePickerEditText"
+                android:hint="@string/end_date_placeholder_edt"
+                tools:ignore="TextFields" />
+        </LinearLayout>
         <View
             android:id="@+id/divider_2"
             style="@style/dividerHorizontal"
-            android:layout_below="@+id/diary_end_date_icon" />
+            android:layout_below="@+id/dates_container" />
 
         <LinearLayout
             android:id="@+id/diary_budget_container"
@@ -171,14 +170,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/currency_icon"
-                android:src="@drawable/ic_cuncurrency" />
+                android:src="@drawable/ic_currency" />
             <Spinner
                 android:id="@+id/diary_currency_spinner"
                 style="@style/AddDiarySpinner" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/diary_category_container"
+            android:id="@+id/diary_category_cotrav_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/diary_budget_container"
@@ -195,16 +194,6 @@
             <Spinner
                 android:id="@+id/diary_category_spinner"
                 style="@style/AddDiarySpinner" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/diary_cotraveler_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/diary_category_container"
-            android:layout_marginTop="@dimen/add_diary_margin_top"
-            android:gravity="center_vertical">
-
             <ImageView
                 android:id="@+id/diary_cotraveler_icon"
                 android:layout_width="wrap_content"
@@ -220,7 +209,7 @@
         <View
             android:id="@+id/divider_3"
             style="@style/dividerHorizontal"
-            android:layout_below="@+id/diary_cotraveler_container" />
+            android:layout_below="@+id/diary_category_cotrav_container" />
 
         <Button
             android:id="@+id/save_button"
