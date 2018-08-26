@@ -321,5 +321,6 @@
     <string name="daily_trend">Daily Trend</string>
     <string name="fake_total_budget">/360 EUR</string>
     <string name="no_content_text">Any data to analyze.</string>
+    <string name="appwidget_text">Any Diary Found</string>
 
 </resources>

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -44,6 +45,8 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
 
     private DiaryViewAdapter dvApter;
 
+    public static List<Diary> mDiaries;
+    public static long mDiaryId;
 
     public DiaryFragment() {
     }
@@ -109,6 +112,7 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
             });
         } else {
             dataViewModel.getDiaries().observe(this, diaries -> {
+                mDiaries = diaries;
                 if(diaries!=null)
                     dvApter.setDiarysData(diaries);
                 if (mListState!=null)
