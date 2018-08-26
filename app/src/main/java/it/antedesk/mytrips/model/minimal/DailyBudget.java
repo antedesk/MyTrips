@@ -9,10 +9,12 @@ public class DailyBudget {
     @ColumnInfo(name = "date_time")
     private Date dateTime;
     private double budget;
+    private String currency;
 
-    public DailyBudget(Date dateTime, double budget) {
+    public DailyBudget(Date dateTime, double budget,String currency) {
         this.dateTime = dateTime;
         this.budget = budget;
+        this.currency = currency;
     }
 
     public Date getDateTime() {
@@ -29,5 +31,22 @@ public class DailyBudget {
 
     public void setBudget(double budget) {
         this.budget = budget;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    @Override
+    public String toString() {
+        return "DailyBudget{" +
+                "dateTime=" + dateTime +
+                ", budget=" + budget +
+                ", currency='" + currency + '\'' +
+                '}';
     }
 }

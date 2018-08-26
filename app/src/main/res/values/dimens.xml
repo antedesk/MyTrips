@@ -41,7 +41,7 @@
     <dimen name="margin20dp">20dp</dimen>
     <dimen name="textsize_copyright">20sp</dimen>
     <dimen name="text_size_appname_login">40sp</dimen>
-    <dimen name="textsize_stats_data">25sp</dimen>
+    <dimen name="textsize_stats_data">22sp</dimen>
     <dimen name="textsize_stats_title">16sp</dimen>
     <dimen name="welcome_appbar_elevation">36dp</dimen>
 </resources>

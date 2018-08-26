@@ -1,14 +1,16 @@
 package it.antedesk.mytrips.ui.fragment;
 
-import android.graphics.Color;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -30,15 +32,35 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import it.antedesk.mytrips.R;
+
 import it.antedesk.mytrips.model.minimal.DailyBudget;
+import it.antedesk.mytrips.model.minimal.DatesInfo;
+import it.antedesk.mytrips.viewmodel.DiaryStatisticsViewModel;
 
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
 public class StatsFragment  extends Fragment {
 
-    private PieChart mPieChart;
-    private LineChart mLineChart;
+    @BindView(R.id.note_pie_chart)
+    PieChart mPieChart;
+    @BindView(R.id.note_line_chart)
+    LineChart mLineChart;
+
+    @BindView(R.id.current_vs_total_days_tv)
+    TextView mCurrentVsTotalDayTv;
+    @BindView(R.id.total_notes_tv)
+    TextView mTotalNotestv;
+    @BindView(R.id.total_checkins_tv)
+    TextView mTotalCheckinsTv;
+    @BindView(R.id.current_budget_tv)
+    TextView mCurrentBudgetTv;
+    @BindView(R.id.total_budget_tv)
+    TextView mTotalBudgetTv;
+    @BindView(R.id.average_budget_tv)
+    TextView mAverageBudgeTv;
 
     public StatsFragment() {
     }
@@ -59,13 +81,46 @@ public class StatsFragment  extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stats, container, false);
+        ButterKnife.bind(this, rootView);
         setPieChart(rootView);
         setLineChart(rootView);
+
         return rootView;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getArguments() != null) {
+            setMainStats(getArguments().getLong(SELECTED_DIARY_ID));
+        }
+    }
+
+    private void setMainStats(final long diaryId) {
+        DiaryStatisticsViewModel dataViewModel = ViewModelProviders.of(this).get(DiaryStatisticsViewModel.class);
+        dataViewModel.getAVGBudgetByDiaryId(diaryId).observe(this, dailyBudget -> {
+            Log.d("AVG", dailyBudget.toString());
+            mAverageBudgeTv.setText(TextUtils.concat(String.valueOf(dailyBudget.getBudget()), " ",
+                    dailyBudget.getCurrency()!= null ? dailyBudget.getCurrency() : "" ));
+        });
+
+        dataViewModel.getTotalNotesByDiaryId(diaryId).observe(this, integer -> mTotalNotestv.setText(String.valueOf(integer)));
+
+        dataViewModel.getTotalCheckinsByDiaryId(diaryId).observe(this, integer -> mTotalCheckinsTv.setText(String.valueOf(integer)));
+
+        dataViewModel.getTotalBudgetByDiaryId(diaryId).observe(this, aDouble ->
+                mCurrentBudgetTv.setText(aDouble!=null ? String.valueOf(aDouble) : "0.0"));
+
+        dataViewModel.getDiaryBudgetByDiaryId(diaryId).observe(this, budgetInfo ->
+                mTotalBudgetTv.setText(TextUtils.concat("/", String.valueOf(budgetInfo.getTotalBudget()),
+                        budgetInfo.getCurrency()!= null ? budgetInfo.getCurrency() : "" ))
+        );
+
+        dataViewModel.getDatesInfoByDiaryId(diaryId).observe(this, (DatesInfo datesInfo) ->
+                mCurrentVsTotalDayTv.setText(TextUtils.concat(String.valueOf(datesInfo.getCurrentDays()),
+                "/", String.valueOf(datesInfo.getTotalDays()))));
     }
 
     private void setPieChart(View rootView){
-        mPieChart = rootView.findViewById(R.id.note_pie_chart);
         mPieChart.getDescription().setEnabled(false);
 
         // radius of the center hole in percent of maximum radius
@@ -91,14 +146,14 @@ public class StatsFragment  extends Fragment {
 
     private void setLineChart(View rootView){
 
-        mLineChart = rootView.findViewById(R.id.note_line_chart);
+
         mLineChart.getDescription().setEnabled(false);
 
         List<DailyBudget> dailyBudgets = new ArrayList<>();
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 50));
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 10));
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 100));
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 90));
+        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 50, "EUR"));
+        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 10, "EUR"));
+        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 100,"EUR"));
+        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 90,"EUR"));
 
         mLineChart.setDrawGridBackground(false);
 
@@ -180,15 +235,10 @@ public class StatsFragment  extends Fragment {
             entries.add(new Entry(dailyBudgets.indexOf(data), (float) data.getBudget()));
         }
 
-
         LineDataSet dataSet = new LineDataSet(entries, getString(R.string.daily_trend_budget));
-
         dataSet.setLineWidth(2f);
-
         dataSet.setDrawCircles(false);
-
         dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-
         sets.add(dataSet);
 
         LineData d = new LineData(sets);

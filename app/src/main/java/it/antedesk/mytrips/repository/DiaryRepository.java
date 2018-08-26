@@ -8,6 +8,7 @@ import java.util.List;
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Diary;
+import it.antedesk.mytrips.model.minimal.BudgetInfo;
 
 public class DiaryRepository {
 
@@ -42,9 +43,16 @@ public class DiaryRepository {
         appExecutors.diskIO().execute(() -> diaries.postValue(mDb.getDiaryDao().loadAllDiaries(true)));
         return diaries;
     }
+
     public LiveData<List<Diary>> getDiaries() {
         MutableLiveData<List<Diary>> diaries = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> diaries.postValue(mDb.getDiaryDao().loadAllDiaries(false)));
+        return diaries;
+    }
+
+    public LiveData<BudgetInfo> getBudgetByDiaryId(long id){
+        MutableLiveData<BudgetInfo> diaries = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> diaries.postValue(mDb.getDiaryDao().getBudgetByDiaryId(id)));
         return diaries;
     }
 

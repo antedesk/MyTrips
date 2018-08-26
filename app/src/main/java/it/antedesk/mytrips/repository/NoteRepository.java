@@ -8,7 +8,11 @@ import java.util.List;
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Note;
+import it.antedesk.mytrips.model.minimal.BudgetInfo;
+import it.antedesk.mytrips.model.minimal.CategoryBudget;
 import it.antedesk.mytrips.model.minimal.CheckinMinimal;
+import it.antedesk.mytrips.model.minimal.DailyBudget;
+import it.antedesk.mytrips.model.minimal.DatesInfo;
 
 public class NoteRepository {
 
@@ -82,9 +86,40 @@ public class NoteRepository {
         return total;
     }
 
-    public LiveData<Double> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
-        MutableLiveData<Double> total = new MutableLiveData<>();
+
+    public LiveData<CategoryBudget> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
+        MutableLiveData<CategoryBudget> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByCategoriesAndDiaryId(diaryId)));
+        return total;
+    }
+
+    public LiveData<DailyBudget> getAVGBudgetByDiaryId(long diaryId) {
+        MutableLiveData<DailyBudget> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getAVGBudgetByDiaryId(diaryId)));
+        return total;
+    }
+
+    public LiveData<Integer> getTotalNotesByDiaryId(long diaryId) {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalNotesByDiaryId(diaryId)));
+        return total;
+    }
+
+    public LiveData<Integer> getTotalCheckinsByDiaryId(long diaryId) {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalCheckinsByDiaryId(diaryId)));
+        return total;
+    }
+
+    public LiveData<DailyBudget> getTotalBudgetByDayAndDiaryId(long diaryId) {
+        MutableLiveData<DailyBudget> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByDayAndDiaryId(diaryId)));
+        return total;
+    }
+
+    public LiveData<DatesInfo> getDatesInfoByDiaryId(long diaryId) {
+        MutableLiveData<DatesInfo> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getDatesInfoByDiaryId(diaryId)));
         return total;
     }
 

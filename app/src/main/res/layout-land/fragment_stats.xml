@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal">
-
         <android.support.v7.widget.CardView
             android:id="@+id/stats_container"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -41,6 +40,7 @@
                             style="@style/StatsTitle"
                             android:text="@string/days_stats_title"/>
                         <TextView
+                            android:id="@+id/current_vs_total_days_tv"
                             style="@style/StatsContent"
                             android:text="@string/fake_days_stats"/>
                     </LinearLayout>
@@ -57,6 +57,7 @@
                             style="@style/StatsTitle"
                             android:text="@string/notes_stats_title"/>
                         <TextView
+                            android:id="@+id/total_notes_tv"
                             style="@style/StatsContent"
                             android:text="@string/fake_notes_num"/>
                     </LinearLayout>
@@ -73,6 +74,7 @@
                             style="@style/StatsTitle"
                             android:text="@string/places_stats_title"/>
                         <TextView
+                            android:id="@+id/total_checkins_tv"
                             style="@style/StatsContent"
                             android:text="@string/fake_places_num"/>
                     </LinearLayout>
@@ -95,10 +97,20 @@
                             style="@style/StatsTitle"
                             android:textColor="@color/dark_gray"
                             android:text="@string/budget_stats_title"/>
-                        <TextView
-                            style="@style/StatsContent"
-                            android:textColor="@color/dark_gray"
-                            android:text="@string/fake_budget"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/current_budget_tv"
+                                style="@style/StatsContent"
+                                android:textColor="@color/dark_gray"
+                                android:text="@string/fake_budget"/>
+                            <TextView
+                                android:id="@+id/total_budget_tv"
+                                style="@style/StatsContent"
+                                android:textColor="@color/dark_gray"
+                                android:text="@string/fake_total_budget"/>
+                        </LinearLayout>
                     </LinearLayout>
                     <View
                         android:id="@+id/divider_3"
@@ -115,6 +127,7 @@
                             android:textColor="@color/dark_gray"
                             android:text="@string/budget_avg_title"/>
                         <TextView
+                            android:id="@+id/average_budget_tv"
                             style="@style/StatsContent"
                             android:textColor="@color/dark_gray"
                             android:text="@string/fake_budget_avg"/>
@@ -122,11 +135,12 @@
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <TextView
             style="@style/BaseTextView"
-            android:text="@string/daily_trend"
+            android:layout_marginBottom="@dimen/margin_10dp"
             android:layout_marginTop="@dimen/margin_10dp"
-            android:layout_marginBottom="@dimen/margin_10dp"/>
+            android:text="@string/daily_trend" />
         <include
             layout="@layout/line_chart" />
         <TextView
