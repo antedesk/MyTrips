@@ -46,10 +46,10 @@ public interface NoteDao extends BaseDao<Note>{
     Double getTotalBudgetByDiaryId(long diaryId);
 
     @Query("SELECT SUM(budget) as budget, currency, category FROM notes WHERE diary_id=:diaryId GROUP BY category")
-    CategoryBudget getTotalBudgetByCategoriesAndDiaryId(long diaryId);
+    List<CategoryBudget> getTotalBudgetByCategoriesAndDiaryId(long diaryId);
 
-    @Query("SELECT date(date_time) as date_time, SUM(budget) as budget, currency FROM notes WHERE diary_id=:diaryId GROUP BY date(datetime(date_time/1000, 'unixepoch'))")
-    DailyBudget getTotalBudgetByDayAndDiaryId(long diaryId);
+    @Query("SELECT date_time, SUM(budget) as budget, currency FROM notes WHERE diary_id=:diaryId GROUP BY date(datetime(date_time/1000, 'unixepoch'))")
+    List<DailyBudget> getTotalBudgetByDayAndDiaryId(long diaryId);
 
     @Query("SELECT (SUM(notes.budget)/COUNT(distinct(date(datetime(date_time/1000, 'unixepoch'))))) as budget, diaries.currency, null as date_time " +
             "FROM notes JOIN diaries on diary_id = diaries.id WHERE diary_id=:diaryId")

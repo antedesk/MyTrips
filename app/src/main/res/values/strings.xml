@@ -320,5 +320,6 @@
     <string name="budget_distribution">Budget Distribution</string>
     <string name="daily_trend">Daily Trend</string>
     <string name="fake_total_budget">/360 EUR</string>
+    <string name="no_content_text">Any data to analyze.</string>
 
 </resources>

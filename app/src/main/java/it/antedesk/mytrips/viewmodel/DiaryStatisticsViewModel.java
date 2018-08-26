@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
+import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
@@ -27,7 +28,7 @@ public class DiaryStatisticsViewModel extends AndroidViewModel {
         appExecutors = AppExecutors.getInstance();
     }
 
-    public LiveData<CategoryBudget> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
+    public LiveData<List<CategoryBudget>> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
         return NoteRepository.getInstance(database, appExecutors).getTotalBudgetByCategoriesAndDiaryId(diaryId);
     }
 
@@ -55,7 +56,7 @@ public class DiaryStatisticsViewModel extends AndroidViewModel {
         return NoteRepository.getInstance(database, appExecutors).getDatesInfoByDiaryId(diaryId);
     }
 
-    public LiveData<DailyBudget> getTotalBudgetByDayAndDiaryId(long diaryId) {
+    public LiveData<List<DailyBudget>> getTotalBudgetByDayAndDiaryId(long diaryId) {
         return NoteRepository.getInstance(database, appExecutors).getTotalBudgetByDayAndDiaryId(diaryId);
     }
 }

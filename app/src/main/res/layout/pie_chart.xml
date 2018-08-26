@@ -8,5 +8,12 @@
         android:id="@+id/note_pie_chart"
         android:layout_width="match_parent"
         android:layout_height="280dp" />
-
+    <TextView
+        android:id="@+id/no_content_piechart"
+        style="@style/BaseTextView"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:gravity="center"
+        android:text="@string/no_content_text"
+        android:visibility="gone"/>
 </LinearLayout>

@@ -87,8 +87,8 @@ public class NoteRepository {
     }
 
 
-    public LiveData<CategoryBudget> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
-        MutableLiveData<CategoryBudget> total = new MutableLiveData<>();
+    public LiveData<List<CategoryBudget>> getTotalBudgetByCategoriesAndDiaryId(long diaryId) {
+        MutableLiveData<List<CategoryBudget>> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByCategoriesAndDiaryId(diaryId)));
         return total;
     }
@@ -111,8 +111,8 @@ public class NoteRepository {
         return total;
     }
 
-    public LiveData<DailyBudget> getTotalBudgetByDayAndDiaryId(long diaryId) {
-        MutableLiveData<DailyBudget> total = new MutableLiveData<>();
+    public LiveData<List<DailyBudget>> getTotalBudgetByDayAndDiaryId(long diaryId) {
+        MutableLiveData<List<DailyBudget>> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalBudgetByDayAndDiaryId(diaryId)));
         return total;
     }

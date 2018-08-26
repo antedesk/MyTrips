@@ -1,7 +1,9 @@
 package it.antedesk.mytrips.ui.fragment;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -27,6 +29,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.R;
 
+import it.antedesk.mytrips.model.minimal.CategoryBudget;
 import it.antedesk.mytrips.model.minimal.DailyBudget;
 import it.antedesk.mytrips.model.minimal.DatesInfo;
 import it.antedesk.mytrips.viewmodel.DiaryStatisticsViewModel;
@@ -61,6 +65,12 @@ public class StatsFragment  extends Fragment {
     TextView mTotalBudgetTv;
     @BindView(R.id.average_budget_tv)
     TextView mAverageBudgeTv;
+    @BindView(R.id.no_content_piechart)
+    TextView mNoContentPieTv;
+    @BindView(R.id.no_content_linechart)
+    TextView mNoContentLineTv;
+
+    private DiaryStatisticsViewModel dataViewModel;
 
     public StatsFragment() {
     }
@@ -82,24 +92,29 @@ public class StatsFragment  extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stats, container, false);
         ButterKnife.bind(this, rootView);
+
+        dataViewModel = ViewModelProviders.of(this).get(DiaryStatisticsViewModel.class);
+
         setPieChart(rootView);
         setLineChart(rootView);
 
         return rootView;
     }
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         if (getArguments() != null) {
             setMainStats(getArguments().getLong(SELECTED_DIARY_ID));
         }
     }
 
     private void setMainStats(final long diaryId) {
-        DiaryStatisticsViewModel dataViewModel = ViewModelProviders.of(this).get(DiaryStatisticsViewModel.class);
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMinimumFractionDigits(0);
+        formatter.setMaximumFractionDigits(2);
+
         dataViewModel.getAVGBudgetByDiaryId(diaryId).observe(this, dailyBudget -> {
-            Log.d("AVG", dailyBudget.toString());
-            mAverageBudgeTv.setText(TextUtils.concat(String.valueOf(dailyBudget.getBudget()), " ",
+            mAverageBudgeTv.setText(TextUtils.concat(formatter.format(dailyBudget.getBudget()), " ",
                     dailyBudget.getCurrency()!= null ? dailyBudget.getCurrency() : "" ));
         });
 
@@ -108,19 +123,30 @@ public class StatsFragment  extends Fragment {
         dataViewModel.getTotalCheckinsByDiaryId(diaryId).observe(this, integer -> mTotalCheckinsTv.setText(String.valueOf(integer)));
 
         dataViewModel.getTotalBudgetByDiaryId(diaryId).observe(this, aDouble ->
-                mCurrentBudgetTv.setText(aDouble!=null ? String.valueOf(aDouble) : "0.0"));
+                mCurrentBudgetTv.setText(aDouble!=null ? formatter.format(aDouble) : "0"));
 
         dataViewModel.getDiaryBudgetByDiaryId(diaryId).observe(this, budgetInfo ->
-                mTotalBudgetTv.setText(TextUtils.concat("/", String.valueOf(budgetInfo.getTotalBudget()),
-                        budgetInfo.getCurrency()!= null ? budgetInfo.getCurrency() : "" ))
+                mTotalBudgetTv.setText(TextUtils.concat("/", formatter.format(budgetInfo.getTotalBudget()),
+                        budgetInfo.getCurrency()!= null ? " "+budgetInfo.getCurrency() : "" ))
         );
 
         dataViewModel.getDatesInfoByDiaryId(diaryId).observe(this, (DatesInfo datesInfo) ->
                 mCurrentVsTotalDayTv.setText(TextUtils.concat(String.valueOf(datesInfo.getCurrentDays()),
-                "/", String.valueOf(datesInfo.getTotalDays()))));
+                        "/", String.valueOf(datesInfo.getTotalDays()))));
     }
 
     private void setPieChart(View rootView){
+        dataViewModel.getTotalBudgetByCategoriesAndDiaryId(getArguments().getLong(SELECTED_DIARY_ID)).observe(this,
+                categoryBudgets -> {
+                    if (categoryBudgets != null && !categoryBudgets.isEmpty())
+                        mPieChart.setData(generatePieData(categoryBudgets));
+                    else {
+                        mPieChart.setVisibility(View.GONE);
+                        mNoContentPieTv.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+
         mPieChart.getDescription().setEnabled(false);
 
         // radius of the center hole in percent of maximum radius
@@ -138,64 +164,19 @@ public class StatsFragment  extends Fragment {
 
         mPieChart.setExtraBottomOffset(10f);
         mPieChart.setEntryLabelColor(R.color.dark_gray);
-        mPieChart.setData(generatePieData());
         mPieChart.highlightValues(null);
 
         mPieChart.invalidate();
     }
 
-    private void setLineChart(View rootView){
+    protected PieData generatePieData(List<CategoryBudget> categoryBudgets) {
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
-
-        mLineChart.getDescription().setEnabled(false);
-
-        List<DailyBudget> dailyBudgets = new ArrayList<>();
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 50, "EUR"));
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 10, "EUR"));
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 100,"EUR"));
-        dailyBudgets.add(new DailyBudget(Calendar.getInstance().getTime(), 90,"EUR"));
-
-        mLineChart.setDrawGridBackground(false);
-
-        mLineChart.setData(generateLineData(dailyBudgets));
-        mLineChart.animateX(2000);
-
-        //Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),"OpenSans-Light.ttf");
-
-        Legend l = mLineChart.getLegend();
-        //l.setTypeface(tf);
-
-        YAxis leftAxis = mLineChart.getAxisLeft();
-        //leftAxis.setTypeface(tf);
-
-        mLineChart.getAxisRight().setEnabled(false);
-
-        // the labels that should be drawn on the XAxis
-        DateFormat dateFormatter = SimpleDateFormat.getDateInstance();
-        final String[] dates = new String[dailyBudgets.size()];
-        for(int i = 0; i < dates.length; i++){
-            dates[i] = dateFormatter.format(dailyBudgets.get(i).getDateTime());
+        for(CategoryBudget categoryBudget : categoryBudgets){
+            pieEntries.add(new PieEntry((float) categoryBudget.getBudget(), categoryBudget.getCategory()));
         }
 
-        IAxisValueFormatter formatter = (value, axis) -> dates[(int) value];
-
-        XAxis xAxis = mLineChart.getXAxis();
-        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter(formatter);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelRotationAngle(-75);
-    }
-
-    protected PieData generatePieData() {
-
-        int count = 8;
-
-        ArrayList<PieEntry> entries1 = new ArrayList<>();
-
-        for(int i = 0; i < count; i++) {
-            entries1.add(new PieEntry((float) ((Math.random() * 60) + 40), "Quarter " + (i+1)));
-        }
-        PieDataSet data = new PieDataSet(entries1, "");
+        PieDataSet data = new PieDataSet(pieEntries, "");
         data.setColors(createPieChartColors());
         data.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         data.setValueTextSize(11f);
@@ -224,6 +205,48 @@ public class StatsFragment  extends Fragment {
             colors.add(c);
 
         return colors;
+    }
+
+    private void setLineChart(View rootView){
+
+        dataViewModel.getTotalBudgetByDayAndDiaryId(getArguments().getLong(SELECTED_DIARY_ID)).observe(this,
+                dailyBudgets -> {
+                    if (dailyBudgets != null && !dailyBudgets.isEmpty()) {
+                        mLineChart.setData(generateLineData(dailyBudgets));
+                        // the labels that should be drawn on the XAxis
+                        DateFormat dateFormatter = SimpleDateFormat.getDateInstance();
+                        final String[] dates = new String[dailyBudgets.size()];
+                        for (int i = 0; i < dates.length; i++) {
+                            dates[i] = dateFormatter.format(dailyBudgets.get(i).getDateTime());
+                        }
+
+                        IAxisValueFormatter formatter = (value, axis) -> dates[(int) value];
+                        XAxis xAxis = mLineChart.getXAxis();
+                        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                        xAxis.setValueFormatter(formatter);
+                        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                        xAxis.setLabelRotationAngle(-75);
+                    } else {
+                        mLineChart.setVisibility(View.GONE);
+                        mNoContentLineTv.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+
+        mLineChart.getDescription().setEnabled(false);
+        mLineChart.setDrawGridBackground(false);
+        mLineChart.animateX(500);
+        mLineChart.setExtraBottomOffset(10);
+
+        //Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),"OpenSans-Light.ttf");
+
+        Legend l = mLineChart.getLegend();
+        //l.setTypeface(tf);
+
+        YAxis leftAxis = mLineChart.getAxisLeft();
+        //leftAxis.setTypeface(tf);
+
+        mLineChart.getAxisRight().setEnabled(false);
     }
 
     protected LineData generateLineData(List<DailyBudget> dailyBudgets) {
