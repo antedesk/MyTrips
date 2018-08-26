@@ -1,7 +1,10 @@
 package it.antedesk.mytrips;
 
+import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -29,6 +32,8 @@ public class WelcomeActivity extends AppCompatActivity {
     ViewPager mViewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
+    @BindView(R.id.appbar)
+    AppBarLayout appBarLayout;
 
     @BindView(R.id.fab_add_diary)
     FloatingActionButton fabDiary;
@@ -78,9 +83,17 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
-
+        setAppBarLayoutElevation();
         setupFABs();
     }
+    private void setAppBarLayoutElevation(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            StateListAnimator stateListAnimator = new StateListAnimator();
+            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(appBarLayout, "elevation", 10));
+            appBarLayout.setStateListAnimator(stateListAnimator);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

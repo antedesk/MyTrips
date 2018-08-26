@@ -8,7 +8,9 @@ import android.arch.persistence.room.PrimaryKey;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-
+/**
+ * For future development
+ */
 @Entity(tableName = "images",
         indices = { @Index(value = {"id"}, unique = true) },
         foreignKeys = {@ForeignKey(entity = Note.class,

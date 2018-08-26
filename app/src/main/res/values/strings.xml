@@ -306,5 +306,18 @@
     <string name="world_icon_description">world icon</string>
     <string name="logo_app_description">logo app</string>
     <string name="copyright">Powered By Antedesk</string>
+    <string name="fake_notes_num">30</string>
+    <string name="notes_stats_title">Notes</string>
+    <string name="places_stats_title">Check-Ins</string>
+    <string name="days_stats_title">Days</string>
+    <string name="fake_days_stats">1\/4</string>
+    <string name="fake_places_num">14</string>
+    <string name="budget_stats_title">Budget</string>
+    <string name="fake_budget">200/560€</string>
+    <string name="budget_avg_title">Budget/days</string>
+    <string name="fake_budget_avg">50€</string>
+    <string name="daily_trend_budget">Budget daily trend</string>
+    <string name="budget_distribution">Budget Distribution</string>
+    <string name="daily_trend">Daily Trend</string>
 
 </resources>

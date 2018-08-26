@@ -40,6 +40,18 @@
         <item name="android:textColor">@color/black_text_color</item>
     </style>
 
+    <style name="StatsTitle" parent="@android:style/TextAppearance">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/textsize_stats_title</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="StatsContent" parent="StatsTitle">
+        <item name="android:textSize">@dimen/textsize_stats_data</item>
+        <item name="android:layout_marginTop">@dimen/margin_10dp</item>
+    </style>
+
     <style name="CounterText" parent="TextAppearance.Design.Counter">
         <item name="android:textSize">@dimen/text_size_16sp</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
@@ -66,14 +78,19 @@
         <item name="android:inputType">none</item>
     </style>
 
-    <style name="dividerBase">
-        <item name="android:background">@color/colorPrimaryDark</item>
-    </style>
 
-    <style name="dividerHorizontal" parent="dividerBase">
+    <style name="dividerHorizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/view_separator_thickness</item>
         <item name="android:layout_margin">@dimen/add_diary_margin_top</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="dividerVertical">
+        <item name="android:layout_width">@dimen/view_separator_thickness</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">@dimen/margin_10dp</item>
+        <item name="android:background">@color/white</item>
     </style>
 
 </resources>

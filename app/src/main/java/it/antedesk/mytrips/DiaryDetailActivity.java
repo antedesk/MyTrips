@@ -1,8 +1,12 @@
 package it.antedesk.mytrips;
 
+import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -23,6 +27,7 @@ import butterknife.ButterKnife;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.ui.fragment.CheckInsFragment;
 import it.antedesk.mytrips.ui.fragment.NotesFragment;
+import it.antedesk.mytrips.ui.fragment.StatsFragment;
 import it.antedesk.mytrips.ui.fragment.adapter.SectionsPagerAdapter;
 
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY;
@@ -36,6 +41,8 @@ public class DiaryDetailActivity extends AppCompatActivity {
     ViewPager mViewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
+    @BindView(R.id.appbar)
+    AppBarLayout appBarLayout;
 
     @BindView(R.id.fab)
     FloatingActionButton fabAddNote;
@@ -79,8 +86,13 @@ public class DiaryDetailActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
+                    setAppBarLayoutElevation(10);
                     fabAddNote.show();
+                } else if (position == 1) {
+                    setAppBarLayoutElevation(10);
+                    fabAddNote.hide();
                 } else {
+                    setAppBarLayoutElevation(0);
                     fabAddNote.hide();
                 }
             }
@@ -92,17 +104,22 @@ public class DiaryDetailActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
 
         tabLayout.setupWithViewPager(mViewPager);
-        //fabAddNote.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //        .setAction("Action", null).show());
-
 
         Intent addNoteIntent = new Intent(this, AddNoteActivity.class);
         fabAddNote.setOnClickListener(view -> {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+                    .setAction("Action", null).show();
             addNoteIntent.putExtra(SELECTED_DIARY_ID, diaryId);
             startActivity(addNoteIntent);
         });
+    }
+
+    private void setAppBarLayoutElevation(float elevation){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            StateListAnimator stateListAnimator = new StateListAnimator();
+            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(appBarLayout, "elevation", elevation));
+            appBarLayout.setStateListAnimator(stateListAnimator);
+        }
     }
 
     private void snackBarMessage(int messageId) {
@@ -117,7 +134,7 @@ public class DiaryDetailActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager mViewPager) {
         mSectionsPagerAdapter.addFrag(NotesFragment.newInstance(diaryId), getString(R.string.tab_notes));
         mSectionsPagerAdapter.addFrag(CheckInsFragment.newInstance(diaryId), getString(R.string.checkins));
-        mSectionsPagerAdapter.addFrag(PlaceholderFragment.newInstance(2), getString(R.string.stats));
+        mSectionsPagerAdapter.addFrag(StatsFragment.newInstance(diaryId), getString(R.string.stats));
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
@@ -136,57 +153,5 @@ public class DiaryDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_diary_detail, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-
-        /**
-         * Calculates the number of columns for the gridlayout
-         *
-         * @param context
-         * @return
-         */
-        public static int calculateNoOfColumns(Context context) {
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            int scalingFactor = 180;
-            int noOfCol = (int) (dpWidth / scalingFactor);
-            noOfCol = noOfCol >= 3 ? 2 : 1;
-            return noOfCol;
-        }
     }
 }

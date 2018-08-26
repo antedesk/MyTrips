@@ -106,7 +106,8 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        mListState = mNoteRecyclerView.getLayoutManager().onSaveInstanceState();
+        if(mNoteRecyclerView!= null)
+            mListState = mNoteRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(LIST_STATE, mListState);
     }
 

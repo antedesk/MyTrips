@@ -28,7 +28,7 @@ public interface NoteDao extends BaseDao<Note>{
     List<CheckinMinimal> getCheckinsByDiaryId(long diaryId);
 
     @Query("SELECT COUNT(DISTINCT address) " +
-            "FROM activities " +
+            "FROM notes " +
             "WHERE diary_id=:diaryId " +
             "ORDER BY date_time DESC")
     long getTotalCheckinsByDiaryId(long diaryId);
