@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -46,7 +47,7 @@ import it.antedesk.mytrips.viewmodel.DiaryStatisticsViewModel;
 
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
-public class StatsFragment  extends Fragment {
+public class StatsFragment extends Fragment {
 
     @BindView(R.id.note_pie_chart)
     PieChart mPieChart;
@@ -100,6 +101,7 @@ public class StatsFragment  extends Fragment {
 
         return rootView;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -115,7 +117,7 @@ public class StatsFragment  extends Fragment {
 
         dataViewModel.getAVGBudgetByDiaryId(diaryId).observe(this, dailyBudget -> {
             mAverageBudgeTv.setText(TextUtils.concat(formatter.format(dailyBudget.getBudget()), " ",
-                    dailyBudget.getCurrency()!= null ? dailyBudget.getCurrency() : "" ));
+                    dailyBudget.getCurrency() != null ? dailyBudget.getCurrency() : ""));
         });
 
         dataViewModel.getTotalNotesByDiaryId(diaryId).observe(this, integer -> mTotalNotestv.setText(String.valueOf(integer)));
@@ -123,11 +125,11 @@ public class StatsFragment  extends Fragment {
         dataViewModel.getTotalCheckinsByDiaryId(diaryId).observe(this, integer -> mTotalCheckinsTv.setText(String.valueOf(integer)));
 
         dataViewModel.getTotalBudgetByDiaryId(diaryId).observe(this, aDouble ->
-                mCurrentBudgetTv.setText(aDouble!=null ? formatter.format(aDouble) : "0"));
+                mCurrentBudgetTv.setText(aDouble != null ? formatter.format(aDouble) : "0"));
 
         dataViewModel.getDiaryBudgetByDiaryId(diaryId).observe(this, budgetInfo ->
                 mTotalBudgetTv.setText(TextUtils.concat("/", formatter.format(budgetInfo.getTotalBudget()),
-                        budgetInfo.getCurrency()!= null ? " "+budgetInfo.getCurrency() : "" ))
+                        budgetInfo.getCurrency() != null ? " " + budgetInfo.getCurrency() : ""))
         );
 
         dataViewModel.getDatesInfoByDiaryId(diaryId).observe(this, (DatesInfo datesInfo) ->
@@ -135,7 +137,7 @@ public class StatsFragment  extends Fragment {
                         "/", String.valueOf(datesInfo.getTotalDays()))));
     }
 
-    private void setPieChart(View rootView){
+    private void setPieChart(View rootView) {
         dataViewModel.getTotalBudgetByCategoriesAndDiaryId(getArguments().getLong(SELECTED_DIARY_ID)).observe(this,
                 categoryBudgets -> {
                     if (categoryBudgets != null && !categoryBudgets.isEmpty())
@@ -172,7 +174,7 @@ public class StatsFragment  extends Fragment {
     protected PieData generatePieData(List<CategoryBudget> categoryBudgets) {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
-        for(CategoryBudget categoryBudget : categoryBudgets){
+        for (CategoryBudget categoryBudget : categoryBudgets) {
             pieEntries.add(new PieEntry((float) categoryBudget.getBudget(), categoryBudget.getCategory()));
         }
 
@@ -219,11 +221,21 @@ public class StatsFragment  extends Fragment {
                         for (int i = 0; i < dates.length; i++) {
                             dates[i] = dateFormatter.format(dailyBudgets.get(i).getDateTime());
                         }
-
-                        IAxisValueFormatter formatter = (value, axis) -> dates[(int) value];
                         XAxis xAxis = mLineChart.getXAxis();
                         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-                        xAxis.setValueFormatter(formatter);
+
+                        if (dates.length > 0) {
+                            IAxisValueFormatter formatter = (float value, AxisBase axis) ->
+                            {
+                                String label = "";
+                                    try{
+                                        label = dates[(int) value];
+                                    }catch (Exception e){
+                                    }
+                                    return label;
+                            };
+                            xAxis.setValueFormatter(formatter);
+                        }
                         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                         xAxis.setLabelRotationAngle(-75);
                     } else {
