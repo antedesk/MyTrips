@@ -79,23 +79,25 @@ public class CheckInsFragment extends Fragment implements OnMapReadyCallback {
         switch(categoryId)
         {
             case "BRKFST":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_breakfast;
             case "LNCH":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_lunch;
             case "DNNR":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_dinner;
             case "TRNSFR":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_travel;
             case "OVRNGHY":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_overnight_stay;
             case "EXCRSN":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_excursion;
             case "SHPPNG":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_shopping;
             case "CLTRL":
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_cultural;
+            case "OTHR":
+                return R.drawable.ic_marker_other;
             default:
-                return R.drawable.ic_world;
+                return R.drawable.ic_marker_ship;
         }
     }
 
