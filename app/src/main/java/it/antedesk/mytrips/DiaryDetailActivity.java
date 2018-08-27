@@ -2,25 +2,17 @@ package it.antedesk.mytrips;
 
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,10 +60,10 @@ public class DiaryDetailActivity extends AppCompatActivity {
 
         Diary diary = intent != null ? intent.getParcelableExtra(SELECTED_DIARY) : null;
         if (diary == null) {
-            snackBarMessage(R.string.general_error);
+            snackBarMessage();
             finish();
         }
-        toolbar.setTitle(diary.getName());
+        toolbar.setTitle(diary != null ? diary.getName() : "");
         diaryId = diary.getId();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -85,15 +77,19 @@ public class DiaryDetailActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    setAppBarLayoutElevation(10);
-                    fabAddNote.show();
-                } else if (position == 1) {
-                    setAppBarLayoutElevation(10);
-                    fabAddNote.hide();
-                } else {
-                    setAppBarLayoutElevation(0);
-                    fabAddNote.hide();
+                switch (position) {
+                    case 0:
+                        setAppBarLayoutElevation(10);
+                        fabAddNote.show();
+                        break;
+                    case 1:
+                        setAppBarLayoutElevation(10);
+                        fabAddNote.hide();
+                        break;
+                    default:
+                        setAppBarLayoutElevation(0);
+                        fabAddNote.hide();
+                        break;
                 }
             }
 
@@ -122,14 +118,12 @@ public class DiaryDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void snackBarMessage(int messageId) {
-        Snackbar.make(findViewById(R.id.fab), getString(messageId), Snackbar.LENGTH_LONG).show();
+    private void snackBarMessage() {
+        Snackbar.make(findViewById(R.id.fab), getString(R.string.general_error), Snackbar.LENGTH_LONG).show();
     }
 
     /**
      * Allows to set up the tabs and titles
-     *
-     * @param mViewPager
      */
     private void setupViewPager(ViewPager mViewPager) {
         mSectionsPagerAdapter.addFrag(NotesFragment.newInstance(diaryId), getString(R.string.tab_notes));

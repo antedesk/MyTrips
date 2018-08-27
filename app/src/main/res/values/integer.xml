@@ -2,5 +2,4 @@
 <resources>
     <integer name="diary_name_et_limit">30</integer>
     <integer name="diary_description_et_limit">180</integer>
-    <integer name="diary_description_max_lines">10</integer>
 </resources>

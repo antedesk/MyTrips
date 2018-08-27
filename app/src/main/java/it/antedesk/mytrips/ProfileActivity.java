@@ -13,14 +13,12 @@ import it.antedesk.mytrips.viewmodel.LoadDiariesViewModel;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private AppDatabase mDb;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mDb = AppDatabase.getsInstance(getApplicationContext());
+        AppDatabase mDb = AppDatabase.getsInstance(getApplicationContext());
 
         final Diary d = new Diary("pippo", "my pippo", Calendar.getInstance().getTime(),
                 Calendar.getInstance().getTime(), 200.59, "EUR", "family", false);

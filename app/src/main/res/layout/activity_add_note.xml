@@ -22,21 +22,27 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/basic_add"
             android:gravity="center_horizontal"
+            android:weightSum="2"
             android:orientation="horizontal">
 
             <fragment
                 android:id="@+id/place_autocomplete_fragment"
-                android:layout_width="280dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="2"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/fetch_address_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:elevation="@dimen/find_me_elevation"
+                android:contentDescription="@string/fetch_address"
+                android:background="@drawable/button_round_corners"
                 android:onClick="fetchAddressButtonHandler"
-                android:text="@string/fetch_address" />
+                android:src="@drawable/find_me"
+                android:focusable="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -67,17 +73,17 @@
             style="@style/dividerHorizontal"
             android:layout_below="@+id/address_container" />
 
-        <Button
+        <ImageButton
             android:id="@+id/save_button"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/divider_4"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/save_button_margin_bottom"
             android:layout_marginTop="@dimen/add_note_margin_top"
             android:background="@drawable/button_round_corners"
+            android:src="@drawable/ic_save"
             android:elevation="@dimen/button_elevation"
-            android:onClick="onSaveNoteClick"
-            android:text="@string/save_txt_button" />
+            android:onClick="onSaveNoteClick"/>
     </RelativeLayout>
 </ScrollView>

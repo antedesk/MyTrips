@@ -22,6 +22,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,7 +98,7 @@ public class AddNoteActivity extends AppCompatActivity {
     @BindView(R.id.location_address_view)
     TextView mLocationAddressET;
     @BindView(R.id.fetch_address_button)
-    Button mFetchAddressButton;
+    ImageView mFetchAddressButton;
 
 
     private ProgressDialog mProgressDialog;
@@ -147,7 +149,6 @@ public class AddNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_note);
 
         ButterKnife.bind(this);
-
         Intent intent = getIntent();
         // checking if it is null, if so close the activity
         if (intent == null) {
@@ -421,7 +422,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 mLocation2Geocode = savedInstanceState.getParcelable(LOCATION_TO_GEOCODE);
                 if(savedInstanceState.keySet().contains(CURRENT_CHECKIN_INFO)){
                     mCheckinMinimal = savedInstanceState.getParcelable(CURRENT_CHECKIN_INFO);
-                    mLocationAddressET.setText(mCheckinMinimal.getAddress());
+                    mLocationAddressET.setText(mCheckinMinimal != null ? mCheckinMinimal.getAddress() : "");
                 }
             }
             if(savedInstanceState.containsKey(SELECTED_DATETIME)) {
@@ -644,11 +645,9 @@ public class AddNoteActivity extends AppCompatActivity {
         if (shouldProvideRationale) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
             showSnackbarPermission(R.string.permission_rationale,
-                    android.R.string.ok, view -> {
-                        ActivityCompat.requestPermissions(AddNoteActivity.this,
-                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                REQUEST_PERMISSIONS_REQUEST_CODE);
-                    });
+                    android.R.string.ok, view -> ActivityCompat.requestPermissions(AddNoteActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_PERMISSIONS_REQUEST_CODE));
         } else {
             Log.i(TAG, "Requesting permission");
             ActivityCompat.requestPermissions(AddNoteActivity.this,

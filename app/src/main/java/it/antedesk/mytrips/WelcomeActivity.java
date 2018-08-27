@@ -136,7 +136,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     /**
      * Allows to set up the tabs and titles
-     * @param viewPager
      */
     private void setupViewPager(ViewPager viewPager) {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());

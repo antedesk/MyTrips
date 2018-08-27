@@ -26,7 +26,6 @@ import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.viewmodel.AddDiaryViewModel;
 
 import static it.antedesk.mytrips.utils.Constants.IS_PLAN;
-import static it.antedesk.mytrips.utils.Constants.SELECTED_DATETIME;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_ENDDATE;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_STARTDATE;
 
@@ -226,13 +225,13 @@ public class AddDiaryActivity extends AppCompatActivity {
         }
 
         if (currentStartDate == null) {
-            snackBarError(R.string.missing_data);
+            snackBarError();
             startDateEditTxt.setError(getString(R.string.missing_date));
             errors = true;
         }
 
         if (currentEndDate == null) {
-            snackBarError(R.string.missing_data);
+            snackBarError();
             endDateEditTxt.setError(getString(R.string.missing_date));
             errors = true;
         }
@@ -247,14 +246,12 @@ public class AddDiaryActivity extends AppCompatActivity {
         if (diaryBudgetEditText.getText() != null && diaryBudgetEditText.length() != 0)
             budget = Double.valueOf(diaryBudgetEditText.getText().toString());
 
-        Diary diary = errors ? null : new Diary(diaryNameEditText.getText().toString(),
+        return errors ? null : new Diary(diaryNameEditText.getText().toString(),
                 diaryDescEditText.getText().toString(),
                 currentStartDate,
                 currentEndDate,
                 budget, currenciesSpinner.getSelectedItem().toString().split(" - ")[0],
                 categorySpinner.getSelectedItem().toString(), isPlan);
-
-        return diary;
     }
 
     public void onSaveClick(View view) {
@@ -266,11 +263,11 @@ public class AddDiaryActivity extends AppCompatActivity {
             finish();
         } else {
             errors = false;
-            snackBarError(R.string.missing_data);
+            snackBarError();
         }
     }
 
-    private void snackBarError(int messageId) {
-        Snackbar.make(findViewById(R.id.form_scroller), getString(messageId), Snackbar.LENGTH_LONG).show();
+    private void snackBarError() {
+        Snackbar.make(findViewById(R.id.form_scroller), getString(R.string.missing_data), Snackbar.LENGTH_LONG).show();
     }
 }

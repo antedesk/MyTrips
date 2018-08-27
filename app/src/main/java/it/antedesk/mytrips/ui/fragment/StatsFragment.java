@@ -1,13 +1,10 @@
 package it.antedesk.mytrips.ui.fragment;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +30,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -115,10 +111,8 @@ public class StatsFragment extends Fragment {
         formatter.setMinimumFractionDigits(0);
         formatter.setMaximumFractionDigits(2);
 
-        dataViewModel.getAVGBudgetByDiaryId(diaryId).observe(this, dailyBudget -> {
-            mAverageBudgeTv.setText(TextUtils.concat(formatter.format(dailyBudget.getBudget()), " ",
-                    dailyBudget.getCurrency() != null ? dailyBudget.getCurrency() : ""));
-        });
+        dataViewModel.getAVGBudgetByDiaryId(diaryId).observe(this, dailyBudget -> mAverageBudgeTv.setText(TextUtils.concat(formatter.format(dailyBudget.getBudget()), " ",
+                dailyBudget.getCurrency() != null ? dailyBudget.getCurrency() : "")));
 
         dataViewModel.getTotalNotesByDiaryId(diaryId).observe(this, integer -> mTotalNotestv.setText(String.valueOf(integer)));
 
@@ -186,14 +180,12 @@ public class StatsFragment extends Fragment {
         data.setValueTextColor(R.color.dark_gray);
         data.setValueTextSize(15f);
 
-        PieData d = new PieData(data);
-
-        return d;
+        return new PieData(data);
     }
 
     private ArrayList<Integer> createPieChartColors() {
 
-        ArrayList<Integer> colors = new ArrayList<Integer>();
+        ArrayList<Integer> colors = new ArrayList<>();
 
         for (int c : ColorTemplate.VORDIPLOM_COLORS)
             colors.add(c);
@@ -230,7 +222,7 @@ public class StatsFragment extends Fragment {
                                 String label = "";
                                     try{
                                         label = dates[(int) value];
-                                    }catch (Exception e){
+                                    }catch (Exception ignored){
                                     }
                                     return label;
                             };
@@ -276,8 +268,7 @@ public class StatsFragment extends Fragment {
         dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
         sets.add(dataSet);
 
-        LineData d = new LineData(sets);
-        return d;
+        return new LineData(sets);
     }
 
 }

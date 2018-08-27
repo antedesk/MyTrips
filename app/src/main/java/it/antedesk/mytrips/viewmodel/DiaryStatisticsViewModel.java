@@ -5,7 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import java.util.Date;
 import java.util.List;
 
 import it.antedesk.mytrips.database.AppDatabase;

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +17,6 @@ import android.view.ViewGroup;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import it.antedesk.mytrips.DiaryDetailActivity;
 import it.antedesk.mytrips.R;
 import it.antedesk.mytrips.model.Diary;
@@ -138,8 +135,6 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
 
     /**
      * Calculates the number of columns for the gridlayout
-     * @param context
-     * @return
      */
     public static int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

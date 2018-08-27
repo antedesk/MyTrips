@@ -22,8 +22,8 @@
     <dimen name="form_tv_size">23sp</dimen>
     <dimen name="add_diary_grid_padding">18dp</dimen>
     <dimen name="add_diary_margin_top">10dp</dimen>
-    <dimen name="save_button_margin_bottom">5dp</dimen>
-    <dimen name="button_elevation">6dp</dimen>
+    <dimen name="save_button_margin_bottom">15dp</dimen>
+    <dimen name="button_elevation">4dp</dimen>
     <dimen name="view_separator_thickness">1dp</dimen>
     <dimen name="cover_photo_layout_height">200dp</dimen>
     <dimen name="detail_cardview_text_size">20sp</dimen>
@@ -49,6 +49,8 @@
 Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
-    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_margin">0dp</dimen>
     <dimen name="tv_size">24sp</dimen>
+    <dimen name="find_me_elevation">4dp</dimen>
+    <dimen name="add_diary_save_buton_size">100dp</dimen>
 </resources>

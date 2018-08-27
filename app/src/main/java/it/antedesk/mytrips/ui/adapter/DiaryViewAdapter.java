@@ -20,14 +20,13 @@ import it.antedesk.mytrips.model.Diary;
 
 public class DiaryViewAdapter extends RecyclerView.Adapter<DiaryViewAdapter.DiaryAdapterViewHolder> {
     private List<Diary> diaryList;
-    private Context parentContex;
 
     private final DiaryViewAdapterOnClickHandler mClickHandler;
 
     @NonNull
     @Override
     public DiaryAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        Context parentContex = parent.getContext();
         int layoutIdForListItem = R.layout.diary_item;
         LayoutInflater inflater = LayoutInflater.from(parentContex);
 

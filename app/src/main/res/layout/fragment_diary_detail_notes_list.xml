@@ -4,7 +4,7 @@
     android:id="@+id/diary_details_notes_tab"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DiaryDetailActivity$PlaceholderFragment">
+    tools:context=".DiaryDetailActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/notes_recycler_view"

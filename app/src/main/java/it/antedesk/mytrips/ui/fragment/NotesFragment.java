@@ -79,9 +79,6 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
 
     /**
      * Calculates the number of columns for the gridlayout
-     *
-     * @param context
-     * @return
      */
     public static int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

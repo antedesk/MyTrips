@@ -3,12 +3,9 @@ package it.antedesk.mytrips.database.dao;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Query;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import it.antedesk.mytrips.model.Note;
-import it.antedesk.mytrips.model.minimal.BudgetInfo;
 import it.antedesk.mytrips.model.minimal.CategoryBudget;
 import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.model.minimal.DailyBudget;

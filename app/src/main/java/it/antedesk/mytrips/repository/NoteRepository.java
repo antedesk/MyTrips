@@ -8,7 +8,6 @@ import java.util.List;
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Note;
-import it.antedesk.mytrips.model.minimal.BudgetInfo;
 import it.antedesk.mytrips.model.minimal.CategoryBudget;
 import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.model.minimal.DailyBudget;

@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/form_scroller"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddDiaryActivity">
@@ -107,7 +108,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/add_diary_margin_top"
-                android:src="@drawable/ic_start_date" />
+                android:src="@drawable/ic_start_date"
+                android:contentDescription="@string/start_date_icon_description" />
 
             <EditText
                 android:id="@+id/diary_start_date_edt"
@@ -223,9 +225,9 @@
             style="@style/dividerHorizontal"
             android:layout_below="@+id/diary_category_cotrav_container" />
 
-        <Button
+        <ImageButton
             android:id="@+id/save_button"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/add_diary_save_buton_size"
             android:layout_height="wrap_content"
             android:layout_below="@+id/divider_3"
             android:layout_centerHorizontal="true"
@@ -233,7 +235,7 @@
             android:layout_marginTop="@dimen/add_diary_margin_top"
             android:background="@drawable/button_round_corners"
             android:elevation="@dimen/button_elevation"
-            android:onClick="onSaveClick"
-            android:text="@string/save_txt_button" />
+            android:src="@drawable/ic_save"
+            android:onClick="onSaveClick"/>
     </RelativeLayout>
 </ScrollView>
