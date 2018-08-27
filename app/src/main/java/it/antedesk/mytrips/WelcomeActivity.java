@@ -2,6 +2,7 @@ package it.antedesk.mytrips;
 
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -125,12 +126,20 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddDiaryActivity.class);
         fabDiary.setOnClickListener((View view) -> {
             intent.putExtra(IS_PLAN, false);
-            startActivity(intent);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+                startActivity(intent, bundle);
+            } else
+                startActivity(intent);
         });
 
         fabPlan.setOnClickListener((View view) -> {
             intent.putExtra(IS_PLAN, true);
-            startActivity(intent);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+                startActivity(intent, bundle);
+            } else
+                startActivity(intent);
         });
     }
 
