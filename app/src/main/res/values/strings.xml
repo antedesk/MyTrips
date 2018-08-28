@@ -323,5 +323,9 @@
     <string name="no_content_text">Any data to analyze.</string>
     <string name="appwidget_text">Any Diary Found</string>
     <string name="title_activity_note_detail">NoteDetailActivity</string>
+    <string name="notedt_date_placeholder_tv">27 aug 2018</string>
+    <string name="notedt_time_placeholder_tv">11:20</string>
+    <string name="budget_description">budget icon</string>
+    <string name="notedt_buget_placeholder">200 EUR</string>
 
 </resources>

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import it.antedesk.mytrips.DiaryDetailActivity;
+import it.antedesk.mytrips.NoteDetailActivity;
 import it.antedesk.mytrips.R;
 import it.antedesk.mytrips.model.Diary;
 import it.antedesk.mytrips.ui.adapter.DiaryViewAdapter;

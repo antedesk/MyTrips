@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_gray"
+    card_view:cardElevation="@dimen/cardview_note_detail">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="6"
+            android:layout_marginTop="@dimen/notedt_margin_top"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/notedt_start_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/start_date_icon_description"
+                android:src="@drawable/ic_set_date" />
+
+            <TextView
+                android:id="@+id/notedt_start_date_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                style="@style/NoteDetailTextView"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                android:text="@string/notedt_date_placeholder_tv" />
+
+            <ImageView
+                android:id="@+id/notedt_time_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/notedt_margin_top"
+                android:layout_weight="1"
+                android:contentDescription="@string/time_icon_desc"
+                android:src="@drawable/ic_set_time" />
+
+            <TextView
+                android:id="@+id/notedt_time_tv"
+                style="@style/NoteDetailTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/notedt_time_placeholder_tv" />
+        </LinearLayout>
+        <View
+            android:id="@+id/divider_1"
+            style="@style/dividerHorizontal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="6"
+            android:layout_marginTop="@dimen/notedt_margin_top"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/notedt_category_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/start_date_icon_description"
+                android:src="@drawable/ic_breakfast" />
+
+            <TextView
+                android:id="@+id/notedt_category_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                style="@style/NoteDetailTextView"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                android:text="@string/notedt_date_placeholder_tv" />
+
+            <ImageView
+                android:id="@+id/notedt_budget_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/budget_description"
+                android:src="@drawable/ic_budget" />
+
+            <TextView
+                android:id="@+id/notedt_budget_tv"
+                style="@style/NoteDetailTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/notedt_buget_placeholder" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

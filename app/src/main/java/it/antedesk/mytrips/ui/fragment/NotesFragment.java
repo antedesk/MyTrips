@@ -2,6 +2,7 @@ package it.antedesk.mytrips.ui.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,12 +17,15 @@ import android.view.ViewGroup;
 import java.util.List;
 import java.util.Objects;
 
+import it.antedesk.mytrips.DiaryDetailActivity;
+import it.antedesk.mytrips.NoteDetailActivity;
 import it.antedesk.mytrips.R;
 import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.ui.adapter.NoteViewAdapter;
 import it.antedesk.mytrips.viewmodel.LoadDiaryDataViewModel;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
 
 public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewAdapterOnClickHandler {
@@ -118,6 +122,8 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
 
     @Override
     public void onClick(Note selectedNote) {
-
+        Intent intent = new Intent(getActivity(), NoteDetailActivity.class);
+        intent.putExtra(SELECTED_DIARY, selectedNote);
+        startActivity(intent);
     }
 }

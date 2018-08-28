@@ -19,6 +19,7 @@
     <dimen name="fab_cardCornerRadius">6dp</dimen>
     <dimen name="fab_cardElevation">6dp</dimen>
     <dimen name="default_tv_size">16sp</dimen>
+    <dimen name="note_tv_size">18sp</dimen>
     <dimen name="form_tv_size">23sp</dimen>
     <dimen name="add_diary_grid_padding">18dp</dimen>
     <dimen name="add_diary_margin_top">10dp</dimen>
@@ -53,4 +54,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="tv_size">24sp</dimen>
     <dimen name="find_me_elevation">4dp</dimen>
     <dimen name="add_diary_save_buton_size">100dp</dimen>
+    <dimen name="cardview_note_detail">5dp</dimen>
+    <dimen name="notedt_margin_top">8dp</dimen>
 </resources>
