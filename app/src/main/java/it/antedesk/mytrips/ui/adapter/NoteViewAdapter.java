@@ -71,22 +71,68 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
 
         // get category icon
         Picasso.get()
-                .load(getCategoryIcon(note))
+                .load(getCategoryIcon(note.getCategoryId()))
                 .placeholder(R.mipmap.fake_icon)
                 .error(R.mipmap.fake_icon) //TODO replace with error icon R.drawable.error_icon
                 .into(holder.mNoteActivity);
-        //TODO add cover photo logic
         Picasso.get()
-                .load(R.drawable.default_img_cover)
+                .load(getCoverImage(note.getCategoryId()))
                 .placeholder(R.drawable.default_img_cover)
                 .error(R.drawable.default_img_cover) //TODO replace with error icon R.drawable.error_icon
                 .into(holder.mNoteCoverPhoto);
     }
 
 
-    private ImageInfo getCoverImage(Note note){
+    private int getCategoryIcon(String categoryId){
+        switch(categoryId)
+        {
+            case "BRKFST":
+                return R.drawable.ic_breakfast;
+            case "LNCH":
+                return R.drawable.ic_lunch;
+            case "DNNR":
+                return R.drawable.ic_dinner;
+            case "TRNSFR":
+                return R.drawable.ic_transfer;
+            case "OVRNGHY":
+                return R.drawable.ic_overnight;
+            case "EXCRSN":
+                return R.drawable.ic_excursion;
+            case "SHPPNG":
+                return R.drawable.ic_shopping;
+            case "CLTRL":
+                return R.drawable.ic_cultural;
+            case "OTHR":
+                return R.drawable.ic_other;
+            default:
+                return R.drawable.ic_world;
+        }
+    }
 
-        return null;
+    private int getCoverImage(String categoryId){
+        switch(categoryId)
+        {
+            case "BRKFST":
+                return R.drawable.breakfast03;
+            case "LNCH":
+                return R.drawable.lunch03;
+            case "DNNR":
+                return R.drawable.dinner03;
+            case "TRNSFR":
+                return R.drawable.transfert03;
+            case "OVRNGHY":
+                return R.drawable.overnight03;
+            case "EXCRSN":
+                return R.drawable.excurtion03;
+            case "SHPPNG":
+                return R.drawable.shopping03;
+            case "CLTRL":
+                return R.drawable.cultural03;
+            case "OTHR":
+                return R.drawable.other03;
+            default:
+                return R.drawable.home03;
+        }
     }
 
     private int getCategoryIcon(Note note){
