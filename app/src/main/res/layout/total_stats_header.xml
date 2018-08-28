@@ -92,7 +92,7 @@
                     android:text="@string/fake_budget"/>
             </LinearLayout>
             <View
-                android:id="@+id/divider_3"
+                android:id="@+id/divider_4"
                 style="@style/dividerVertical"
                 android:background="@color/dark_gray"/>
             <LinearLayout
@@ -112,7 +112,7 @@
                     android:text="@string/fake_activities_num"/>
             </LinearLayout>
             <View
-                android:id="@+id/divider_3"
+                android:id="@+id/divider_5"
                 style="@style/dividerVertical"
                 android:background="@color/dark_gray"/>
             <LinearLayout

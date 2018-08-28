@@ -58,4 +58,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="add_diary_save_buton_size">100dp</dimen>
     <dimen name="cardview_note_detail">5dp</dimen>
     <dimen name="notedt_margin_top">8dp</dimen>
+    <dimen name="text_size_title">20sp</dimen>
 </resources>

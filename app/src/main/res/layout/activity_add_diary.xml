@@ -231,6 +231,7 @@
             android:layout_marginTop="@dimen/add_diary_margin_top"
             android:background="@drawable/button_round_corners"
             android:elevation="@dimen/button_elevation"
+            android:contentDescription="@string/save_txt_button"
             android:src="@drawable/ic_save"
             android:onClick="onSaveClick"/>
     </RelativeLayout>

@@ -29,7 +29,7 @@
             android:id="@+id/note_name_edtxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title_placeholder_txt"
+            android:hint="@string/note_title_placeholder_txt"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:orientation="horizontal"
