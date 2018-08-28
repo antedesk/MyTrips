@@ -113,25 +113,25 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
         switch(categoryId)
         {
             case "BRKFST":
-                return R.drawable.breakfast03;
+                return R.drawable.breakfast01;
             case "LNCH":
-                return R.drawable.lunch03;
+                return R.drawable.lunch01;
             case "DNNR":
-                return R.drawable.dinner03;
+                return R.drawable.dinner01;
             case "TRNSFR":
-                return R.drawable.transfert03;
+                return R.drawable.transfert01;
             case "OVRNGHY":
-                return R.drawable.overnight03;
+                return R.drawable.overnight01;
             case "EXCRSN":
-                return R.drawable.excurtion03;
+                return R.drawable.excurtion01;
             case "SHPPNG":
-                return R.drawable.shopping03;
+                return R.drawable.shopping01;
             case "CLTRL":
-                return R.drawable.cultural03;
+                return R.drawable.cultural01;
             case "OTHR":
-                return R.drawable.other03;
+                return R.drawable.other01;
             default:
-                return R.drawable.home03;
+                return R.drawable.home01;
         }
     }
 
