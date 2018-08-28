@@ -327,6 +327,13 @@
     <string name="budget_description">budget icon</string>
     <string name="notedt_buget_placeholder">200 EUR</string>
     <string name="long_description">Thiiiiiiiiiiiiiiiis is my first very long long long descriptrion about how I made it worked just in time to finish this awesome course. GOD thank you!</string>
+    <string name="countries_title">Countries</string>
+    <string name="cities_stats_title">Cities</string>
+    <string name="activities_title">Activities</string>
+    <string name="fake_activities_num">150</string>
+    <string name="tab_my_stats">My Stats</string>
+    <string name="activities_distribution">Activities Distribution over Trips</string>
+    <string name="diaries_title">Diaries</string>
 
 
 </resources>

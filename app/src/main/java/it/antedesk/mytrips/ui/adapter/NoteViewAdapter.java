@@ -72,13 +72,13 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
         // get category icon
         Picasso.get()
                 .load(getCategoryIcon(note.getCategoryId()))
-                .placeholder(R.mipmap.fake_icon)
-                .error(R.mipmap.fake_icon) //TODO replace with error icon R.drawable.error_icon
+                .placeholder(R.drawable.ic_world)
+                .error(R.drawable.ic_world)
                 .into(holder.mNoteActivity);
         Picasso.get()
                 .load(getCoverImage(note.getCategoryId()))
-                .placeholder(R.drawable.default_img_cover)
-                .error(R.drawable.default_img_cover) //TODO replace with error icon R.drawable.error_icon
+                .placeholder(R.drawable.home01)
+                .error(R.drawable.home01)
                 .into(holder.mNoteCoverPhoto);
     }
 
@@ -133,31 +133,6 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
             default:
                 return R.drawable.home01;
         }
-    }
-
-    private int getCategoryIcon(Note note){
-        int icon2load = R.mipmap.fake_icon; //TODO replace R.mipmap with R.drawable
-        String category = note.getCategory();
-        if(category.equals(BREAKFAST))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.breakfast
-        else if(category.equals(LUNCH))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.lunch
-        else if(category.equals(DINNER))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.dinner
-        else if(category.equals(TRANSFER))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.transfer
-        else if(category.equals(OVERNIGHT_STAY))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.overnight_stay
-        else if(category.equals(EXCURSION))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.excursion
-        else if(category.equals(SHOPPING))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.shopping
-        else if(category.equals(CULTURAL_VISIT))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.
-        else if(category.equals(OTHER))
-            icon2load = R.mipmap.fake_icon; //TODO replace with R.drawable.other
-
-        return icon2load;
     }
 
     @Override

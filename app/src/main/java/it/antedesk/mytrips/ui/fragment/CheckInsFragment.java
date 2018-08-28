@@ -36,8 +36,7 @@ public class CheckInsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Returns a new instance of this fragment
      */
     public static CheckInsFragment newInstance(long diaryId) {
         CheckInsFragment fragment = new CheckInsFragment();

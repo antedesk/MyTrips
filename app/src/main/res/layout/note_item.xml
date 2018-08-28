@@ -80,8 +80,7 @@
             android:layout_marginTop="@dimen/margin_5dp"
             android:ellipsize="end"
             android:maxLength="150"
-            android:maxLines="2"
-            android:text="@string/long_description"/>
+            android:maxLines="2"/>
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

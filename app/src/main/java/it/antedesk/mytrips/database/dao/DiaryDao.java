@@ -19,4 +19,7 @@ public interface DiaryDao extends BaseDao<Diary>{
 
     @Query("SELECT budget as total_budget, currency FROM diaries WHERE id = :diaryId")
     BudgetInfo getBudgetByDiaryId(long diaryId);
+
+    @Query("SELECT COUNT(id) FROM diaries")
+    int getTotalDiaries();
 }

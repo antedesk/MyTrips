@@ -82,7 +82,6 @@ public class Diary implements Parcelable{
         return 0;
     }
 
-    //TODO add start/end data
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
@@ -93,7 +92,6 @@ public class Diary implements Parcelable{
         dest.writeString(category);
         dest.writeByte((byte) (isPlan ? 1 : 0));
         dest.writeLong(startDate.getTime());
-
     }
 
     public long getId() {

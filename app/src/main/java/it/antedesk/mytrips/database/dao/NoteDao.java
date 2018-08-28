@@ -5,8 +5,10 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import it.antedesk.mytrips.model.Activity;
 import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.model.minimal.CategoryBudget;
+import it.antedesk.mytrips.model.minimal.CategoryTotalInfo;
 import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.model.minimal.DailyBudget;
 import it.antedesk.mytrips.model.minimal.DatesInfo;
@@ -58,6 +60,24 @@ public interface NoteDao extends BaseDao<Note>{
             "FROM notes JOIN diaries on diary_id = diaries.id WHERE diary_id=:diaryId")
     DatesInfo getDatesInfoByDiaryId(long diaryId);
 
+    @Query("SELECT  COUNT(DISTINCT address) FROM notes")
+    int getTotalCheckIn();
+
+    @Query("SELECT  COUNT(DISTINCT city) FROM notes")
+    int getTotalCities();
+
+    @Query("SELECT COUNT(DISTINCT country) FROM notes")
+    int getTotalCountries();
+
+    @Query("SELECT COUNT(distinct(date(datetime(date_time/1000, 'unixepoch')))) FROM notes")
+    int getTotalDays();
+
+    @Query("SELECT COUNT(category_id) FROM notes")
+    int getTotalActivities();
+
+    @Query("SELECT COUNT(category_id) as total, category, category_id FROM notes GROUP BY category_id")
+    List<CategoryTotalInfo> getActivitiesDistribution();
+
     /*
      * The following methods should be used for the total stats, that will be developed in future
      * release
@@ -67,15 +87,6 @@ public interface NoteDao extends BaseDao<Note>{
 
     @Query("SELECT category, SUM(budget) FROM notes GROUP BY category")
     double getTotalBudgetByCategories();
-
-    @Query("SELECT  COUNT(DISTINCT address) FROM notes")
-    int getTotalCheckIn();
-
-    @Query("SELECT  COUNT(DISTINCT city) FROM notes")
-    int getTotalCities();
-
-    @Query("SELECT COUNT(DISTINCT country) FROM notes")
-    int getTotalCountries();
 
     @Query("SELECT DISTINCT country FROM notes")
     List<String> getCountries();

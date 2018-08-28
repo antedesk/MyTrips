@@ -19,6 +19,7 @@ import android.view.View;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.antedesk.mytrips.ui.fragment.DiaryFragment;
+import it.antedesk.mytrips.ui.fragment.GeneralStatsFragment;
 import it.antedesk.mytrips.ui.fragment.adapter.SectionsPagerAdapter;
 
 import static it.antedesk.mytrips.utils.Constants.IS_PLAN;
@@ -72,11 +73,13 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
+                    setAppBarLayoutElevation(10);
                     fabDiary.show();
-                    fabPlan.hide();
+                    //fabPlan.hide(); //future release
                 } else {
+                    setAppBarLayoutElevation(0);
                     fabDiary.hide();
-                    fabPlan.show();
+                    //fabPlan.show(); //future release
                 }
             }
 
@@ -84,13 +87,13 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        setAppBarLayoutElevation();
         setupFABs();
     }
-    private void setAppBarLayoutElevation(){
+
+    private void setAppBarLayoutElevation(float value){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             StateListAnimator stateListAnimator = new StateListAnimator();
-            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(appBarLayout, "elevation", 10));
+            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(appBarLayout, "elevation", value));
             appBarLayout.setStateListAnimator(stateListAnimator);
         }
     }
@@ -103,6 +106,8 @@ public class WelcomeActivity extends AppCompatActivity {
         return true;
     }
 
+/*
+    // Future release
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -121,7 +126,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+*/
     private void setupFABs(){
         Intent intent = new Intent(this, AddDiaryActivity.class);
         fabDiary.setOnClickListener((View view) -> {
@@ -133,6 +138,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(intent);
         });
 
+        /*
+        //future release
         fabPlan.setOnClickListener((View view) -> {
             intent.putExtra(IS_PLAN, true);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -141,6 +148,7 @@ public class WelcomeActivity extends AppCompatActivity {
             } else
                 startActivity(intent);
         });
+        */
     }
 
     /**
@@ -149,7 +157,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(DiaryFragment.newInstance(false), getString(R.string.tab_diaries));
-        adapter.addFrag(DiaryFragment.newInstance(true), getString(R.string.tab_plans));
+        //adapter.addFrag(DiaryFragment.newInstance(true), getString(R.string.tab_plans)); //future release
+        adapter.addFrag(GeneralStatsFragment.newInstance(), getString(R.string.tab_my_stats));
+
         viewPager.setAdapter(adapter);
     }
 }

@@ -50,8 +50,7 @@ public class DiaryFragment extends Fragment implements DiaryViewAdapter.DiaryVie
     }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Returns a new instance of this fragment
      */
     public static DiaryFragment newInstance(boolean isPlane) {
         DiaryFragment fragment = new DiaryFragment();

@@ -73,8 +73,7 @@ public class StatsFragment extends Fragment {
     }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Returns a new instance of this fragment
      */
     public static StatsFragment newInstance(long diaryId) {
         StatsFragment fragment = new StatsFragment();

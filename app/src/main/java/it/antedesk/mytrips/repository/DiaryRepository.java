@@ -56,6 +56,12 @@ public class DiaryRepository {
         return diaries;
     }
 
+    public LiveData<Integer> getTotalDiaries(){
+        MutableLiveData<Integer> diaries = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> diaries.postValue(mDb.getDiaryDao().getTotalDiaries()));
+        return diaries;
+    }
+
     public void insertDiary (Diary diary) {
         appExecutors.diskIO().execute(() -> mDb.getDiaryDao().insert(diary));
     }

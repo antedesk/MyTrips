@@ -9,6 +9,7 @@ import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.model.minimal.CategoryBudget;
+import it.antedesk.mytrips.model.minimal.CategoryTotalInfo;
 import it.antedesk.mytrips.model.minimal.CheckinMinimal;
 import it.antedesk.mytrips.model.minimal.DailyBudget;
 import it.antedesk.mytrips.model.minimal.DatesInfo;
@@ -119,6 +120,45 @@ public class NoteRepository {
     public LiveData<DatesInfo> getDatesInfoByDiaryId(long diaryId) {
         MutableLiveData<DatesInfo> total = new MutableLiveData<>();
         appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getDatesInfoByDiaryId(diaryId)));
+        return total;
+    }
+
+    // for general stats
+
+
+    public LiveData<Integer> getTotalCheckIn() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalCheckIn()));
+        return total;
+    }
+
+    public LiveData<Integer> getTotalCities() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalCities()));
+        return total;
+    }
+
+    public LiveData<Integer> getTotalCountries() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalCountries()));
+        return total;
+    }
+
+    public LiveData<Integer> getTotalDays() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalDays()));
+        return total;
+    }
+
+    public LiveData<Integer> getTotalActivities() {
+        MutableLiveData<Integer> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getTotalActivities()));
+        return total;
+    }
+
+    public LiveData<List<CategoryTotalInfo>> getActivitiesDistribution() {
+        MutableLiveData<List<CategoryTotalInfo>> total = new MutableLiveData<>();
+        appExecutors.diskIO().execute(() -> total.postValue(mDb.getNoteDao().getActivitiesDistribution()));
         return total;
     }
 

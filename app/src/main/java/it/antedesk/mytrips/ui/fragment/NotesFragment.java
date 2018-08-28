@@ -42,8 +42,7 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
     }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Returns a new instance of this fragment
      */
     public static NotesFragment newInstance(long diaryId) {
         NotesFragment fragment = new NotesFragment();

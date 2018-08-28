@@ -2,7 +2,9 @@ package it.antedesk.mytrips;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.DateFormat;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,7 +122,7 @@ public class NoteDetailActivity extends AppCompatActivity
             mMap.addMarker(new MarkerOptions().position(noteLocation)
                     .title(note.getAddress())
                     .icon(BitmapDescriptorFactory.fromResource(getMarkerIcon(note.getCategoryId()))));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(noteLocation));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(noteLocation,15));
         }
     }
 
