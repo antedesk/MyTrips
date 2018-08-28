@@ -11,7 +11,7 @@ import it.antedesk.mytrips.R;
 
 public class DiaryWidgetService extends IntentService {
 
-    public static final String ACTION_UPDATE_RECIPE_INGREDIENTS_LIST = "it.antedesk.bakingapp.widget.action.update_recipe_ingredients";
+    public static final String ACTION_UPDATE_DIARIES_LIST = "it.antedesk.mytrips.widget.action.update_diaries";
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -24,7 +24,7 @@ public class DiaryWidgetService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_UPDATE_RECIPE_INGREDIENTS_LIST.equals(action)) {
+            if (ACTION_UPDATE_DIARIES_LIST.equals(action)) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, DiariesWidgetProvider.class));
 
@@ -38,7 +38,7 @@ public class DiaryWidgetService extends IntentService {
 
     public static boolean startActionUpdateRecipeIngredientsList(Context context) {
         Intent intent = new Intent(context, DiaryWidgetService.class);
-        intent.setAction(ACTION_UPDATE_RECIPE_INGREDIENTS_LIST);
+        intent.setAction(ACTION_UPDATE_DIARIES_LIST);
         try {
             context.startService(intent);
             return true;

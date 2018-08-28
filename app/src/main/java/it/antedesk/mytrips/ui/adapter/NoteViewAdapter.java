@@ -27,16 +27,6 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
 
     private final NoteViewAdapterOnClickHandler mClickHandler;
 
-    private String BREAKFAST;
-    private String LUNCH;
-    private String DINNER;
-    private String TRANSFER;
-    private String OVERNIGHT_STAY;
-    private String EXCURSION;
-    private String SHOPPING;
-    private String CULTURAL_VISIT;
-    private String OTHER;
-
     @NonNull
     @Override
     public NoteAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,16 +40,6 @@ public class NoteViewAdapter extends RecyclerView.Adapter<NoteViewAdapter.NoteAd
 
     @Override
     public void onBindViewHolder(@NonNull NoteAdapterViewHolder holder, int position) {
-
-        BREAKFAST      = parentContex.getString(R.string.note_category_breakfast);
-        LUNCH          = parentContex.getString(R.string.note_category_lunch);
-        DINNER         = parentContex.getString(R.string.note_category_dinner);
-        TRANSFER       = parentContex.getString(R.string.note_category_transfer);
-        OVERNIGHT_STAY = parentContex.getString(R.string.note_category_overnight_stay);
-        EXCURSION      = parentContex.getString(R.string.note_category_excursion);
-        SHOPPING       = parentContex.getString(R.string.note_category_shopping);
-        CULTURAL_VISIT = parentContex.getString(R.string.note_category_excursion);
-        OTHER          = parentContex.getString(R.string.note_category_other);
 
         Note note = noteList.get(position);
         Log.d(NoteAdapterViewHolder.class.getName(), note.toString());
