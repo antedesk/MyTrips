@@ -27,6 +27,8 @@ import it.antedesk.mytrips.viewmodel.LoadDiaryDataViewModel;
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY;
 import static it.antedesk.mytrips.utils.Constants.SELECTED_DIARY_ID;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_NOTE;
+import static it.antedesk.mytrips.utils.Constants.SELECTED_NOTE_ID;
 
 public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewAdapterOnClickHandler {
 
@@ -123,7 +125,7 @@ public class NotesFragment extends Fragment implements NoteViewAdapter.NoteViewA
     @Override
     public void onClick(Note selectedNote) {
         Intent intent = new Intent(getActivity(), NoteDetailActivity.class);
-        intent.putExtra(SELECTED_DIARY, selectedNote);
+        intent.putExtra(SELECTED_NOTE, selectedNote);
         startActivity(intent);
     }
 }

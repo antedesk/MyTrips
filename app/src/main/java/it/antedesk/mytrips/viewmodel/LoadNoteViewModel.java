@@ -5,26 +5,25 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 import it.antedesk.mytrips.database.AppDatabase;
 import it.antedesk.mytrips.database.AppExecutors;
 import it.antedesk.mytrips.model.Note;
 import it.antedesk.mytrips.repository.NoteRepository;
 
-public class LoadDiaryDataViewModel extends AndroidViewModel {
+public class LoadNoteViewModel extends AndroidViewModel {
 
     private AppDatabase database;
     private AppExecutors appExecutors;
 
-    public LoadDiaryDataViewModel(@NonNull Application application) {
+    public LoadNoteViewModel(@NonNull Application application) {
         super(application);
         database = AppDatabase.getsInstance(this.getApplication());
         appExecutors = AppExecutors.getInstance();
     }
 
-    public LiveData<List<Note>> getDiaryNotes(long diaryId) {
-        return NoteRepository.getInstance(database, appExecutors).getDiaryNotes(diaryId);
+    public LiveData<Note> geteNoteById(long noteId) {
+        return NoteRepository.getInstance(database, appExecutors).geteNoteById(noteId);
     }
 
 }
+

@@ -194,7 +194,7 @@ public class AddNoteActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 Log.i(TAG, "Place: " + place.getName());
-                mLocation2Geocode = new Location(mCurrentLocation.getProvider());
+                mLocation2Geocode = new Location("GooglePlacesProvider");
                 mLocation2Geocode.setLatitude(place.getLatLng().latitude);
                 mLocation2Geocode.setLongitude(place.getLatLng().longitude);
 

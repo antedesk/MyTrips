@@ -21,6 +21,9 @@ public final class Constants {
     public final static String SELECTED_DATETIME = "SELECTED_DATETIME";
     public final static String SELECTED_STARTDATE = "SELECTED_STARTDATE";
     public final static String SELECTED_ENDDATE = "SELECTED_ENDDATE";
+    public final static String SELECTED_NOTE = "SELECTED_NOTE";
+    public final static String SELECTED_NOTE_ID = "SELECTED_NOTE_ID";
+
 
 
     /**
