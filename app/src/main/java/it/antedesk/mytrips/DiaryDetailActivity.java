@@ -131,13 +131,14 @@ public class DiaryDetailActivity extends AppCompatActivity {
         mSectionsPagerAdapter.addFrag(StatsFragment.newInstance(diaryId), getString(R.string.stats));
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
-
+/*
+    // Future release
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_diary_detail, menu);
         return true;
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

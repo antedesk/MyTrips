@@ -98,7 +98,8 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-
+/*
+    // Future release
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -106,7 +107,6 @@ public class WelcomeActivity extends AppCompatActivity {
         return true;
     }
 
-/*
     // Future release
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
